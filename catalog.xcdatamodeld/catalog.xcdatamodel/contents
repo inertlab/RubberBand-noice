@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14315.2.4" systemVersion="17E202" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Album" representedClassName="Album" syncable="YES" codeGenerationType="class">
+        <attribute name="albumArt" optional="YES" attributeType="URI" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="contains" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Song" inverseName="trackOf" inverseEntity="Song" syncable="YES"/>
+    </entity>
+    <entity name="Details" representedClassName="Details" syncable="YES" codeGenerationType="class">
+        <attribute name="charter" optional="YES" attributeType="String" maxValueString="32" syncable="YES"/>
+        <attribute name="delay" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="folder" optional="YES" attributeType="URI" syncable="YES"/>
+        <attribute name="genre" optional="YES" attributeType="String" maxValueString="32" syncable="YES"/>
+        <attribute name="icon" optional="YES" attributeType="String" maxValueString="16" syncable="YES"/>
+        <attribute name="phrase" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="previewstart" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+    </entity>
+    <entity name="Player" representedClassName="Player" syncable="YES" codeGenerationType="class">
+        <attribute name="exp" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="index" attributeType="Integer 16" minValueString="0" maxValueString="8" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="name" attributeType="String" minValueString="1" maxValueString="32" defaultValueString="no name" syncable="YES"/>
+        <attribute name="stagename" optional="YES" attributeType="String" maxValueString="24" syncable="YES"/>
+        <relationship name="stats" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Stats" inverseName="setby" inverseEntity="Stats" syncable="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="index"/>
+            </uniquenessConstraint>
+            <uniquenessConstraint>
+                <constraint value="name"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="Score" representedClassName="Score" syncable="YES" codeGenerationType="class">
+        <attribute name="difficulty" optional="YES" attributeType="String" maxValueString="16" syncable="YES"/>
+        <attribute name="playcount" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="score" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="stars" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="d_stats" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Stats" inverseName="drums" inverseEntity="Stats" syncable="YES"/>
+        <relationship name="g_stats" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Stats" inverseName="guitar" inverseEntity="Stats" syncable="YES"/>
+        <relationship name="pd_stats" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Stats" inverseName="prodrums" inverseEntity="Stats" syncable="YES"/>
+    </entity>
+    <entity name="Song" representedClassName="Song" syncable="YES" codeGenerationType="class">
+        <attribute name="artist" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="delay" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="folder" optional="YES" attributeType="URI" syncable="YES"/>
+        <attribute name="genre" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="icon" optional="YES" attributeType="String" maxValueString="16" defaultValueString="blank" syncable="YES"/>
+        <attribute name="length" optional="YES" attributeType="Integer 16" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uuid" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="year" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="stats" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Stats" inverseName="song" inverseEntity="Stats" syncable="YES"/>
+        <relationship name="tier" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Tiers" inverseName="song" inverseEntity="Tiers" syncable="YES"/>
+        <relationship name="trackOf" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Album" inverseName="contains" inverseEntity="Album" syncable="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="uuid"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="Stats" representedClassName="Stats" syncable="YES" codeGenerationType="class">
+        <attribute name="pindex" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="playcount" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="songid" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="stars" optional="YES" attributeType="Integer 16" maxValueString="6" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="drums" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Score" inverseName="d_stats" inverseEntity="Score" syncable="YES"/>
+        <relationship name="guitar" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Score" inverseName="g_stats" inverseEntity="Score" syncable="YES"/>
+        <relationship name="prodrums" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Score" inverseName="pd_stats" inverseEntity="Score" syncable="YES"/>
+        <relationship name="setby" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Player" inverseName="stats" inverseEntity="Player" syncable="YES"/>
+        <relationship name="song" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Song" inverseName="stats" inverseEntity="Song" syncable="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="pindex"/>
+                <constraint value="songid"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="Tiers" representedClassName="Tiers" syncable="YES" codeGenerationType="class">
+        <attribute name="drums" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="guitar" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="song" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Song" inverseName="tier" inverseEntity="Song" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Album" positionX="-614.1484375" positionY="485.44140625" width="128" height="90"/>
+        <element name="Player" positionX="-1066.14453125" positionY="369.046875" width="128" height="120"/>
+        <element name="Score" positionX="-833.54296875" positionY="100.60546875" width="128" height="150"/>
+        <element name="Song" positionX="-832.7734375" positionY="275.05859375" width="128" height="225"/>
+        <element name="Stats" positionX="-1056.96875" positionY="138.01171875" width="154.44921875" height="180"/>
+        <element name="Tiers" positionX="-616.89453125" positionY="372.76953125" width="128" height="90"/>
+        <element name="Details" positionX="-619.19921875" positionY="190.20703125" width="128" height="30"/>
+    </elements>
+</model>
