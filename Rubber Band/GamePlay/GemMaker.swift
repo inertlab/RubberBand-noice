@@ -21,6 +21,8 @@ struct Gems {
 	let m_cymbals	:SCNMaterial
 	let m_white		:SCNMaterial
 	let m_orange 	= SCNMaterial()
+	let kick 		= SCNNode(geometry: SCNBox(width: 4, height: 0.03, length: 0.13, chamferRadius: 0))
+	let m_cymbals_g :SCNMaterial
 	
 	init () {
 		self.tom 		= self.instruments.rootNode.childNode(withName: "tom"	, recursively: true)!
@@ -35,6 +37,8 @@ struct Gems {
 		self.m_white 	= self.tom.geometry!.material(named: "white")!
 		self.m_orange.diffuse.contents = NSColor.rbOrange
 		self.m_orange.selfIllumination.contents = NSColor.white
+		self.kick.geometry?.firstMaterial = self.m_orange
+		self.m_cymbals_g = self.hihat.geometry!.material(named: "glow")!
 	}
 }
 
@@ -42,17 +46,14 @@ let gems = Gems()
 
 class GemMaker {
 	
-//	makes gems by loading external file
+	///	makes gems by loading external file
 	func makegem (controller: DrumKit) -> SCNNode {
-//		var translation = SCNMatrix4()
-//		var scale = SCNMatrix4MakeScale(0.5, 0.5, 0)
-		
+
 		var node = SCNNode()
 		
-//		clones the appropriate geometry to var node
 		switch controller{
 		case .o_bass:
-			node.geometry = makekick()
+			node = gems.kick.clone()
 		case .b_ride:
 			node = clonegem(instrument: gems.ride)
 		case .g_crash:
@@ -61,35 +62,48 @@ class GemMaker {
 			node = clonegem(instrument: gems.hihat)
 		default:
 			node = clonegem(instrument: gems.tom)
-//			node.geometry?.firstMaterial?.diffuse.contents 	= gem_diffuse
-		}
-		
-// 		assign the porper material and color if needed
-		switch controller{
-		case .b_ride, .y_hihat, .g_crash:
-			break
-//			node.geometry?.firstMaterial?.diffuse.contents 	= cym_diffuse
-//			scale = SCNMatrix4MakeScale(1, 1, 0)
-//			translation = SCNMatrix4MakeTranslation(0, 0, 0)
-		default: // default is toms, material is already defined, but we need to scale it
-			//		assigns the proper material offset to the gem
+			
 			switch controller.metrics.color {
 			case .rbBlue:
 				node.geometry?.firstMaterial = gems.m_blue
-//				translation = SCNMatrix4MakeTranslation(1, 0, 0)
 			case .rbGreen:
 				node.geometry?.firstMaterial = gems.m_green
-//				translation = SCNMatrix4MakeTranslation(0, 1, 0)
 			case .rbYellow:
 				node.geometry?.firstMaterial = gems.m_yellow
-//				translation = SCNMatrix4MakeTranslation(1, 1, 0)
 			default: // default is red
 				break
-//				translation = SCNMatrix4MakeTranslation(0, 0, 0)
 			}
 		}
+		return node
+	}
+	
+	///	makes gems by loading external file
+	func makegem (controller: Button) -> SCNNode {
 		
-//		node.pivot = SCNMatrix4MakeTranslation(0, -node.boundingBox.max.y, 0)
+		var node = SCNNode()
+		
+		switch controller{
+		case .orange:
+			node = gems.kick.clone()
+		case .blue_c:
+			node = clonegem(instrument: gems.ride)
+		case .green_c, .plus:
+			node = clonegem(instrument: gems.crash)
+		case .yellow_c:
+			node = clonegem(instrument: gems.hihat)
+		case .blue:
+			node = clonegem(instrument: gems.tom)
+			node.geometry?.firstMaterial = gems.m_blue
+		case .green:
+			node = clonegem(instrument: gems.tom)
+			node.geometry?.firstMaterial = gems.m_green
+		case .yellow:
+			node = clonegem(instrument: gems.tom)
+			node.geometry?.firstMaterial = gems.m_yellow
+		default:
+			node = clonegem(instrument: gems.tom)
+		}
+		
 		return node
 	}
 	
@@ -130,6 +144,7 @@ private extension GemMaker {
 	}
 }
 
+
 /// Describes a Drumkit Controller
 ///	## Raw Names
 /// the drumkit parts (bass, snare, etc)
@@ -138,8 +153,8 @@ private extension GemMaker {
 /// - Note: Midi Notes do not match midi notes sent from instrument
 enum DrumKit: String {
 	case o_bass 	= "96"	, r_snare 	= "97"
-	case y_hihat 	= "98"	, b_ride 	= "99"	, g_crash = "100" 	// cymbals
-	case y_tom 		= "110"	, b_tom 	= "111"	, g_tom = "112" 	// toms
+	case y_hihat 	= "98"	, b_ride 	= "99"	, g_crash 	= "100" 	// cymbals
+	case y_tom 		= "110"	, b_tom 	= "111"	, g_tom 	= "112" 	// toms
 	/// Drumkit Attributes
 	/// # Atributtes
 	/// ## pos = horizontal position on highway (based on color)
@@ -177,11 +192,11 @@ enum MidiNote: String {
 }
 
 extension NSColor {
-	static var rbRed:		NSColor { return .red 		}
-	static var rbYellow:	NSColor { return .yellow	}
-	static var rbBlue:		NSColor { return .blue		}
-	static var rbOrange:	NSColor { return .orange	}
-	static var rbGreen:		NSColor { return .green		}
+	static var rbRed:		NSColor { return NSColor(srgbRed: 1, green: 0.2, blue: 0, alpha: 1) 	}
+	static var rbYellow:	NSColor { return NSColor(srgbRed: 1, green: 0.95, blue: 0, alpha: 1)	}
+	static var rbBlue:		NSColor { return NSColor(srgbRed: 0, green: 0.65, blue: 9, alpha: 1)	}
+	static var rbOrange:	NSColor { return NSColor(srgbRed: 1, green: 0.70, blue: 0, alpha: 1)	}
+	static var rbGreen:		NSColor { return NSColor(srgbRed: 0, green: 0.69, blue: 0.3, alpha: 1)	}
 }
 
 /// gem position by color
@@ -209,7 +224,11 @@ struct GemBit {
 	static let yelloc	= 1 << 6
 	static let bluec	= 1 << 7
 	static let dead		= 1 << 8
-	static let active	= 1 << 9
+//	static let activate	= 1 << 9
+	static var activate:Int{
+		return self.green | self.greenc
+	}
+	static let cymbals  = [GemBit.yelloc, GemBit.bluec, GemBit.greenc]
 }
 
 

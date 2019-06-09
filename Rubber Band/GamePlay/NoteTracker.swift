@@ -14,7 +14,7 @@ import SpriteKit
 
 let particleDir = "art.scnassets/particles/"
 let burst = SCNParticleSystem(named: "burst.scnp", inDirectory: particleDir)
-//let spartiscle = SCNParticleSystem(named: "sparticle.scnp", inDirectory: particleDir)
+let spartiscle = SCNParticleSystem(named: "sparticle.scnp", inDirectory: particleDir)
 
 /// note tracker is attached to triggers on the highway. depending on the trigger, it tracks notes hit
 class NoteTracker {
@@ -30,6 +30,7 @@ class NoteTracker {
 
 	init(note: DrumKit){
 		self.note 		= note
+//		print(self.particle?.particleColor)
 		self.particle?.particleColor = note.metrics.color
 		switch self.note {
 		case .r_snare:
@@ -55,17 +56,17 @@ class NoteTracker {
 			self.glow 		= hwy.base.childNode(withName: "glow_green"	, recursively: false)!
 		}
 	}
-
 	
 	func checkHit() { // this more efficient than a dictionary
 		let max = hwy.pista.position.z + pace.hitwindow
 		//		let min = pista.position.z - pace.hitwindow
-		for gem in hwy.gems.childNodes {
+		for gem in hwy.notes.childNodes {
 			
 			if gem.categoryBitMask == self.note.metrics.bit {
 				if gem.position.z < max {
-					gem.removeFromParentNode()
 					hit()
+					gem.categoryBitMask = GemBit.dead
+					gem.opacity = 0
 				}else{
 					miss()
 				}
@@ -81,18 +82,13 @@ class NoteTracker {
 	}
 	
 	func miss() {
-		scorekeeper.scoreMiss()
+		
 		self.burst.removeAllActions()
 		self.glow.opacity = 0
 		self.trigger.addAnimation(thumpmiss, forKey: "selfllumination")
+		scorekeeper.scoreMiss()
 	}
-	
-	/// sends notification from drumkit to main process
-	func notify() {
-		drumCenter.post(name: drumNotification, object: self)
-	}
-	
-	
+
 	private let wait = SCNAction.wait(duration: 0.25)
 	private let rotate = SCNAction.rotate(by: 0.75, around: SCNVector3(0, 1, 0), duration: 0.25)
 }
@@ -103,53 +99,27 @@ private extension NoteTracker {
 	func burstit () {
 		self.burst.removeAllActions()
 		if kick {
-			if self.count < 1 {
-				self.count += 0.075
-			}else{
-				self.count = 0
-			}
-			self.burst.geometry?.firstMaterial?.emission.intensity = 1
-			self.burst.addAnimation(lightning, forKey: "emission")
-			self.burst.geometry?.firstMaterial?.emission.contentsTransform.m41 = self.count
-			self.burst.runAction(wait){
-				self.burst.geometry?.firstMaterial?.emission.intensity = 0.001
-			}
+			self.burst.geometry?.firstMaterial?.diffuse.contentsTransform.m42 += 0.25
+			self.burst.addAnimation(kickframe, forKey: "self")
 		}else{
-//			self.glow.removeAllActions()
 			splat(node: trigger)
-//			self.glow.opacity = 1
 			self.trigger.addParticleSystem(self.particle!)
-//			self.trigger.addAnimation	(thump		, forKey: "selfIllumination")
 			self.burst.addAnimation		(animup		, forKey: "emission"		)
 			self.burst.addAnimation		(animdown	, forKey: "multiply"		)
 			self.burst.runAction		(self.rotate)
 			self.burst.geometry?.firstMaterial?.multiply.contentsTransform.m41 += 0.1
-//			self.glow.runAction(wait){
-//				self.glow.opacity = 0
-//			}
 		}
 	}
 	// MARK: animations
-	/// animation for kick score
-	var lightning:CABasicAnimation  {
-		let animation = CABasicAnimation(keyPath: "geometry.firstMaterial.emission.contentsTransform.m11")
-			animation.fromValue 		= 0
-			animation.toValue 			= 0.76
-			animation.duration 			= 0.25
-			animation.repeatCount 		= 0
-			animation.timingFunction 	= CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
-		return animation
-	}
-	
 	/// transforms the colore gradient upward
 	var animup:CABasicAnimation {
 		let animation = CABasicAnimation(keyPath: "geometry.firstMaterial.emission.contentsTransform.m42")
 			animation.fromValue 		= 0.55
 			animation.toValue 			= 1
-			animation.duration 			= 0.25
+			animation.duration 			= 0.2
 			animation.autoreverses 		= false
 			animation.repeatCount 		= 0
-			animation.timingFunction 	= CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
+			animation.timingFunction 	= CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
 		return animation
 	}
 	
@@ -157,15 +127,11 @@ private extension NoteTracker {
 	var animdown:CABasicAnimation {
 		let animation = CABasicAnimation(keyPath: "geometry.firstMaterial.multiply.contentsTransform.m42")
 			animation.byValue 			= -0.32
-			animation.duration 			= 0.25
+			animation.duration 			= 0.2
 			animation.isCumulative 		= true
 			animation.repeatCount 		= 0
-			animation.timingFunction 	= CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
+			animation.timingFunction 	= CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
 		return animation
-	}
-	
-	var waiter:SCNAction {
-		return SCNAction.wait(duration: 0.25)
 	}
 	
 	/// makes trigger fade to black and back. used when player misses and scores
@@ -175,7 +141,7 @@ private extension NoteTracker {
 			animation.toValue 		= 1
 			animation.duration 		= 0.1
 			animation.autoreverses 	= true
-			animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseIn)
+			animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
 		return animation
 	}
 	
@@ -185,6 +151,7 @@ private extension NoteTracker {
 		animation.toValue 		= 0
 		animation.duration 		= 0.1
 		animation.autoreverses 	= true
+		animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
 		return animation
 	}
 	
@@ -216,8 +183,16 @@ private extension NoteTracker {
 			self.trigger.position.y = 0
 		}
 	}
+	
+	var kickframe:CAKeyframeAnimation {
+		let animation = CAKeyframeAnimation(keyPath: "geometry.firstMaterial.diffuse.contentsTransform.m41")
+			animation.values = [0.8, 0.6, 0.4, 0.2, 0]
+			animation.keyTimes = [0, 0.025, 0.045, 0.9, 0.18]
+//			animation.duration = 1
+			animation.calculationMode = CAAnimationCalculationMode.discrete
+		return animation
+	}
 }
-
 
 
 var kick 	= NoteTracker(note: .o_bass)
