@@ -7,9 +7,13 @@
 //
 
 import Foundation
+import SpriteKit
 
 
-let genIcon = [
+let iconAtlas = SKTextureAtlas(named: "icon")
+
+
+let Icon = [
 	"blank"		: "0000",
 	"ass"		: "0001",
 	"bh"		: "0002",

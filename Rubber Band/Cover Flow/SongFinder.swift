@@ -13,9 +13,17 @@ import SpriteKit
 //let songfinder = SongFinder(path: home+"/rubberband/")
 //let songlist = songfinder.songList()
 
-let labeln = menuOverlay?.childNode(withName: "name") as! SKLabelNode
-let labela = menuOverlay?.childNode(withName: "artist") as! SKLabelNode
-let labelt = menuOverlay?.childNode(withName: "time") as! SKLabelNode
+let labeln 			= menuOverlay?.childNode(withName: "name") 		as! SKLabelNode
+let labela 			= menuOverlay?.childNode(withName: "artist") 	as! SKLabelNode
+let labelt 			= menuOverlay?.childNode(withName: "time") 		as! SKLabelNode
+let labeldetails 	= menuOverlay?.childNode(withName: "details")!
+let labelphrase 	= labeldetails?.childNode(withName: "phrase") 	as! SKLabelNode
+let labelcharter 	= labeldetails?.childNode(withName: "charter") 	as! SKLabelNode
+let labelalbum	 	= labeldetails?.childNode(withName: "album") 	as! SKLabelNode
+let labelyear	 	= labeldetails?.childNode(withName: "year") 	as! SKLabelNode
+let labelgenre	 	= labeldetails?.childNode(withName: "genre") 	as! SKLabelNode
+let labelDiff 		= labeldetails?.childNode(withName: "difficulty") as! SKLabelNode
+let labelicon 		= menuOverlay?.childNode(withName: "icon") 		as! SKSpriteNode
 
 var selectedSong = Song()
 var selectedStat = Stats()
@@ -59,8 +67,8 @@ class SongFinder {
 //		var stats	= [Stats]()
 		for ini in inis! {
 			/// managed object Song to be inserted into pc context
-			let song 	= Song(context: pc.viewContext)
-				song.tier = maketier()
+			let song 		= Song(context: pc.viewContext)
+				song.tier 	= maketier()
 			
 			/// managed object Album to be inserted into pc context
 			var album:Album
@@ -112,14 +120,21 @@ class SongFinder {
 					case .icon:
 						song.icon = s.value.lowercased()
 					case .charter:
+						song.charter = s.value
 						charter = s.value.lowercased()
+					case .loading_phrase:
+						song.phrase = s.value
 					case .song_length:
-						print(s.value)
-						if let sec = Int32(s.value){
+//						print(s.value)
+						if let sec = Double(s.value){
 //						let sec 	= Int16(s.value)
-							song.length =  Int16(sec / 1000)
+							song.length =  sec / 1000
 						}
 //						print(sec)
+					case .preview_start_time:
+						if let start = Double(s.value) {
+							song.preview = start / 1000
+						}
 					default:
 						break;
 					}
@@ -143,9 +158,9 @@ class SongFinder {
 				}
 //				update the list of songs and albums
 				stat!.song			= song
-				stat!.songid			= song.uuid
-				stat!.pindex			= 0
-				stat!.setby			= userdef.player
+				stat!.songid		= song.uuid
+				stat!.pindex		= 0
+				stat!.setby			= User.current.player
 //				stats.append(stat)
 				songs[song.title!] 	= song
 				albums[artalbum] 	= album
@@ -213,8 +228,8 @@ private extension SongFinder {
 		for line in inilines {
 			let splitdata = line.components(separatedBy: " = ")
 			if let data = SongData(rawValue: splitdata[0]) {
-				if splitdata[1] != " "{
-					songdata[data] = splitdata[1]
+				if splitdata[1] != " " && splitdata[1] != ""{
+					songdata[data] = splitdata[1].trimmingCharacters(in: .whitespaces)
 				}
 			}
 		}
@@ -231,7 +246,7 @@ private extension SongFinder {
 		let yhex	= String.init(format: "%0x", song.year).padding(toLength: 4, withPad: "0", startingAt: 0)
 		let chex	= String.init(format: "%0x", charter.hash).padding(toLength: 8, withPad: "0", startingAt: 0)
 		var ichex 	= ""
-		if let icon = genIcon[song.icon!]{
+		if let icon = Icon[song.icon!]{
 			ichex = icon
 		}else{
 			ichex = "0000"
@@ -256,6 +271,6 @@ private extension SongFinder {
 /// - directory: folder containing all files for this song
 /// - video: video to be used as background
 enum SongData: String {
-	case name, artist, album, year, genre, multiplier_note, diff_drums, diff_guitar, directory, video, delay, icon, charter, song_length
+	case name, artist, album, year, genre, diff_drums, diff_guitar, directory, video, delay, icon, charter, song_length, loading_phrase, preview_start_time
 }
 
