@@ -36,12 +36,10 @@ class TimeCode {
 				newnote.0 = oldtime
 		
 			} else {
-				
 				oldnote = note.0
 				
 				for event in events {
 					if note.0 < event.mts {
-//						print(event)
 						if note.0 == event.prev_mts {
 							newnote.0 = event.time
 							oldtime = event.time
@@ -49,16 +47,48 @@ class TimeCode {
 						}
 						newnote.0 = mtstosec(fzte: event, timestamp: note.0)
 						oldtime = newnote.0
-						//					print(event)
 						break
 					}
 				}
-//							print(newnote)
 			}
-			
 			newnotes.append(newnote)
 		}
-//		print(newnotes)
+		return newnotes
+	}
+	
+	/// converts the MusicTimeStamps in an array of tuples to Seconds
+	///
+	/// - Parameter seq: midi sequence to analyze
+	/// - return: an array of tuples
+	func convertmtstosec(notes: [( Double, Button)]) -> [(Double, Button)]{
+		var newnotes = [(Double, Button)]()
+		var oldnote = 0.0
+		var oldtime = 0.0
+		for note in notes {
+			//			print(note)
+			var newnote = (0.0, note.1)
+			
+			if note.0 == oldnote {
+				newnote.0 = oldtime
+				
+			} else {
+				oldnote = note.0
+				
+				for event in events {
+					if note.0 < event.mts {
+						if note.0 == event.prev_mts {
+							newnote.0 = event.time
+							oldtime = event.time
+							break
+						}
+						newnote.0 = mtstosec(fzte: event, timestamp: note.0)
+						oldtime = newnote.0
+						break
+					}
+				}
+			}
+			newnotes.append(newnote)
+		}
 		return newnotes
 	}
 	
@@ -136,9 +166,7 @@ private extension TimeCode {
 	func secperbeat(bpm: Double) -> Double {
 		return 1 / bpm * 60
 	}
-
 }
-
 
 /// fztempoevents holds the previous tempo event to find offest
 struct fzTempoEvent {

@@ -36,9 +36,9 @@ class PaceMaker {
 //		fps_d		= round(miditempo / 100 * 12)
 		fps_d		= 16
 		fps 		= CGFloat(fps_d)
-		asphalt		= fps / 8
+		asphalt		= fps / 32
 		self.hitwindow 	= fps * 0.1
-		print("average tempo = \(miditempo)\nHit window = \(hitwindow)")
+		print("average tempo = \(miditempo)\nHit window = \(hitwindow) \nfps = \(fps)")
 	}
 }
 

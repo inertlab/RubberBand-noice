@@ -22,8 +22,6 @@ struct FZevents {
 /**
  Loads a standard MIDIfile into a MusicSequence and displays the events to stdout.
  */
-
-
 class FZMIDI {
 
     var currentMusicSequence:MusicSequence?
