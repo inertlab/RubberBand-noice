@@ -12,32 +12,19 @@ import SpriteKit
 import AVFoundation
 
 
+fileprivate var beat: TimeInterval = 0
 
+var totaltime 	= 0.0
+var asphalt 	= hwy.base.childNode(withName: "asphalt", recursively: false)
 
-var beat: TimeInterval = 0
-
-
-var playa = URL(string: "")
-//var midiplayer = AVMIDIPlayer()
-
-var totaltime = 0.0
-var asphalt = hwy.base.childNode(withName: "asphalt", recursively: false)
+let frustum = menuScene.rootNode.childNode(withName: "frustum", recursively: false)
 
 class GameView: SCNView {
 
-	
-	
 	override func keyDown (with event: NSEvent) {
-		
-		if event.modifierFlags.rawValue == 1048840 {
-			switchboard.checkkey(keymodified: event.keyCode)
-		}else{
-			switchboard.checkkey(keypad: event.keyCode)
+		if let key = keycode[event.keyCode] {
+			switchboard.checkinput(key)
 		}
-	}
-	
-	override func viewDidHide() {
-		
 	}
 }
 
@@ -45,47 +32,34 @@ class GameView: SCNView {
 var format:DateComponentsFormatter{
 	let form = DateComponentsFormatter()
 	form.allowedUnits = [.minute, .second]
-//	form.includesTimeRemainingPhrase = true
-//	form.unitsStyle = .short
 	return form
 }
 
 extension GameViewController: SCNSceneRendererDelegate {
 	
-	
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
 		
 		if switchboard.gamestate == .drumsPlaying {
 			
-			let songtime	= OggNo.sharedInstance.players[playa!]?.currentTime
+			let songtime 	= Jukebox.shared.players[.guitar]?.currentTime
+//			let songtime	= OggNo.sharedInstance.players[playa!]?.currentTime
 			let midiframe 	= CGFloat(songtime!)
 			let beatframe 	= midiframe * pace.fps
 			
 			hwy.pista.position.z = beatframe
 			
+			vocalcoach.tracklyrics(time: songtime!)
 			trackdeadnotes(time: beatframe)
 			starpower.trackpower(time: beatframe)
 			// asphat animation
 			asphalt?.geometry?.firstMaterial?.selfIllumination.contentsTransform.m42 = midiframe * pace.asphalt
-			if time >= beat {
-//				let timers = Int(totaltime - songtime!)
-				
-				scorekeeper.time.text = format.string(from: totaltime - songtime!)
-				/// empty action to keep game from pausing
-//				hwy.pista.runAction(emptyaction)
-				beat = time + TimeInterval(1)
-			}
 		}
     }
 }
 
-///empty action to keep gameview from pausing
-let emptyaction = SCNAction.customAction(duration: 60, action: { (node, loc) in })
-
-
 func trackdeadnotes (time: CGFloat) {
 	var count = 0
-	for gem in hwy.gems.childNodes {
+	for gem in hwy.notes.childNodes {
 		count += 1
 		if gem.isHidden {
 			continue
@@ -97,18 +71,17 @@ func trackdeadnotes (time: CGFloat) {
 		if gem.categoryBitMask == GemBit.dead {
 			continue
 		}
-		if gem.position.z < time - pace.hitwindow   {
+		if gem.position.z < time - pace.hitwindow {
+		
 			gem.categoryBitMask = GemBit.dead
 //			gem.geometry?.firstMaterial?.selfIllumination.contents = NSColor.black
 			scorekeeper.scoreMiss()
-//			coun-t += 1
-			continue
+			break
 		}
-		if count > 24 {
+		if count > 12 {
 			break
 		}
 	}
-	
 }
 
 
