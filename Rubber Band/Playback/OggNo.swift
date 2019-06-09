@@ -7,9 +7,10 @@
 //
 import AVFoundation
 
+var playa = URL(string: "")
+
 /// creates audi players, finds audio files (m4v, aac, mp3) in Song folder and plays all files found
 class OggNo: NSObject, AVAudioPlayerDelegate {
-	
 	
 	static let sharedInstance = OggNo()
 	
@@ -22,14 +23,14 @@ class OggNo: NSObject, AVAudioPlayerDelegate {
 	///
 	/// - Parameter folder: path to song folder
 	/// - Returns: an array of URLs of all the audio files found of the same format
-	func aacPaths (folder: URL) -> [URL]?{
+	func aacPaths (folder: URL) -> [URL] {
 		var aacURLs = [URL]()
 		// returns all the paths to ini files in all subdirectories
 		do{
 			let soundfiles = try FileManager.default.contentsOfDirectory(atPath: folder.path)
 			let aacfiles = soundfiles.filter{$0.contains(".m4a")}
 			for a in aacfiles {
-				if a == "preview.m4a" 	{ continue }
+				if a == "preview.m4a" || a == "crowd.m4a" { continue }
 				let url = folder.appendingPathComponent(a)
 				if a == "guitar.m4a"	{playa = url}
 				aacURLs.append(url)
@@ -50,9 +51,6 @@ class OggNo: NSObject, AVAudioPlayerDelegate {
 					aacURLs.append(url)
 				}
 			}
-			if aacURLs.count == 0 {
-				print("no files found")
-			}
 		}catch{
 			
 		}
@@ -60,15 +58,14 @@ class OggNo: NSObject, AVAudioPlayerDelegate {
 	}
 	
 	
-	/// creates multiple audio players plays all audio files found by OggNo.aacPaths()
+	/// creates multiple audio players to play all audio files found by OggNo.aacPaths()
 	///
-	/// - Parameter aacURL: an Array of audi file URLs
+	/// - Parameter aacURL: an Array of audio file URLs
 	func playSounds(aacURL: [URL]) {
 		for path in aacURL {
 			playSound(aacURL: path)
 		}
-		
-		totaltime = (players[playa!]?.duration)!
+		totaltime = (players[playa!]!.duration)
 	}
 	
 	func pauseSounds() {
@@ -92,6 +89,7 @@ class OggNo: NSObject, AVAudioPlayerDelegate {
 			if player.isPlaying == false { 	//player is not in use, so use that one
 				player.prepareToPlay()
 				player.play()
+
 			} else { 						// player is in use, create a new, duplicate, player and use that instead
 				let duplicatePlayer = try! AVAudioPlayer(contentsOf: aacURL)
 				//use 'try!' because we know the URL worked before.
@@ -114,18 +112,26 @@ class OggNo: NSObject, AVAudioPlayerDelegate {
 				print("Could not play sound file!")
 			}
 		}
-		
 	}
 	
 	func stop() {
 		players.removeAll()
-//		midiplayer.stop()
+		duplicatePlayers.removeAll()
 	}
 	
 	func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
 		//Remove the duplicate player once it is done
-		duplicatePlayers.remove(at: duplicatePlayers.index(of: player)!)
-		presentmenu()
+		duplicatePlayers.remove(at: duplicatePlayers.firstIndex(of: player)!)
 	}
 }
 
+
+/// creates new mikplayer and instructs playback
+///
+/// - Parameter seq: midi sequequence loaded from song.mid file
+func preparePlayback(){
+	/// all the song files inside the current song folder of the them type
+	let aacUrls = OggNo.sharedInstance.aacPaths(folder: selectedSong.folder!)
+	OggNo.sharedInstance.playSounds(aacURL: aacUrls)
+	
+}
