@@ -117,30 +117,31 @@ func animatecover (column: SCNNode) {
 	cover.addChildNode(record!)
 	cover.addChildNode(menutext.detailnode!)
 
-	if let stat = smanager.sorted.first(where: {$0.songid == cover.id}) {
-		selectedStat = stat
+	if let song = smanager.sorted.first(where: {$0.uuid == cover.id}) {
+		selectedSong = song
 	} else {
-		selectedStat =  smanager.fetchStatByID(id: cover.id.uuidString)
+		selectedSong =  smanager.fetchSongById(id: cover.id.uuidString)
 	}
-
-	selectedSong = selectedStat.song!
 	
+	// if no stat is found, update to 0,0
+	if let stat = scorekeeper.selectStat(selectedSong) {
+		TextureMover.shared.updateStars(stat)
+	} else {
+		TextureMover.shared.updateStars(0, dif: 0)
+	}
 	
-	
-	TextureMover.shared.changeStars(selectedStat.prodrums?.stars ?? 0)
-	print(selectedStat.prodrums?.stars)
-	TextureMover.shared.changeDifficulty(diff: selectedSong.tier?.drums ?? 0, node: label!)
-//	label?.geometry?.firstMaterial?.diffuse.contents = iconAtlas.textureNamed(selectedSong.icon!)
+	TextureMover.shared.updateTier()
 	
 	record?.runAction(slideout)
 	record?.runAction(spinrecord)
 	
 	labela.text = selectedSong.artist
 	labeln.text = selectedSong.title
-	let texture = iconAtlas.textureNamed(selectedSong.icon ?? "blank")
+	
+	let texturename = IconFile[selectedSong.icon!] ?? selectedSong.icon!
+	let texture = iconAtlas.textureNamed(texturename)
 	
 	labelicon.texture = texture
-	
 	
 	if selectedSong.length > 0 {
 		var secs = DateComponents()
@@ -154,27 +155,12 @@ func animatecover (column: SCNNode) {
 	lastnode.runAction(movebackward)
 	lastnode.runAction(rotateto0)
 	
-//	waddleforever.timingMode = .easeOut
 	cover.removeAllActions()
 	cover.position.z = 0
 	cover.position.x = 0
 	
-//	timer?.invalidate()
-//	timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true){tim in
-//		print(tim.timeInterval)
-//		if tim.timeInterval > 10 {
-//			Jukebox.shared.fadeout()
-//		}
-//		if tim.timeInterval > 15 {
-//
-//			Jukebox.shared.stop()
-//			timer?.invalidate()
-//		}
-//	}
-	
 	Jukebox.shared.timeit()
 	cover.runAction(wad, forKey: "looper") {
-
 		cover.runAction(wadtwice, forKey: "looper")
 		Jukebox.shared.getsongfiles(folder: selectedSong.folder!)
 		if Jukebox.shared.players.isEmpty {
@@ -191,8 +177,6 @@ func animatecover (column: SCNNode) {
 			}else {
 				Jukebox.shared.preview(from: selectedSong.preview)
 			}
-			
-			
 		}
 	}
 	
@@ -215,7 +199,6 @@ func animatecolumn (column: SCNNode) {
 }
 
 let waddle 	= SCNAction.rotateTo(x: 0, y: 0.5, z: 0, duration: 1.25)
-
 
 var waddle1:SCNAction {
 	let scna = SCNAction.rotateTo(x: 0, y: 0.5, z: 0, duration: 1.25)
