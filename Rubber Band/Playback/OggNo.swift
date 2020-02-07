@@ -35,7 +35,7 @@ class OggNo: NSObject, AVAudioPlayerDelegate {
 				if a == "guitar.m4a"	{playa = url}
 				aacURLs.append(url)
 			}
-			if aacURLs.count == 0 {
+			if aacURLs.isEmpty {
 				let aacfiles = soundfiles.filter{$0.contains(".aac")}
 				for a in aacfiles {
 					if a == "preview.aac" { continue }
@@ -43,7 +43,7 @@ class OggNo: NSObject, AVAudioPlayerDelegate {
 					aacURLs.append(url)
 				}
 			}
-			if aacURLs.count == 0 {
+			if aacURLs.isEmpty {
 				let aacfiles = soundfiles.filter{$0.contains(".mp3")}
 				for a in aacfiles {
 					if a == "preview.mp3" { continue }
@@ -131,7 +131,7 @@ class OggNo: NSObject, AVAudioPlayerDelegate {
 /// - Parameter seq: midi sequequence loaded from song.mid file
 func preparePlayback(){
 	/// all the song files inside the current song folder of the them type
-	let aacUrls = OggNo.sharedInstance.aacPaths(folder: selectedSong.folder!)
+	let aacUrls = OggNo.sharedInstance.aacPaths(folder: smanager.selected.song.folder!)
 	OggNo.sharedInstance.playSounds(aacURL: aacUrls)
 	
 }

@@ -12,48 +12,50 @@ import AVFoundation
 /// creates audi players, finds audio files (m4v, aac, mp3) in Song folder and plays all files found
 class Jukebox: NSObject, AVAudioPlayerDelegate {
 	
-	
 	static let shared = Jukebox()
 	
 	private override init() {}
 
-	var players 	= [Track:AVAudioPlayer]()
-	var folder 		= URL(fileURLWithPath: "")
-	var timer 		= Timer()
-	var time		= 0.0
+	var players = [Track:AVAudioPlayer]()
+	var folder 	= URL(fileURLWithPath: "upnext")
+	var timer 	= Timer()
+	var time	= 0.0
 	
 	/// creates multiple audio players to play all audio files found by OggNo.aacPaths()
 	///
 	/// - Parameter aacURL: an Array of audio file URLs
 	func play() {
 		self.timer.invalidate()
+		let devicetime = players[.guitar]?.deviceCurrentTime
 		for p in players {
 			if p.key == .preview { continue }
 			if p.key == .crowd { p.value.volume = 0 }
-			p.value.currentTime = 0
+//			p.value.currentTime = 0
 			p.value.prepareToPlay()
-			p.value.play()
+			p.value.play(atTime: devicetime! + 0.5)
 		}
 	}
 	
 	func preview(from: Double) {
 		if let player = players[.preview] {
-			print("playing preview")
 			player.prepareToPlay()
 			player.play()
 			return
 		}
+
+		let devicetime = players[.guitar]?.deviceCurrentTime
+//		self.timer.invalidate()
 		for p in players {
 			if p.key == .crowd { continue}
 			p.value.volume = 0
 			p.value.currentTime = from
 			p.value.prepareToPlay()
-			p.value.play()
+			p.value.play(atTime: devicetime! + 0.5) 	// sets playtime with delay - according to apple this ensures syncing
 			p.value.setVolume(1, fadeDuration: 1.5)
 		}
+//		print(from)
+//		self.timeit()
 	}
-	
-
 	
 	func stop() {
 		if let player = players[.preview] {
@@ -71,7 +73,7 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 		}
 	}
 	
-	func pauseSounds() {
+	func pauseMusic() {
 		for p in self.players.enumerated() {
 			p.element.value.pause()
 		}
@@ -88,15 +90,12 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 		self.timer.invalidate()
 		self.timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true){tim in
 			self.time += tim.timeInterval
-//			print(self.time)
 			if self.time == 25 {
-//				print("fading out")
 				Jukebox.shared.fadeout()
 			}
 			if self.time > 25 {
 				Jukebox.shared.stop()
 				tim.invalidate()
-//				print("invalidated")
 			}
 		}
 	}
@@ -169,9 +168,16 @@ private extension Jukebox {
 		var dic 		= [Track:AVAudioPlayer]()
 		let musicfiles 	= files.filter{$0.contains(format)}
 		for a in musicfiles {
-			if let track = Track.init(rawValue: a.split(separator: ".").first!.description) {
-				let player = try! AVAudioPlayer(contentsOf: folder.appendingPathComponent(a))
-				dic[track] = player
+			if let track 	= Track.init(rawValue: a.split(separator: ".").first!.description) {
+				let player 	= try! AVAudioPlayer(contentsOf: folder.appendingPathComponent(a))
+				dic[track] 	= player
+			}
+		}
+		
+		if !dic.isEmpty {
+			if dic[.guitar] == nil {
+				dic[.guitar] = dic[.song]
+				dic.removeValue(forKey: .song)
 			}
 		}
 		return dic
