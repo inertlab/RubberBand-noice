@@ -14,7 +14,6 @@ var midiClient	: MIDIClientRef 	= 0
 var inPort		: MIDIPortRef	 	= 0
 var src			: MIDIEndpointRef 	= MIDIGetSource(0)
 
-
 let drumgothit		 	= NSNotification.Name("drumhit")
 let drumCenter 			= NotificationCenter()
 let midiobject			= MIDIObjectRef()
@@ -33,7 +32,6 @@ func getDisplayName(_ obj: MIDIObjectRef) -> String
 	print("thisi s it ", name)
 	return name
 }
-
 
 func MyMIDIReadProc(pktList: UnsafePointer<MIDIPacketList>,
 					readProcRefCon: UnsafeMutableRawPointer?, srcConnRefCon: UnsafeMutableRawPointer?) -> Void
@@ -60,7 +58,6 @@ func MyMIDIReadProc(pktList: UnsafePointer<MIDIPacketList>,
 //	}
 }
 
-
 /// sets up a midi device listenter to register hits into the main thread. currently only works for game, needs to be setup for song selection
 func setupMidiDevice () {
 	MIDIClientCreate("MidiTestClient" as CFString, nil, nil, &midiClient)
@@ -69,11 +66,10 @@ func setupMidiDevice () {
 	
 	drumCenter.addObserver(forName: drumgothit, object: nil, queue: OperationQueue.main){
 		(note) in
-		switchboard.checkinput(note.object as! Button)
+//		switchboard.checkinput(note.object as! Button)
+		stagemc.currentact.handleevent(note.object as! Button)
 	}
 }
-
-
 
 //reference function DO NOT DELETE!!!
 //func MyMIDIReadProc(pktList: UnsafePointer<MIDIPacketList>,

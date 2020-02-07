@@ -10,62 +10,29 @@ import Foundation
 import MIKMIDI
 
 
+/// Timecode changes MidiTimeStamps into Seconds
+///
+/// There is no need to do anything with this class directly. When a new MusicSequence gets added to MusicSheet. TimeCode gets updated
 class TimeCode {
+	static let tc = TimeCode()
 	/// keeps internal count of seconds
 	private var clock = 0.0
 	/// list of tempo events updated with seconds and previous bmp and timestamp
 	private var events = [fzTempoEvent]()
 	
-	init(seq: MIKMIDISequence) {
-		updateevents(seq: seq)
-	}
+	private init() {}
 	
 	/// converts the MusicTimeStamps in an array of tuples to Seconds
 	///
 	/// - Parameter seq: midi sequence to analyze
 	/// - return: an array of tuples
-	func convertmtstosec(notes: [( Double, String)]) -> [(Double, String)]{
-		var newnotes = [(Double, String)]()
-		var oldnote = 0.0
-		var oldtime = 0.0
-		for note in notes {
-//			print(note)
-			var newnote = (0.0, note.1)
-			
-			if note.0 == oldnote {
-				newnote.0 = oldtime
-		
-			} else {
-				oldnote = note.0
-				
-				for event in events {
-					if note.0 < event.mts {
-						if note.0 == event.prev_mts {
-							newnote.0 = event.time
-							oldtime = event.time
-							break
-						}
-						newnote.0 = mtstosec(fzte: event, timestamp: note.0)
-						oldtime = newnote.0
-						break
-					}
-				}
-			}
-			newnotes.append(newnote)
-		}
-		return newnotes
-	}
-	
-	/// converts the MusicTimeStamps in an array of tuples to Seconds
 	///
-	/// - Parameter seq: midi sequence to analyze
-	/// - return: an array of tuples
+	/// Depricated
 	func convertmtstosec(notes: [( Double, Button)]) -> [(Double, Button)]{
 		var newnotes = [(Double, Button)]()
 		var oldnote = 0.0
 		var oldtime = 0.0
 		for note in notes {
-			//			print(note)
 			var newnote = (0.0, note.1)
 			
 			if note.0 == oldnote {
@@ -77,12 +44,12 @@ class TimeCode {
 				for event in events {
 					if note.0 < event.mts {
 						if note.0 == event.prev_mts {
-							newnote.0 = event.time
-							oldtime = event.time
+							newnote.0 	= event.time
+							oldtime 	= event.time
 							break
 						}
-						newnote.0 = mtstosec(fzte: event, timestamp: note.0)
-						oldtime = newnote.0
+						newnote.0 	= mtstosec(fzte: event, timestamp: note.0)
+						oldtime 	= newnote.0
 						break
 					}
 				}
@@ -102,25 +69,20 @@ class TimeCode {
 		}
 		return sec
 	}
-}
-
-private extension TimeCode {
-
-	/// converts musicTimeStamps into seconds and adjusts for song delay
-	///
-	/// - Parameters:
-	///   - fzte: fzTempoEvent
-	///   - timestamp: double representing a musicTimeStamp
-	/// - Returns: time stamp in seconds with delay built in
-	func mtstosec(fzte: fzTempoEvent, timestamp: Double ) -> Double  {
-		let beatoffest = timestamp - fzte.prev_mts
-		return (beatoffest * secperbeat(bpm: fzte.bpm)) + fzte.time + selectedSong.delay
+	
+	func fznotetosec(_ fznote: fzNote) {
+		for event in events {
+			if fznote.time < event.mts {
+				
+			}
+		}
 	}
 	
 	/// converts tempo events into fzTempoEvents and stores them in self.events
 	///
 	/// - Parameter seq: musicSequence - aka midi file track
-	func updateevents(seq: MIKMIDISequence) {
+	func initTimeCode(seq: MIKMIDISequence) {
+		self.events = []
 		let totalbeats = seq.length
 		let tempos = seq.tempoEvents()
 		var bpm = 100.0
@@ -149,6 +111,20 @@ private extension TimeCode {
 		let lastevent = fzTempoEvent(mts: totalbeats, bpm: bpm, time: clock, prev_mts: prev_tstamp)
 		self.events.append(lastevent)
 		clock = 0
+	}
+}
+
+private extension TimeCode {
+
+	/// converts musicTimeStamps into seconds and adjusts for song delay
+	///
+	/// - Parameters:
+	///   - fzte: fzTempoEvent
+	///   - timestamp: double representing a musicTimeStamp
+	/// - Returns: time stamp in seconds with delay built in
+	func mtstosec(fzte: fzTempoEvent, timestamp: Double ) -> Double  {
+		let beatoffest = timestamp - fzte.prev_mts
+		return (beatoffest * secperbeat(bpm: fzte.bpm)) + fzte.time + smanager.selected.song.delay
 	}
 	
 	/// Upades Clock elapsed time
@@ -180,3 +156,11 @@ struct fzTempoEvent {
 	let prev_mts:	Double
 }
 
+struct FZNoteEvent {
+	let button: 	Button
+	let start: 	Double
+	let end:		Double
+}
+
+typealias fzNote = (button:Button, time:Double, length:Double)
+typealias fzNoteList = [fzNote]

@@ -13,8 +13,8 @@ import SpriteKit
 struct Starvalues {
 	let label = scoreDisplay?.childNode(withName: "stars") as! SKLabelNode
 	var gold:Double
-	var stars:Int16 = 0
-	var goal:Int32 = 0
+	var stars:Int16 	= 0
+	var goal:Int32 		= 0
 	init (notecount: Double ) {
 		self.gold = (notecount - 30) * 140
 		self.goal = Int32(self.gold * 0.055)
@@ -52,11 +52,30 @@ struct Starvalues {
 
 /// Keeps track of StarPower notes and streaks
 class StarPower {
+	
+	enum State {
+		case activated
+		case low
+		case ready
+	}
+	
+	let hwy: HWY
+	/// gems that activate star power - Crash Cymbals
+	let activators: SCNNode
+//	let powerx: Int
+	
+	init(_ hwy: HWY) {
+		self.hwy = hwy
+		self.activators	= hwy.pista.childNode(withName: "starpower", recursively: false)!
+//		if bass { self.powerx = 3 } else {self.powerx = 2}
+	}
+	
 	var state 		= State.low
 	/// an list of gems to hide when star power is active so they aren't double hit
-	var tohide 		= [SCNNode]()
-	/// gems that activate star power - Crash Cymbals
-	let activators	= hwy.pista.childNode(withName: "starpower", recursively: false)!
+//	var tohide 		= [SCNNode]()
+
+	var starnotes 	= MusicSheet.ChordList()
+
 	/// time frame for the segments of starpower notes
 	var timelist 	= [(CGFloat,CGFloat)]()
 	/// all the nodes with star power
@@ -79,34 +98,12 @@ class StarPower {
 	/// - Parameter time: current play time from the midi file
 	func trackpower (time: CGFloat){
 		
-		if index < self.timelist.count {	// keeps index from going out of range
-			if !self.segment && time > self.timelist[index].0 { //star segment has began
-				self.segment = true
-				print("segment is on")
-			}
-			if self.segment {				// star segment is active
-				if self.miss {				// star segement ends immediate if note is missed - failure
-					self.powermissed()
-//					self.success()
-				} else if time > self.timelist[index].1 {	// star segment ended succesfully
-					self.success()
-				}
-			}
-		}
-		
-		switch self.state {
-		case .countdown:
-			
+		if state == .activated {
 			if meter == 0 {
-				self.state = .low
-				self.power = 1
-				if scorekeeper.multiplier == 4 {
-					asphalt?.geometry?.firstMaterial?.selfIllumination.contentsTransform.m41 = 0.25
-					
-				}else{
-					asphalt?.geometry?.firstMaterial?.selfIllumination.contentsTransform.m41 = 0
-				}
-				break
+				self.state 		= .low
+				self.power 		= 1
+				hwy.starpower 	= false
+				return
 			}
 			
 			for beat in hwy.beatlines.childNodes {
@@ -117,16 +114,12 @@ class StarPower {
 					break
 				}
 			}
-		
-			break
-		case .low:
-			break
-		case .ready: // when ready, the triggers are displayed and tracked
-			break
 		}
 	}
 	
 	/// resets all variables for new song
+	///
+	/// this is not needed if SP get initiated everytime
 	func resetvars () {
 		self.timelist.removeAll()
 		self.powergems.removeAll()
@@ -135,113 +128,58 @@ class StarPower {
 		self.power 		= 1
 		self.meter 		= 0
 		self.segment 	= false
-		starpower.tohide = []
+//		self.tohide 	= []
 		self.activators.opacity = 0
-		self.state = .low
-		for c in activators.childNodes {
-			c.removeFromParentNode()
+		self.state 		= .low
+		for node in activators.childNodes {
+			node.removeFromParentNode()
 		}
 	}
 	
-	/// Checks if note was present when trigger was hit
-	///
-	/// - Returns: returns true on success and false on fail
-	func checkHit() -> Bool {
-		let max = hwy.pista.position.z + pace.hitwindow
-		let min = hwy.pista.position.z - pace.hitwindow
-	
-		for trigger in self.activators.childNodes {
-			
-			if trigger.position.z < max && trigger.position.z > min {
-				// trigger was successful
-				self.activetime = trigger.position.z
-				self.power = 2
-				self.state = .countdown
-				
-				if scorekeeper.multiplier == 4 {
-					asphalt?.geometry?.firstMaterial?.selfIllumination.contentsTransform.m41 = 0.75
-				}else{
-					asphalt?.geometry?.firstMaterial?.selfIllumination.contentsTransform.m41 = 0.5
-				}
-				
-				trigger.removeFromParentNode()
-				activators.opacity = 0
-				for gem in tohide {
-					if gem.position.z < hwy.pista.position.z + 5 {
-						gem.removeFromParentNode()
-						continue
-					}
-					gem.isHidden = false
-				}
-				greenC.hit()
-				
-				for beat in hwy.beatlines.childNodes {
-					if beat.position.z < self.activetime {
-						beat.removeFromParentNode()
-					}
-				}
-				print ("star power active")
-				return true
+	/// Activate Star Power - Begins countdown
+	/// - Parameter power: the power multiple. 3x for Bass, 2x for other instruments
+	func activateSP (_ power: Int) {
+
+		self.power = power
+		self.state = .activated
+		
+		hwy.starpower = true
+		
+		// clean out all the beats in front of activator to start count
+		for beat in hwy.beatlines.childNodes {
+			if beat.position.z < self.activetime {
+				beat.removeFromParentNode()
+//				print(beat)
 			}
 		}
-		return false
+		print ("star power active")
+	}
+	
+	/// called when star notes section is completed succesfully, implement animation here
+	func starruncompleted() {
+//		var ready = false
+		segment = false
+		// add to star meter
+		if meter < 32 || state == .activated {
+			meter 	+= 8
+			index 	+= 1
+			
+			print("starpower acquired")
+			
+			flash(node: hwy.base)
+		}
+		// add to star meter
+		if meter >= 16 && state != .activated {
+			state = .ready
+			// todo
+			// show activators
+			// hide notes that line up with activators
+		}
 	}
 }
 
 
 private extension StarPower {
-	/// called when star notes are hit succesfully, implement animation here
-	func success() {
-		segment = false
-		if meter < 32 || state == .countdown {
-			meter 	+= 8
-			index 	+= 1
-			print("starpower acquired")
-			
-			flash(node: hwy.base)
-		}
-		if meter >= 16 && state != .countdown {
-			state = .ready
-			for trigger in activators.childNodes {
-				if trigger.position.z < hwy.pista.position.z - 5 {
-					trigger.removeFromParentNode()
-					continue
-				}
-			}
-			activators.opacity = 1
-			for note in tohide {
-				if note.position.z < hwy.pista.position.z + 5 {
-					continue
-				}
-				note.isHidden = true
-			}
-		}
-	}
-	
-	/// handles animations and score when player fails
-	func powermissed () {	//
-		self.segment 	= false
-		self.miss 		= false
-		for gem in self.powergems[index]{
-			switch gem.categoryBitMask {
-			case GemBit.red:
-				gem.geometry?.firstMaterial = gems.m_red
-			case GemBit.blue:
-				gem.geometry?.firstMaterial = gems.m_blue
-			case GemBit.green:
-				gem.geometry?.firstMaterial = gems.m_green
-			case GemBit.yellow:
-				gem.geometry?.firstMaterial = gems.m_yellow
-			case GemBit.orange:
-				gem.geometry?.firstMaterial = gems.m_orange
-				break
-			default:
-				gem.geometry?.firstMaterial = gems.m_cymbals
-			}
-		}
-		self.index += 1
-		print("segment failed")
-	}
 	
 	/// animate meter back to zero
 	func resetmeter () {
@@ -261,10 +199,4 @@ private extension StarPower {
 	}
 }
 
-let starpower = StarPower()
 
-enum State {
-	case countdown
-	case low
-	case ready
-}

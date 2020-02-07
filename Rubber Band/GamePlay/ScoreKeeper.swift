@@ -26,6 +26,11 @@ class ScoreKeeper {
 		return stats?.childNode(withName: "message") as! SKLabelNode
 	}
 	
+	
+	var streaklabe:SKLabelNode {
+		return stats?.childNode(withName: "streak") as! SKLabelNode
+	}
+	
 	/// the cumulitive score
 	var starvalues:Starvalues?
 	
@@ -36,29 +41,58 @@ class ScoreKeeper {
 		}
 	}
 	/// note value gets multiplied by this
+	///
+	/// issue: multiplier only changes the multipler number and flow of Orb
 	var multiplier 	= 1 {
 		didSet {
-			let val = self.multiplier * starpower.power
-			hwy.sphereglow.removeAllActions()
-			if val == 1 {
+			let value = self.multiplier * stagemc.track.sp.power
+			stagemc.track.hwy.spherex.flow(multiplier: self.multiplier)
+			
+			if value == 1 {
 				self.labelx.text = ""
-				hwy.sphereglow.opacity = 0
-			} else {
-				if self.multiplier == 4 {
-					hwy.sphereglow.opacity = 0.1
-					hwy.sphereglow.runAction(SCNAction.repeatForever(spinpulse))
-				} else {
-					hwy.sphereglow.geometry?.firstMaterial?.diffuse.contentsTransform.m41 += 0.5
-					hwy.sphereglow.runAction(pulsequick)
+				return
+			}
+			self.labelx.text = "x" + value.description
+		}
+	}
+	
+	var streak = 0
+	
+	/// note comborun, when it reaches 10, multiplier goes up 1
+	var comborun = 0 {
+		didSet {
+			switch self.comborun {
+			case 0:
+				// combo broken
+				if multiplier == 4 {
+					stagemc.track.hwy.flow = false
+					if let crowd = Jukebox.shared.players[.crowd] {
+						crowd.setVolume(0, fadeDuration: 1)
+					}
 				}
-				self.labelx.text = "x" + val.description
+				if oldValue > streak {
+					streak = oldValue
+				}
+				multiplier = 1
+			case 10:
+				multiplier = 2
+			case 20:
+				multiplier = 3
+			case 30:
+				// flow achived
+				multiplier = 4
+				stagemc.track.hwy.flow = true
+				if let crowd = Jukebox.shared.players[.crowd] {
+					crowd.setVolume(1, fadeDuration: 1)
+				}
+			default:
+				break;
 			}
 		}
 	}
-	/// note streak, when it reaches 10, multiplier goes up 1
-	var submultiplier = 1
+	
 	/// score value of a successful note
-	let pts 		= 30
+	let pts 	= 30
 	/// Score display on screen
 	var label 	= scoregroup?.childNode(withName: "score"		) 	as! SKLabelNode
 	var labelx 	= scoregroup?.childNode(withName: "multiplier"	) 	as! SKLabelNode
@@ -67,40 +101,35 @@ class ScoreKeeper {
 	
 	/// resets all the multipliers to 1 when player breaks streak
 	func scoreMiss () {
-//		starpower is a seperate class that keeps track of changes in star power
-		if starpower.segment {
-			starpower.miss = true
+		// starpower is a seperate class that keeps track of changes in star power
+		if stagemc.track.sp.segment {
+			stagemc.track.sp.miss = true
 		}
-		self.submultiplier = 1
-		hwy.spherex.geometry?.firstMaterial?.diffuse.contentsTransform.m41 = 0
-		if multiplier == 4 {
-			asphalt?.addAnimation(lightdown, forKey: "mdiffuse")
-			asphalt?.geometry?.firstMaterial?.multiply.intensity = 0.9
-			if let c = Jukebox.shared.players[.crowd] {
-				c.setVolume(0, fadeDuration: 1)
-			}
-			if starpower.state == .countdown {
-				asphalt?.geometry?.firstMaterial?.selfIllumination.contentsTransform.m41 = 0.5
-			}else{
-				asphalt?.geometry?.firstMaterial?.selfIllumination.contentsTransform.m41 = 0
-			}
+		
+		Jukebox.shared.players[.drums]?.volume = 0
+		
+		if comborun != 0 {
+			comborun = 0
 		}
-		self.multiplier = 1
 	}
 	
 	/// updates score when player hits a note
 	func scoreOneUp () {
-		self.total += Int32(self.multiplier * pts * starpower.power)
-		self.multiplierMath()
+		Jukebox.shared.players[.drums]?.volume = 1
+		total += Int32(self.multiplier * pts * stagemc.track.sp.power)
+		
+		if multiplier != 4 {
+			stagemc.track.hwy.spherex.increment()
+		}
+		comborun += 1
 	}
 	
 	/// resets score and streaks. only used when loading a new song
 	func resetscore () {
 		total 			= 0
 		multiplier 		= 1
-		submultiplier 	= 1
-		asphalt?.geometry?.firstMaterial?.multiply.intensity = 0.8
-		asphalt?.geometry?.firstMaterial?.selfIllumination.contentsTransform.m41 = 0
+		comborun 		= 0
+		streak 			= 0
 	}
 	
 	/// deletes all stats for all players
@@ -109,8 +138,10 @@ class ScoreKeeper {
 	func deleteallstats() {
 		let stat:NSFetchRequest<Stats> = Stats.fetchRequest()
 		let arr = try? pc.viewContext.fetch(stat)
+		print("this is happening too")
 		for s in arr! {
 			pc.viewContext.delete(s)
+			print("deleted", s)
 		}
 		try? pc.viewContext.save()
 	}
@@ -120,57 +151,110 @@ class ScoreKeeper {
 		let arr = try? pc.viewContext.fetch(stat)
 		for s in arr! {
 			if s.prodrums != nil {
-//				print("player missign \(s.prodrums?.score, s.song?.title!, s.guitar?.score, s.playcount)")
 			}
 		}
 	}
 	
+	/// displays the stat screen when game song is done or stopped.
+	///
+	/// consolidate with update stats as there is too much crossover
 	func displaystat() {
-		switchboard.updatestate(gamestate: .statsdisplay)
-		scorelabel.text = scorekeeper.total.description
-		mainView.overlaySKScene = stats
-		TextureMover.shared.changeStars(scorekeeper.starvalues!.stars)
+		// update combo one more time, because it only gets updated when streak fails
+		if comborun > streak { streak = comborun}
+		scorelabel.text = total.description
+		streaklabe.text = "your longest streak was \(streak) notes"
+		mainView.overlaySKScene?.run(SKAction.fadeOut(withDuration: 0.25)) {
+			mainView.overlaySKScene = self.stats
+		}
 	}
 	
 	/// Updates user stats: Score, Playcount, etc
 	///
 	/// - Parameter song: The currently selected song
+	///
 	func updatestats(song: Song){
-		if scorekeeper.total > 0 {
-			
-			if selectedStat.prodrums == nil {
-				let drums = Score(context: pc.viewContext)
-				drums.score = scorekeeper.total
-				selectedStat.prodrums = drums
-				congratslabel.text = "New Score!"
-				messagelabel.text = "This is the first recorded score on this song"
-				
-			} else if scorekeeper.total > selectedStat.prodrums!.score {
-				congratslabel.text = "Congratulations!"
-				messagelabel.text = "You set a new High Score by \(scorekeeper.total - selectedStat.prodrums!.score)!"
-				selectedStat.prodrums?.score = scorekeeper.total
-				selectedStat.prodrums?.stars = scorekeeper.starvalues!.stars
-			} else {
-				congratslabel.text = "Try Harder :("
-				messagelabel.text = "You need \(selectedStat.prodrums!.score - scorekeeper.total) to beat your score"
-				return
+		
+		if total == 0 {
+			congratslabel.text = "No Score"
+			var message = "There is no score set fot this song"
+			if let statx = selectStat(song) {
+				if let score = getscorebyinstrument(statx){
+					message = "Your current High Score: \(score.score)"
+				}
 			}
-			
-			try? pc.viewContext.save()
+			messagelabel.text = message
+			// return without saving
+			return
+		}
+		
+		// there is a score to record, maybe
+		if let statx = selectStat(song) {
+			if let score = getscorebyinstrument(statx){
+				// compare new socre to old score
+				switch total - score.score {
+				case 1...:
+					congratslabel.text 	= "Congratz!"
+					messagelabel.text 	= "You got a new High Score by \(total - score.score)!"
+					savenewrecord(score)
+				case 0:
+					congratslabel.text 	= "Try Harder :("
+					messagelabel.text 	= "you tied your last score"
+					savescoreplaycount(score)
+				default:
+					congratslabel.text 	= "Try Harder :("
+					messagelabel.text 	= "You need \(score.score - total) to beat the high score"
+					savescoreplaycount(score)
+				}
+			} else {
+				// no current score, make a new one
+				newScore(statx)
+			}
+		} else {
+			// no stat found, therefore no score found either
+			// make a new stat
+			newStat(song)
 		}
 	}
 	
-	func spin()  {
-		hwy.sphereglow.runAction(SCNAction.repeatForever( spinpulse))
+
+	
+	/// retrieves the score for the current user isntrument
+	/// - Parameter stat: the Stat to the played Song
+	func getscorebyinstrument(_ stat: Stats) -> Score? {
+		switch User.current.instrument {
+		case .drums:
+			return stat.drums
+		case .prodrums:
+			return stat.prodrums
+		default:
+			return stat.guitar
+		}
+	}
+	
+	func selectStat (_ song: Song) -> Stats? {
+		for stat in smanager.selected.song.stats as! Set<Stats> {
+			if stat.pindex == User.current.player.index {
+				return stat
+			}
+		}
+		print("no stat found")
+		return nil
+	}
+	
+	func statcount () -> Int {
+		let stat:NSFetchRequest<Stats> = Stats.fetchRequest()
+		return try! pc.viewContext.count(for: stat)
+	}
+	
+	func deletestat () -> Int {
+		
+		let stat:NSFetchRequest<Stats> = Stats.fetchRequest()
+		return try! pc.viewContext.count(for: stat)
 	}
 }
 
+
 private extension ScoreKeeper {
-	
-	func newscore () -> Score {
-		let score = Score(context: pc.viewContext)
-		return score
-	}
 	
 	/// keep out - dead code
 	///
@@ -183,94 +267,67 @@ private extension ScoreKeeper {
 		fetstat.predicate	= NSCompoundPredicate(andPredicateWithSubpredicates: [uuidp,indexp])
 		do {
 			let stats = try pc.viewContext.fetch(fetstat)
-			if stats.count > 0 {
-				return stats[0]
-			}
-			return nil
+			return stats.first
 		} catch let err as NSError {
 			print(err)
 		}
 		return nil
 	}
-
-	/// keeps track of multiplier streak
-	func multiplierMath(){
-		if multiplier == 4 {
-			return
+	
+	/// creates a new stat where there was none, also created a new Record and attaches it to the correct instrument
+	/// - Parameter song: a song to attach stat to
+	func newStat (_ song: Song) {
+		let stat = Stats(context: pc.viewContext)
+		
+		stat.setby 	= User.current.player
+		stat.pindex = User.current.player.index
+		stat.song 	= song
+		stat.songid = song.uuid // not sure if this is really needed
+	
+		newScore(stat)
+	}
+	
+	/// Makes a new record and saves it if no previous record was found
+	/// - Parameter stat: the current song stat
+	func newScore(_ stat: Stats) {
+		let newscore 		= Score(context: pc.viewContext)
+		switch User.current.instrument {
+		case .drums:
+			stat.drums 		= newscore
+		case .prodrums:
+			stat.prodrums 	= newscore
+		case .bass:
+			stat.bass 		= newscore
+		case .keys:
+			stat.keys		= newscore
+		default:
+			stat.guitar 	= newscore
 		}
-		self.submultiplier += 1
-
-		hwy.spherex.geometry?.firstMaterial?.diffuse.contentsTransform.m41 += 0.025
-
-		if self.submultiplier > 10 {
-			
-			self.submultiplier 	= 1
-			self.multiplier 	+= 1
-//			hwy.spherex.geometry?.firstMaterial?.transparent.contentsTransform.m41 -= 0.25
-			// 4x multiplier reached, add groove animations and crowd sing along
-			if multiplier == 4 {
-				asphalt?.addAnimation(lightup, forKey: "selfIllumination")
-				asphalt?.geometry?.firstMaterial?.multiply.intensity = 0.99
-				if let c = Jukebox.shared.players[.crowd] {
-					c.setVolume(1, fadeDuration: 1)
-				}
-				if starpower.state == .countdown {
-					asphalt?.geometry?.firstMaterial?.selfIllumination.contentsTransform.m41 = 0.75
-				}else{
-					asphalt?.geometry?.firstMaterial?.selfIllumination.contentsTransform.m41 = 0.25
-				}
-			}
+		
+		savenewrecord(newscore)
+		
+		congratslabel.text 	= "New Score!"
+		messagelabel.text 	= "This is the first High Score"
+		
+	}
+	
+	/// if there is a new record score set, saves and updates graphics
+	/// - Parameter score: the current score to update
+	func savenewrecord(_ score: Score) {
+		score.score 		= total
+		score.stars 		= starvalues!.stars
+		score.difficulty 	= User.current.diff.rawValue
+		TextureMover.shared.updateStars(score.stars, dif: score.difficulty)
+		savescoreplaycount(score)
+	}
+	
+	func savescoreplaycount(_ score: Score) {
+		score.playcount += 1
+		do {
+			try pc.viewContext.save()
+		} catch  {
+			print(error)
 		}
-	}
-	
-	/// lights up the asphalt
-	var lightup:CABasicAnimation {
-		let animation = CABasicAnimation(keyPath: "geometry.firstMaterial.diffuse.intensity")
-			animation.fromValue 	= 0.25
-			animation.toValue 		= 1
-			animation.duration 		= 0.5
-			animation.fillMode 		= CAMediaTimingFillMode.forwards
-			animation.repeatCount 	= 0
-			animation.isRemovedOnCompletion = false
-		return animation
-	}
-	
-	/// turns light on asphalt off
-	var lightdown:CABasicAnimation {
-		let animation = CABasicAnimation(keyPath: "geometry.firstMaterial.diffuse.intensity")
-			animation.fromValue 	= 1
-			animation.toValue 		= 0.25
-			animation.duration 		= 0.25
-			animation.autoreverses 	= false
-			animation.fillMode 		= CAMediaTimingFillMode.forwards
-			animation.repeatCount 	= 0
-			animation.isRemovedOnCompletion = false
-		return animation
-	}
-	
-	/// pulse On then Off - once
-	/// total duration should = spinpulse total duration
-	var pulse:SCNAction {
-		let pulsef 		= SCNAction.fadeOpacity(by: 0.9, duration: 0.5)
-		let pulseb 		= SCNAction.fadeOpacity(by: -0.9, duration: 2.5)
-		let sequence 	= SCNAction.sequence([pulsef, pulseb])
-		return sequence
-	}
-	
-	/// pulse On then Off - once
-	/// total duration should = spinpulse total duration
-	var pulsequick:SCNAction {
-		let pulsef 		= SCNAction.fadeOpacity(by: 0.6, duration: 0.25)
-		let pulseb 		= SCNAction.fadeOpacity(by: -0.6, duration: 0.75)
-		let sequence 	= SCNAction.sequence([pulsef, pulseb])
-		return sequence
-	}
-	
-	/// spin and pulse forever
-	var spinpulse:SCNAction {
-		let spin 	= SCNAction.rotateBy(x: 0, y: 0, z: 0.75, duration: 3)
-		let group 	= SCNAction.group([pulse, spin])
-		return group
 	}
 }
 

@@ -21,7 +21,7 @@ class Defaults {
 		let fet:NSFetchRequest<Player> = Player.fetchRequest()
 		let array = try? pc.viewContext.fetch(fet)
 		
-		if array?.count == 0 {
+		if array!.isEmpty {
 			print("no players in db, making default one")
 			let dplayer 	= Player(context: pc.viewContext)
 			dplayer.name 	= "guest"
@@ -47,7 +47,6 @@ class Defaults {
 				}
 			}
 		}
-		
 		return (array?.first)!
 	}
 }

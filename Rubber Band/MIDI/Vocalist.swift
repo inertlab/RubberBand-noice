@@ -16,9 +16,9 @@ class Vocalist {
 	
 	var count 	= 0
 	
-	init(track: MIKMIDITrack, tc: TimeCode) {
-		self.track 		= track
-		lyricist(tc: tc)
+	init() {
+		self.track 		= MusicSheet.shared.getvocals()
+		lyricist()
 	}
 	
 	func updatecoach(coach: Vocalcoach)  {
@@ -26,11 +26,13 @@ class Vocalist {
 	}
 }
 
+fileprivate typealias Phrase = (Double, String)
 private extension Vocalist {
 	/// retrieves lyrics from lyric track in an array of phrases [(time, phrase)]
 	///
 	/// - Parameter tc: timecode instance
-	func lyricist(tc: TimeCode){
+	func lyricist(){
+		let tc = TimeCode.tc
 		var phrase 		= (0.0, "")
 		var text 	 	= ""
 		var time 		= 0.0
@@ -48,20 +50,9 @@ private extension Vocalist {
 			}
 			if e.eventType == .metaText {
 				let event = e as! MIKMIDIMetaTextEvent
-				if levents.count == 0 {
-					if event.string != nil{
-						let st = event.string!
-						switch st.last{
-						case "-":
-							text += st.dropLast()
-						case "+":
-							continue
-						default:
-							text += (st + " ")
-						}
-					}
-				} else if event.string! == "[idle]" {
-					phrase = (time, text)
+				
+				if event.string == "[idle]" {
+					phrase = (time, rephrase(text: text))
 					lyrics.append(phrase)
 					time = tc.beattosec(beat: event.timeStamp)
 					text = "***"
@@ -76,18 +67,23 @@ private extension Vocalist {
 						time = tc.beattosec(beat: note.timeStamp)
 						continue
 					}
-					text = text.replacingOccurrences(of: "= ", with: "-")
-					phrase = (time, text.replacingOccurrences(of: "#|(- )|(-# )|(-^ )", with: "", options: .regularExpression, range: nil))
+					
+					phrase = (time, rephrase(text: text))
 					lyrics.append(phrase)
 					time = tc.beattosec(beat: note.timeStamp)
 					text = ""
 				}
 			}
 		} // end for loop
+		
 		lyrics.append((time, text))
 		lyrics.append((time + 2, ""))
 		lyrics.append((time + 1000, ""))
 //		lyrics.append((tc.beattosec(beat: (track.events.last?.timeStamp)!), ""))
 	} // end of lyricist
 	
+	func rephrase(text: String) -> String {
+		let newtext = text.replacingOccurrences(of: "= ", with: "-")
+		return newtext.replacingOccurrences(of: "#|(- )|(-# )|(-\\^ )|(\\^)", with: "", options: .regularExpression, range: nil)
+	}
 }

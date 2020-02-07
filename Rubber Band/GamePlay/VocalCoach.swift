@@ -17,9 +17,9 @@ class Vocalcoach {
 	var count 		= 0
 	let lyricnode 	= scoreDisplay?.childNode(withName: "lyrics")!
 	var phrases 	= [SKLabelNode]()
-	let phrase_a: SKLabelNode
-	let phrase_b: SKLabelNode
-	let phrase_c: SKLabelNode
+	let phrase_a	: SKLabelNode
+	let phrase_b	: SKLabelNode
+	let phrase_c	: SKLabelNode
 	let a_exit 		= SKAction(named: "exit")
 	let a_enter 	= SKAction(named: "enter")
 	let a_appear 	= SKAction(named: "appear")
@@ -33,11 +33,14 @@ class Vocalcoach {
 		phrases.append(self.phrase_b)
 		phrases.append(self.phrase_c)
 		scoreDisplay?.isPaused = false
+		emptylyrics()
 	}
 	
-	func tracklyrics(time: Double)  {
+	/// Keeps track of Song play position and updates lyrics accordingy
+	/// - Parameter songtime: The current time of the song playback in seconds - Unaltered
+	func tracklyrics(songtime: Double)  {
 	
-		if time > lyrics[count].0  {
+		if songtime > lyrics[count].0  {
 //			resetanim()
 //			resetloc()
 			switch count % 3 {
@@ -74,13 +77,21 @@ private extension Vocalcoach {
 		resetyrlics()
 	}
 	
+	func emptylyrics() {
+		print("emptying lyrics")
+		for p in phrases {
+			p.removeAllActions()
+			p.text = ""
+		}
+	}
+	
 	func startposition() {
 		abc = [0,1,2]
-		phrases[abc[0]].position.y 	= -20
+		phrases[abc[0]].position.y 	= -25
 		phrases[abc[0]].alpha 		= 0.25
-		phrases[abc[1]].position.y 	= -20
+		phrases[abc[1]].position.y 	= -25
 		phrases[abc[1]].alpha 		= 0
-		phrases[abc[2]].position.y 	= -20
+		phrases[abc[2]].position.y 	= -25
 		phrases[abc[2]].alpha 		= 0
 		resetyrlics()
 	}
@@ -116,5 +127,4 @@ let skmoveup 	= SKAction.moveTo(y: CGFloat(0), duration: 1)
 
 let skslideup 	= SKAction.group([skmoveup, skfadein1])
 
-
-let vocalcoach  	= Vocalcoach()
+//let vocalcoach  	= Vocalcoach()

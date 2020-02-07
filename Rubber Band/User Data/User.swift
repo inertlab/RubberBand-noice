@@ -11,14 +11,35 @@ import CoreData
 
 
 class User {
-	static let current = User()
-	
+	static let current 		= User()
+
 	let player:	Player
-	var diff: Difficulty = .easy
+	var diff: Difficulty 	= .expert
+	var instrument: Instrument  {
+		didSet {
+			updatekeycode(self.instrument)
+			lebelInst.text = instrument.name()
+			TextureMover.shared.updateTier(tier: instrument.gettier())
+			TextureMover.shared.updateStars()
+		}
+	}
+	
 	private init() {
-		self.player = Defaults.shared.defaultuser()
-//		self.diff = Difficulty(rawValue: self.player.difficulty) ?? .easy
-		labelDiff.text = self.diff.text()
+		self.player 	= Defaults.shared.defaultuser()
+		self.diff 		= Difficulty(rawValue: self.player.difficulty)!
+		self.instrument = Instrument(rawValue: self.player.instrument)!
+		labelDiff.text 	= self.diff.text()
+		lebelInst.text 	= self.instrument.name()
+	}
+	
+	func updateUser() {
+		player.difficulty = diff.rawValue
+		player.instrument = instrument.rawValue
+		do {
+			try pc.viewContext.save()
+		} catch  {
+			print(error)
+		}
 	}
 	
 	func printinfo() {
@@ -26,8 +47,8 @@ class User {
 	}
 	
 	func newPlayer (name: String)  {
-		let users = findUsers()
-		let user = users.contains {$0.name == name }
+		let users 	= findUsers()
+		let user 	= users.contains {$0.name == name }
 		
 		if user {
 			print("name has been taken")
@@ -35,29 +56,26 @@ class User {
 			
 		}
 		
-		let player = Player(context: pc.viewContext)
+		let player 		= Player(context: pc.viewContext)
 		player.name 	= name
 		player.index 	= Int16(users.count)
 		
-		do{
+		do {
 			try pc.viewContext.save()
-		}catch{
-			print(error)
+		} catch {
 			print("player failed to save")
 		}
 	}
 	
-
 	func deleteplayers() {
 		let delete:NSFetchRequest<NSFetchRequestResult> = Player.fetchRequest()
 		let del = NSBatchDeleteRequest(fetchRequest: delete)
 		do {
 			try pc.viewContext.execute(del)
-		}catch let err as NSError {
+		} catch let err as NSError {
 			print(err)
 		}
 	}
-	
 }
 
 private extension User {
@@ -78,7 +96,7 @@ private extension User {
 //	fet.predicate 	= NSPredicate(format: "name == %@", name)
 //	fet.fetchLimit 	= 1
 //	let array = try? pc.viewContext.fetch(fet)
-//	if array?.count == 0 {
+//	if array?.isEmpty {
 //		print("no players found")
 //		return defaultuser()
 //	}
