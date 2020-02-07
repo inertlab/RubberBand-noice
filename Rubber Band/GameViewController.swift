@@ -12,57 +12,86 @@ import MIKMIDI
 import AVFoundation
 import WebKit
 
-
-
-var mainView 		= SCNView()
-
-let drumScene 		= SCNScene(named: "art.scnassets/scns/highway.scn")!
-var box = SCNNode()
+var mainView = SCNView()
 
 let home	 = NSHomeDirectory()
 
 class GameViewController: NSViewController, WKUIDelegate {
-
+	
+	
     @IBOutlet var boxview: SCNView!
     override func viewDidLoad() {
         mainView 			= self.view as! SCNView
 		mainView.delegate 	= self
 		mainView.scene 		= SCNScene()
-
+		
 		mainView.backgroundColor = NSColor.black
 
+//		pc.persistentStoreCoordinator.destroyPersistentStore(type: "Album")
 		setupMidiDevice()
-		User.current.printinfo()
-		mainView.overlaySKScene = loadingscreen
+		mainView.overlaySKScene 	= loadingscreen
+		loadingscreen?.scaleMode 	= .aspectFit
 		
-		mainView.isPlaying			= true
+		mainView.isPlaying			= false
+	
 		mainView.showsStatistics 	= true
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { // Change `2.0` to the desired number of seconds.
+		
+//		smanager.recatalog()
+//		smanager.deleteCatalog()
+//		smanager.deletealbums()
+		// Change `2.0` to the desired number of seconds.
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 			smanager.coverflow()
 			
 			DispatchQueue.main.asyncAfter(deadline: .now() + 1 ) {
+				stagemc.loadstage()
 				
-				presentmainmenu()
+				updatekeycode(User.current.instrument)
 				
-				menuOverlay?.isPaused = false
+				lebelInst.text 	= User.current.instrument.name()
 				
-				if smanager.columns.count > 0 {
-					let column = smanager.columns[coverindex.0]
-					animatecover(column: column)
-				}
+				menuOverlay?.scaleMode = .aspectFit
 				
-				mainView.prepare(drumScene, shouldAbortBlock: nil)
-				drumScene.background.contentsTransform.m11 = 0.85 // fit width
-				box = startparticle()
 			}
 		}
     }
 	
-    //    MARK: window shit
+    //    MARK: - window shit
     override func viewDidAppear() {
 		super.viewDidAppear()
-		super.view.window?.contentAspectRatio = NSSize(width: 1.5, height: 1)
+		super.view.window?.contentAspectRatio = NSSize(width: 1.6, height: 1)
     }
-
 }
 
+func resetDatabase() {
+	do {
+		try pc.persistentStoreCoordinator.managedObjectModel.entities.forEach { (entity) in
+			if let name = entity.name {
+				let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: name)
+				let request = NSBatchDeleteRequest(fetchRequest: fetch)
+				try pc.viewContext.execute(request)
+			}
+		}
+		
+		try pc.viewContext.save()
+	} catch {
+		print("error resenting the database: \(error.localizedDescription)")
+	}
+}
+
+
+extension NSPersistentStoreCoordinator {
+	func destroyPersistentStore(type: String) -> NSPersistentStore? {
+		print("this happened")
+		guard
+			let store = persistentStores.first(where: { $0.type == type }),
+			let storeURL = store.url
+			else {
+				return nil
+		}
+		
+		try? destroyPersistentStore(at: storeURL, ofType: store.type, options: nil)
+		
+		return store
+	}
+}

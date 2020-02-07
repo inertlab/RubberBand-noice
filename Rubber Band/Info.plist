@@ -26,6 +26,8 @@
 	<string>Copyright © 2018 Artecolote. All rights reserved.</string>
 	<key>NSMainStoryboardFile</key>
 	<string>Main</string>
+	<key>ATSApplicationFontsPath</key>
+	<string></string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 </dict>

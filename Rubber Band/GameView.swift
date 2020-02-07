@@ -11,19 +11,62 @@ import MIKMIDI
 import SpriteKit
 import AVFoundation
 
-
 fileprivate var beat: TimeInterval = 0
 
 var totaltime 	= 0.0
-var asphalt 	= hwy.base.childNode(withName: "asphalt", recursively: false)
+//var asphalt 	= hwy.base.childNode(withName: "asphalt", recursively: false)
 
 let frustum = menuScene.rootNode.childNode(withName: "frustum", recursively: false)
 
-class GameView: SCNView {
+class Menu: NSMenuItem {
 
+}
+
+class GameView: SCNView {
+	
+	var trackingarea: NSTrackingArea?
+	override func updateTrackingAreas() {
+		 if trackingarea != nil {
+				   self.removeTrackingArea(trackingarea!)
+			   }
+		let options : NSTrackingArea.Options =
+				   [.mouseEnteredAndExited, .mouseMoved, .activeInKeyWindow]
+			   trackingarea = NSTrackingArea(rect: self.bounds, options: options,
+											 owner: self, userInfo: nil)
+			   self.addTrackingArea(trackingarea!)
+	}
+	
+	override func mouseEntered(with event: NSEvent) {
+		mainView.window?.titlebarAppearsTransparent =  false
+	}
+	
+	override func mouseExited(with event: NSEvent) {
+		mainView.window?.titlebarAppearsTransparent =  true
+	}
+	
+//	override func mouseMoved(with event: NSEvent) {
+//		print("mouse moved")
+//		mainView.window?.titlebarAppearsTransparent =  false
+//	}
 	override func keyDown (with event: NSEvent) {
+
+		if event.isARepeat {return}
+
 		if let key = keycode[event.keyCode] {
-			switchboard.checkinput(key)
+			stagemc.currentact.handleevent(key)
+		}
+	}
+
+	override func keyUp(with event: NSEvent) {
+		
+		if let key = keycode[event.keyCode] {
+			if key == .strum {return }
+			switch stagemc.onstage {
+			case .guitar, .piano:
+				(stagemc.currentact as! KeyUp).handlekeyup(key)
+			default:
+				return
+			}
 		}
 	}
 }
@@ -36,53 +79,5 @@ var format:DateComponentsFormatter{
 }
 
 extension GameViewController: SCNSceneRendererDelegate {
-	
-    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-		
-		if switchboard.gamestate == .drumsPlaying {
-			
-			let songtime 	= Jukebox.shared.players[.guitar]?.currentTime
-//			let songtime	= OggNo.sharedInstance.players[playa!]?.currentTime
-			let midiframe 	= CGFloat(songtime!)
-			let beatframe 	= midiframe * pace.fps
-			
-			hwy.pista.position.z = beatframe
-			
-			vocalcoach.tracklyrics(time: songtime!)
-			trackdeadnotes(time: beatframe)
-			starpower.trackpower(time: beatframe)
-			// asphat animation
-			asphalt?.geometry?.firstMaterial?.selfIllumination.contentsTransform.m42 = midiframe * pace.asphalt
-		}
-    }
+
 }
-
-func trackdeadnotes (time: CGFloat) {
-	var count = 0
-	for gem in hwy.notes.childNodes {
-		count += 1
-		if gem.isHidden {
-			continue
-		}
-		if gem.position.z < time - 10 {
-			gem.removeFromParentNode()
-			continue
-		}
-		if gem.categoryBitMask == GemBit.dead {
-			continue
-		}
-		if gem.position.z < time - pace.hitwindow {
-		
-			gem.categoryBitMask = GemBit.dead
-//			gem.geometry?.firstMaterial?.selfIllumination.contents = NSColor.black
-			scorekeeper.scoreMiss()
-			break
-		}
-		if count > 12 {
-			break
-		}
-	}
-}
-
-
-
