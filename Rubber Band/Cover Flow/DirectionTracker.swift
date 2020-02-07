@@ -19,85 +19,82 @@ enum Direction {
 	case left, right, up, down
 }
 
-//var timer:Timer?
-/// current cover selection (column number, [row, number of rows])
-var coverindex = (Int(0), Array(repeating: 0, count: smanager.columns.count))
 
 /// When player moves menu selection this updates menu animations and coverindex
 ///
 /// - Parameter d: direction the player pressed, enum:Direction
-func trackDirection (d: Direction) {
-
-	/// currently selected column
-	var column = smanager.columns[coverindex.0]
-	
-	switch d {
-	case .left:
-		resetcovers()
-		if coverindex.0 > 0 {
-			coverindex.0 			-= 1
-			column 					= smanager.columns[coverindex.0]
-			covernode.runAction(slideleft)
-		}else{
-			coverindex.0 			= smanager.columns.count - 1
-			column 					= smanager.columns[coverindex.0]
-			covernode.position.x 	= -CGFloat(coverindex.0)
-		}
-		animatecover (column: column)
-	case .right:
-		resetcovers()
-		if coverindex.0 < smanager.cols {
-			coverindex.0 			+= 1
-			column 					= smanager.columns[coverindex.0]
-			covernode.runAction (slideright)
-		}else{
-			coverindex.0 			= 0
-			column 					= smanager.columns[coverindex.0]
-			covernode.position.x 	= -CGFloat(coverindex.0)
-		}
-		animatecover (column: column)
-	case .up:
-		if coverindex.1[coverindex.0] > 0 {
-			column.runAction(slidedown)
-			coverindex.1[coverindex.0] -= 1
-			animatecover (column: column)
-		}else{
-			// this only sets the position of the cover
-			if coverindex.0 > 0 {
-				let i 			= coverindex.0 - 1
-				let col 		= smanager.columns[i]		// col is the destination col
-				col.position.y 	= -(col.childNodes.last?.position.y)!
-				coverindex.1[i] = col.childNodes.count - 1	//set the las cover on the column
-			}else{
-				let col 		= smanager.columns.last!
-				col.position.y 	= -(col.childNodes.last?.position.y)!
-				coverindex.1[smanager.columns.count - 1] = col.childNodes.count - 1
-			}
-			trackDirection(d: .left)						// this will change and track position of the column
-		}
-	case .down:
-		if coverindex.1[coverindex.0] < column.childNodes.count - 1 {
-			coverindex.1[coverindex.0] += 1
-			column.runAction(slideup)
-			animatecover (column: column)
-		}else{
-			if coverindex.0 < smanager.cols {
-				let i							= coverindex.0 + 1
-				coverindex.1[i]					= 0
-				smanager.columns[i].position.y	= 0
-			}else{
-				smanager.columns[0].position.y 	= 0
-				coverindex.1[0] 				= 0
-			}
-			trackDirection(d: .right)
-		}
-	}
-}
+//func trackDirection (d: Direction) {
+//
+//	/// currently selected column
+//	var column = smanager.columns[coverindex.0]
+//	
+//	switch d {
+//	case .left:
+//		resetcovers()
+//		if coverindex.0 > 0 {
+//			coverindex.0 			-= 1
+//			column 					= smanager.columns[coverindex.0]
+//			covernode.runAction(slideleft)
+//		}else{
+//			coverindex.0 			= smanager.columns.count - 1
+//			column 					= smanager.columns[coverindex.0]
+//			covernode.position.x 	= -CGFloat(coverindex.0)
+//		}
+//		animatecover (column: column)
+//	case .right:
+//		resetcovers()
+//		if coverindex.0 < smanager.cols {
+//			coverindex.0 			+= 1
+//			column 					= smanager.columns[coverindex.0]
+//			covernode.runAction (slideright)
+//		}else{
+//			coverindex.0 			= 0
+//			column 					= smanager.columns[coverindex.0]
+//			covernode.position.x 	= -CGFloat(coverindex.0)
+//		}
+//		animatecover (column: column)
+//	case .up:
+//		if coverindex.1[coverindex.0] > 0 {
+//			column.runAction(slidedown)
+//			coverindex.1[coverindex.0] -= 1
+//			animatecover (column: column)
+//		}else{
+//			// this only sets the position of the cover
+//			if coverindex.0 > 0 {
+//				let i 			= coverindex.0 - 1
+//				let col 		= smanager.columns[i]		// col is the destination col
+//				col.position.y 	= -(col.childNodes.last?.position.y)!
+//				coverindex.1[i] = col.childNodes.count - 1	//set the las cover on the column
+//			}else{
+//				let col 		= smanager.columns.last!
+//				col.position.y 	= -(col.childNodes.last?.position.y)!
+//				coverindex.1[smanager.columns.count - 1] = col.childNodes.count - 1
+//			}
+//			trackDirection(d: .left)						// this will change and track position of the column
+//		}
+//	case .down:
+//		if coverindex.1[coverindex.0] < column.childNodes.count - 1 {
+//			coverindex.1[coverindex.0] += 1
+//			column.runAction(slideup)
+//			animatecover (column: column)
+//		}else{
+//			if coverindex.0 < smanager.cols {
+//				let i							= coverindex.0 + 1
+//				coverindex.1[i]					= 0
+//				smanager.columns[i].position.y	= 0
+//			}else{
+//				smanager.columns[0].position.y 	= 0
+//				coverindex.1[0] 				= 0
+//			}
+//			trackDirection(d: .right)
+//		}
+//	}
+//}
 
 /// resets covers to the correct position before applying new animations
 fileprivate func resetcovers () {
 	covernode.removeAllActions()
-	covernode.position.x = -CGFloat(coverindex.0)
+	covernode.position.x = 0
 }
 
 /// the previously selected cover
@@ -106,89 +103,88 @@ var record 		= menuScene.rootNode.childNode(withName: "record", recursively: fal
 var label 		= record?.childNode(withName: "label", recursively: false)
 
 func animatecover (column: SCNNode) {
-	
-	Jukebox.shared.stop()
-
-	let cover = column.childNodes[coverindex.1[coverindex.0]] as! CoverArt
-	record?.removeAllActions()
-	record?.position.x = 0
-	record?.rotation.z = 1
-	record?.rotation.w = 1.5
-	cover.addChildNode(record!)
-	cover.addChildNode(menutext.detailnode!)
-
-	if let song = smanager.sorted.first(where: {$0.uuid == cover.id}) {
-		selectedSong = song
-	} else {
-		selectedSong =  smanager.fetchSongById(id: cover.id.uuidString)
-	}
-	
-	// if no stat is found, update to 0,0
-	if let stat = scorekeeper.selectStat(selectedSong) {
-		TextureMover.shared.updateStars(stat)
-	} else {
-		TextureMover.shared.updateStars(0, dif: 0)
-	}
-	
-	TextureMover.shared.updateTier()
-	
-	record?.runAction(slideout)
-	record?.runAction(spinrecord)
-	
-	labela.text = selectedSong.artist
-	labeln.text = selectedSong.title
-	
-	let texturename = IconFile[selectedSong.icon!] ?? selectedSong.icon!
-	let texture = iconAtlas.textureNamed(texturename)
-	
-	labelicon.texture = texture
-	
-	if selectedSong.length > 0 {
-		var secs = DateComponents()
-		secs.second = Int(selectedSong.length)
-		labelt.text = format.string(for: secs)
-	}else{
-		labelt.text = ""
-	}
-	
-	lastnode.removeAction(forKey: "looper")
-	lastnode.runAction(movebackward)
-	lastnode.runAction(rotateto0)
-	
-	cover.removeAllActions()
-	cover.position.z = 0
-	cover.position.x = 0
-	
-	Jukebox.shared.timeit()
-	cover.runAction(wad, forKey: "looper") {
-		cover.runAction(wadtwice, forKey: "looper")
-		Jukebox.shared.getsongfiles(folder: selectedSong.folder!)
-		if Jukebox.shared.players.isEmpty {
-			print("no players found, you should exit here")
-		} else {
-			if selectedSong.length < 1 {
-				selectedSong.length = Jukebox.shared.players[.guitar]!.duration
-				
-				labelt.text = format.string(from: selectedSong.length)
-				try? pc.viewContext.save()
-			}
-			if selectedSong.preview == 0 {
-				Jukebox.shared.preview(from: 30)
-			}else {
-				Jukebox.shared.preview(from: selectedSong.preview)
-			}
-		}
-	}
-	
-	cover.runAction(moveforward)
-	
-	lastnode = cover
-	animatecolumn (column: column)
-	
-	DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-		let covers = mainView.nodesInsideFrustum(of: frustum!)
-		smanager.revealcoverart(covers: covers)
-	}
+//	Jukebox.shared.stop()
+//
+//	let cover = column.childNodes[coverindex.1[coverindex.0]] as! CoverArt
+//	record?.removeAllActions()
+//	record?.position.x = 0
+//	record?.rotation.z = 1
+//	record?.rotation.w = 1.5
+//	cover.addChildNode(record!)
+//	cover.addChildNode(menutext.detailnode!)
+//
+//	if let song = smanager.sorted.first(where: {$0.uuid == cover.id}) {
+//		selectedSong = song
+//	} else {
+//		selectedSong =  smanager.fetchSongById(id: cover.id.uuidString)
+//	}
+//
+//	// if no stat is found, update to 0,0
+//	if let stat = scorekeeper.selectStat(selectedSong) {
+//		TextureMover.shared.updateStars(stat)
+//	} else {
+//		TextureMover.shared.updateStars(0, dif: 0)
+//	}
+//
+//	TextureMover.shared.updateTier()
+//
+//	record?.runAction(slideout)
+//	record?.runAction(spinrecord)
+//
+//	labela.text = selectedSong.artist
+//	labeln.text = selectedSong.title
+//
+//	let texturename = IconFile[selectedSong.icon!] ?? selectedSong.icon!
+//	let texture = iconAtlas.textureNamed(texturename)
+//
+//	labelicon.texture = texture
+//
+//	if selectedSong.length > 0 {
+//		var secs = DateComponents()
+//		secs.second = Int(selectedSong.length)
+//		labelt.text = format.string(for: secs)
+//	}else{
+//		labelt.text = ""
+//	}
+//
+//	lastnode.removeAction(forKey: "looper")
+//	lastnode.runAction(movebackward)
+//	lastnode.runAction(rotateto0)
+//
+//	cover.removeAllActions()
+//	cover.position.z = 0
+//	cover.position.x = 0
+//
+//	Jukebox.shared.timeit()
+//	cover.runAction(wad, forKey: "looper") {
+//		cover.runAction(wadtwice, forKey: "looper")
+//		Jukebox.shared.getsongfiles(folder: selectedSong.folder!)
+//		if Jukebox.shared.players.isEmpty {
+//			print("no players found, you should exit here")
+//		} else {
+//			if selectedSong.length < 1 {
+//				selectedSong.length = Jukebox.shared.players[.guitar]!.duration
+//
+//				labelt.text = format.string(from: selectedSong.length)
+//				try? pc.viewContext.save()
+//			}
+//			if selectedSong.preview == 0 {
+//				Jukebox.shared.preview(from: 30)
+//			}else {
+//				Jukebox.shared.preview(from: selectedSong.preview)
+//			}
+//		}
+//	}
+//
+//	cover.runAction(moveforward)
+//
+//	lastnode = cover
+//	animatecolumn (column: column)
+//
+//	DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+//		let covers = mainView.nodesInsideFrustum(of: frustum!)
+//		smanager.revealcoverart(covers: covers)
+//	}
 }
 
 var lastcolumn = SCNNode()
