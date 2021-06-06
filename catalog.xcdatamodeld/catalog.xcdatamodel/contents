@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15400" systemVersion="19D76" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17709" systemVersion="19H2" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Album" representedClassName="Album" syncable="YES" codeGenerationType="class">
         <attribute name="albumArt" optional="YES" attributeType="URI"/>
         <attribute name="artist" optional="YES" attributeType="String"/>
@@ -7,7 +7,11 @@
         <relationship name="contains" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="Song" inverseName="trackOf" inverseEntity="Song"/>
     </entity>
     <entity name="Config" representedClassName="Config" syncable="YES" codeGenerationType="class">
+        <attribute name="kraken" optional="YES" attributeType="Boolean" minValueString="0" maxValueString="1" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="libupdate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="vol_crowd" optional="YES" attributeType="Float" minValueString="0" maxValueString="1" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="vol_master" optional="YES" attributeType="Float" minValueString="0" maxValueString="1" usesScalarValueType="YES"/>
+        <attribute name="vol_preview" optional="YES" attributeType="Float" minValueString="0" maxValueString="1" defaultValueString="1" usesScalarValueType="YES"/>
         <relationship name="currentplayer" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="Player" inverseName="config" inverseEntity="Player"/>
     </entity>
     <entity name="Player" representedClassName="Player" syncable="YES" codeGenerationType="class">
@@ -31,16 +35,11 @@
     <entity name="Score" representedClassName="Score" syncable="YES" codeGenerationType="class">
         <attribute name="difficulty" optional="YES" attributeType="Integer 16" defaultValueString="-1" usesScalarValueType="YES"/>
         <attribute name="instrument" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="playcount" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="playcount" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="score" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="stars" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="streak" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="stat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Stats" inverseName="scores" inverseEntity="Stats"/>
-        <uniquenessConstraints>
-            <uniquenessConstraint>
-                <constraint value="stat"/>
-                <constraint value="instrument"/>
-            </uniquenessConstraint>
-        </uniquenessConstraints>
     </entity>
     <entity name="Song" representedClassName="Song" syncable="YES" codeGenerationType="class">
         <attribute name="artist" optional="YES" attributeType="String"/>
@@ -59,11 +58,6 @@
         <relationship name="stats" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Stats" inverseName="song" inverseEntity="Stats"/>
         <relationship name="tier" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Tiers" inverseName="song" inverseEntity="Tiers"/>
         <relationship name="trackOf" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Album" inverseName="contains" inverseEntity="Album"/>
-        <uniquenessConstraints>
-            <uniquenessConstraint>
-                <constraint value="uuid"/>
-            </uniquenessConstraint>
-        </uniquenessConstraints>
     </entity>
     <entity name="Stats" representedClassName="Stats" syncable="YES" codeGenerationType="class">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -90,10 +84,10 @@
     </entity>
     <elements>
         <element name="Album" positionX="36" positionY="81" width="128" height="105"/>
-        <element name="Config" positionX="-63" positionY="-18" width="128" height="75"/>
+        <element name="Config" positionX="-63" positionY="-18" width="128" height="133"/>
         <element name="Player" positionX="-54" positionY="-9" width="128" height="163"/>
-        <element name="Score" positionX="-36" positionY="9" width="128" height="133"/>
-        <element name="Song" positionX="-18" positionY="27" width="128" height="285"/>
+        <element name="Score" positionX="-36" positionY="9" width="128" height="148"/>
+        <element name="Song" positionX="-18" positionY="27" width="128" height="283"/>
         <element name="Stats" positionX="0" positionY="45" width="128" height="165"/>
         <element name="Tiers" positionX="18" positionY="63" width="128" height="120"/>
     </elements>
