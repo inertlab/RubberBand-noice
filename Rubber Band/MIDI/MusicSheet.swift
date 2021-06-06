@@ -33,7 +33,7 @@ class MusicSheet {
 		self.difficultyConfig = User.current.instrument.config(diff: User.current.diff)
 		TimeCode.tc.initTimeCode(seq: self.seq)
 	}
-	
+		
 	func getTrackByName (partname: TrackName = .drums) -> MIKMIDITrack? {
 		var track:MIKMIDITrack?
 		
@@ -169,15 +169,17 @@ class MusicSheet {
 			let starttime 	= tc.beattosec(beat: e.timeStamp)
 			let etext 		= e as! MIKMIDIMetaTextEvent
 			
-			if etext.string == User.current.diff.flipevent() {
-				fliptuple.0 = true
-				fliptuple.1 = starttime
+			if let drumevent = DrumEvent(rawValue: etext.string!) {
+				if drumevent.flip() {
+					print(drumevent.self)
+					fliptuple.0 = true
+					fliptuple.1 = starttime
+				}
+				if drumevent.noflip() && fliptuple.0 {
+					fliptuple.2 = starttime
+				}
 			}
-			
-			if etext.string == User.current.diff.noflipevent() && fliptuple.0 {
-				fliptuple.2 = starttime
-			}
-			
+
 			if fliptuple.0 && fliptuple.2 > fliptuple.1 {
 				discoFlipMe.append(fliptuple)
 				fliptuple = (false, 0.0, 0.0)
@@ -222,7 +224,6 @@ class MusicSheet {
 		swapCymbaltoTom(toms: tom112, cymbals: &cymbal100	, dnotes: &drumnotes)
 		
 		for (f, start, end) in discoFlipMe {
-			print("flipping")
 			if f {
 				for ( i, dn) in drumnotes.enumerated() {
 					switch dn.0 {
@@ -253,18 +254,20 @@ class MusicSheet {
 	}
 	
 	func getvocals() -> MIKMIDITrack {
-		return getTrackByName(partname: .vocals)!
+		return getTrackByName(partname: .vocals) ?? MIKMIDITrack()
 	}
 	
 	/// makes and layers beat marks on the track
 	///
 	/// - Note: at the end of the track beats tend to dip
-	func layBeat () {
+	func layBeat () -> Int {
 		let beats = getTrackByName(partname: .beat)
 		if beats == nil {
 			layBeatnotrack()
+			return Int(seq.length)
 		} else {
 			layBeatwithtrack()
+			return (beats?.notes.count)!
 		}
 	}
 }
@@ -313,7 +316,6 @@ private extension MusicSheet {
 		if beats == nil {return} // what happens if there is no beat track?
 		let fatline 	= gems.beat_fat
 		let thinline 	= gems.beat_thin
-		
 		for beat in beats!.notes {
 			var line: SCNNode
 			let time = tc.beattosec(beat: beat.timeStamp)
@@ -328,19 +330,12 @@ private extension MusicSheet {
 	}
 	
 	func layBeatnotrack () {
-		let fatline 	= gems.beat_fat
-		//		let thinline 	= drumScene.rootNode.childNode(withName: "thinline"	, recursively: false)!
-		//		let beats		= SCNNode()
+		let fatline = gems.beat_fat
 		for beat in 0...Int(seq.length) {
 			let z 	= CGFloat(tc.beattosec(beat: Double(beat))) * pace.fps
 			let fl 	= fatline.clone()
-			//			let tl 	= thinline.clone()
 			fl.position.z 	= z
-			//			fl.name			= "fat"
-			//			tl.position.z 	= z - (pace.fps * 0.5)
-			//			tl.name			= "thin"
 			stagemc.track.hwy.beatlines.addChildNode(fl)
-			//			stagemc.track.hwy.beatlines.addChildNode(tl)
 		}
 	}
 	

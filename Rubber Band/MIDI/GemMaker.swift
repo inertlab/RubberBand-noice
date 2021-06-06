@@ -37,10 +37,15 @@ struct Gems {
 		self.crash_tail = self.instruments.rootNode.childNode(withName: "activator_tail"	, recursively: true)!
 		self.kick 		= self.instruments.rootNode.childNode(withName: "bass"	, recursively: true)!
 		self.m_green 	= self.tom.geometry!.material(named: "green")!
+//		self.m_green.shaderModifiers = [.fragment: shine]
 		self.m_blue  	= self.tom.geometry!.material(named: "blue")!
+//		self.m_blue.shaderModifiers = [.fragment: shine]
 		self.m_yellow  	= self.tom.geometry!.material(named: "yellow")!
+//		self.m_yellow.shaderModifiers = [.fragment: shine]
 		self.m_red  	= self.tom.geometry!.firstMaterial!
+//		self.m_red.shaderModifiers = [.fragment: shine]
 		self.m_cymbals 	= self.hihat.geometry!.firstMaterial!
+//		self.m_cymbals.shaderModifiers = [.fragment: shine]
 		self.m_white 	= self.tom.geometry!.material(named: "white")!
 		self.m_orange.diffuse.contents = NSColor.rbOrange
 		self.m_orange.selfIllumination.contents = NSColor.white
@@ -179,7 +184,7 @@ private extension GemMaker {
 /// Midi Notes representing each instrument in the song.mid file ("97" "98")
 /// - Note: Midi Notes do not match midi notes sent from instrument
 enum DrumKit: String {
-	case o_bass 	= "96"	, r_snare 	= "97"
+	case o_bass = "96"	, r_snare 	= "97"
 	case y_hihat = "98"	, b_ride 	= "99"	, g_crash 	= "100" 	// cymbals
 	case y_tom 	= "110"	, b_tom 	= "111"	, g_tom 	= "112" 	// toms
 	/// Drumkit Attributes
@@ -246,14 +251,13 @@ struct GemBit {
 	static let green 	= 1 << 0
 	static let red 		= 1 << 1
 	static let yellow 	= 1 << 2
-	static let blue 		= 1 << 3
+	static let blue 	= 1 << 3
 	static let orange 	= 1 << 4
 	static let greenc	= 1 << 5
 	static let yelloc	= 1 << 6
-	static let bluec		= 1 << 7
-	static let tail 		= 1 << 8
+	static let bluec	= 1 << 7
+	static let tail 	= 1 << 8
 	static let dead		= 1 << 9
-//	static let activate	= 1 << 9
 	static var activate:Int{
 		return self.green | self.greenc
 	}

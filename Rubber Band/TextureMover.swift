@@ -12,38 +12,62 @@ import SceneKit
 
 class TextureMover {
 	static let shared 	= TextureMover()
+	
 	let difInitial 		= menutext.detailnode?.childNode(withName: "easy", recursively: false)
 	let disklabel 		= smanager.record.node.childNode(withName: "label", recursively: false)
-	private init(){}
+	let starmat 		= menutext.detailnode?.geometry?.firstMaterial
+	private init(){
+		smanager.delegate = self
+		User.current.delegate = self
+	}
 	
+	/// updates the star texture by using the selected stat
 	func updateStars() {
-		if let stat = scorekeeper.selectStat(smanager.selected.song) {
+		if let stat = ScoreManager.selectStat(smanager.selected.song) {
 			updateStars(stat)
-			difInitial?.opacity = 1
 		} else {
-			difInitial?.opacity = 0
-			updateStars(0, dif: 0)
+			noscore()
 		}
 	}
 	
+	/// updates the star texture by stat
+	/// - Parameter stat: the stat to get score from
 	func updateStars(_ stat: Stats) {
-		updateStars(User.current.instrument.getstars(stat), dif: User.current.instrument.getscoredif(stat))
+		updateStars(score: User.current.instrument.getscore(stat))
 	}
 	
-	func updateStars(_ stars:Int16, dif: Int16) {
-//		print(stars)
+	/// updates the star texture by score
+	/// - Parameter score: Score
+	func updateStars(score: Score?) {
 		let starmat = menutext.detailnode?.geometry?.firstMaterial
-		starmat?.transparent.contentsTransform.m41 = getm41(stars)
-		let ms = getm41m42(dif)
-		difInitial?.geometry?.firstMaterial?.transparent.contentsTransform.m41 = ms.m41
-		difInitial?.geometry?.firstMaterial?.transparent.contentsTransform.m42 = ms.m42
-		if stars > 5 {
-			starmat?.diffuse.contents = NSColor.rbYellow
+		if score == nil {
+			difInitial?.opacity = 0
+			starmat?.transparent.contentsTransform.m41 = getm41(0)
 		} else {
-			starmat?.diffuse.contents = NSColor.rblitegray
+			let ms = getm41m42(score!.difficulty)
+			difInitial?.geometry?.firstMaterial?.transparent.contentsTransform.m41 = ms.m41
+			difInitial?.geometry?.firstMaterial?.transparent.contentsTransform.m42 = ms.m42
+			
+			difInitial?.opacity = 1
+			starmat?.transparent.contentsTransform.m41 = getm41(score!.stars)
+			if score!.stars > 5 {
+				starmat?.diffuse.contents = NSColor.rbYellow
+			} else {
+				starmat?.diffuse.contents = NSColor.rblitegray
+			}
 		}
 	}
-
+	
+	/// resets star texture to zero if no score was found
+	func noscore() {
+		difInitial?.opacity = 0
+		starmat?.diffuse.contents = NSColor.rblitegray
+		starmat?.transparent.contentsTransform.m41 = getm41(0)
+	}
+	
+	/// updates the tier on the album record
+	/// - Parameter diff: the tier
+	/// - Parameter node: the node
 	func changeDifficulty(diff:Int16, node: SCNNode) {
 		let transform = difficulty(diff: diff)
 		node.geometry?.firstMaterial?.diffuse.contentsTransform.m41 = transform.m41
@@ -124,5 +148,19 @@ private extension TextureMover {
 		default:
 			return (0.333, 0.666) // case = nil and -1
 		}
+	}
+}
+
+
+extension TextureMover: SongManagerDelegate, UserDelegate {
+	func changedinstrument(tier: Int16) {
+		updateTier(tier: tier)
+		updateStars()
+	}
+	
+	func newsongselected(song: Song) {
+		updatechartericon(icon: song.icon!)
+		updateStars()
+		updateTier()
 	}
 }

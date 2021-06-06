@@ -22,7 +22,7 @@ let IconFile = [
 //	"ctpk"		: "ctpk"		,
 //	"ctpk2"		: "ctpk2"		,
 	"gdrb"		: "gdrbalt"		, // changed - too faint
-	"gdrbalt"	: "gdrbalt"		, // changed - too faint
+	"gdrbalt"	: "gdrbalt"		, 
 	"gdrbdlc"	: "gdrbalt"		, // changed - too faint
 	"gdrbold"	: "gdrbalt"		, // changed - too faint
 //	"gh1"		: "gh1"			,

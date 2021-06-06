@@ -10,7 +10,6 @@ import Foundation
 import SceneKit
 
 
-
 protocol Performing : class {
 	var scn: SCNScene {get}
 	func handleevent(_ event: Button)

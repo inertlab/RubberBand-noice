@@ -36,13 +36,8 @@ final class StarNoteComp: GKComponent {
 	
 	func starmissed () {
 		if let chord = entity?.component(ofType: NoteComp.self) {
-//			chord.node.opacity = 1
-			//			node.opacity = 0
 			chord.node.runAction(SCNAction.fadeIn(duration: 0.1))
-			node.runAction(SCNAction.fadeOut(duration: 0.1)){
-//				self.node.removeFromParentNode()
-//				self.entity?.removeComponent(ofType: NoteComp.self)
-			}
+			node.runAction(SCNAction.fadeOut(duration: 0.1))
 		}
 	}
 }

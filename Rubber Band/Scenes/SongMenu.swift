@@ -12,39 +12,125 @@ import SpriteKit
 import CoreImage
 import GameplayKit
 
-final class SongMenu: Performing {
+// stars ☆􀋆􀋅
 
+class SelectState: GKState {
+	override func didEnter(from previousState: GKState?) {
+		print("entering state")
+	}
+	
+	override func isValidNextState(_ stateClass: AnyClass) -> Bool {
+		return stateClass is ListState.Type
+	}
+	
+	override func willExit(to nextState: GKState) {
+		print("exisitng ", self.description)
+	}
+}
+
+class ListState: GKState {
+	override func didEnter(from previousState: GKState?) {
+		print("entering list state")
+	}
+	
+	override func isValidNextState(_ stateClass: AnyClass) -> Bool {
+		return stateClass is SelectState.Type
+	}
+}
+
+
+final class SongMenu: Performing {
+	
+	let machine = GKStateMachine(states: [ListState(), SelectState()])
+	
+	let octopus: Octopus
+	let help = Help()
+	
+	let score = Scorelabel()
+	
 	func updatestate() {
 		self.state = .details
+		updatedetails()
 	}
 	
 	let scn: SCNScene
 
 	enum State {
-		case start, select, details, options, relatedsongs
+		case start, select, details, options, relatedsongs, history, help
 	}
 	
+
 	init(){
+		self.octopus = Octopus(arm: SCNScene(named: "art.scnassets/scns/tentacle1.scn")!.rootNode)
 		self.scn = menuScene
+		
+		octopus.updatearms()
+		machine.enter(SelectState.self)
 	}
 	
-	var state:State = .select
+	var state:State = .select {
+		didSet {
+			// if nothing changed bail
+			if oldValue == state { return }
+			if state 	== .help {
+				help.showhelp(state: oldValue)
+				return
+			}
+			// hide old stuff
+			switch oldValue {
+			case .details:
+				labeldetails?.removeAllActions()
+				labeldetails?.run(Actions.shared.fadeout)
+				octopus.leave()
+			case .history, .relatedsongs:
+				othersongsg?.removeAllActions()
+				othersongsg?.run(Actions.shared.fadeout)
+			case .select:
+				UpNext.shared.hide()
+			default:
+				break
+			}
+
+			// show new shit
+			switch state {
+			case .start, .options:
+				rowcall.state = .off
+			case .history:
+				rowcall.state = .off
+				othersongsg?.run(Actions.shared.fadein)
+			case .select:
+				rowcall.state = .neutral
+				UpNext.shared.show()
+			case .relatedsongs:
+				rowcall.state = .detail
+				othersongsg?.run(Actions.shared.fadein)
+			default:
+				rowcall.state = .detail
+				labeldetails?.run(Actions.shared.fadein)
+				octopus.comein()
+			}
+			rowcall.updatezposition()
+		}
+	}
 	
 	func handleevent(_ event: Button) {
 		switch state {
 		case .select:
 			songselect(event)
 		case .details:
-			songoptions(event)
+			detailsoptions(event)
 		case .relatedsongs:
 			relatedsongoptions(event)
+		case .history:
+			historyoptions(event)
+		case .help:
+			state = help.hidehelp()
 		default:
-//			hideoptions()
 			switch event {
 			case .left, .right, .down, .up, .blue, .yellow:
 				if smanager.selectfirstsong() {
 					self.state = .select
-					covernode.runAction(SCNAction.move(to: SCNVector3(0, 0, 0), duration: 0.25))
+					rowcall.posx = 0
 					UpNext.shared.refreshlist(nexttitles: smanager.songrange(index: 0))
 				}
 			default:
@@ -54,42 +140,39 @@ final class SongMenu: Performing {
 		}
 	}
 	
-	func backtosongmenu () {
-		UpNext.shared.show()
+	func songmenuview () {
+		_ = ["st", "fdk"]
 		state = .select
-//		let neon = menuScene.rootNode.childNode(withName: "neon", recursively: false)
-		labeldetails!.run(Actions.shared.fadeout)
-		covernode.runAction(SCNAction.moveBy(x: 0, y: 0, z: 1.25, duration: 0.5))
-//		smanager.selected.cover.runAction(SCNAction.moveBy(x: 0, y: 0, z: -1.25, duration: 0.5))
 		smanager.selected.state = .selected
-//		neon?.runAction(SCNAction.moveBy(x: 0, y: 0, z: -4, duration:0.5))
-
+		UpNext.shared.show()
 	}
-	
 }
 
 private extension SongMenu {
 	// MARK: - event handlers
 	
 	func songselect (_ event: Button) {
+		machine.enter(ListState.self)
 		if !smanager.songenties.isEmpty {
 			switch event {
 			case .minus:
-				smanager.reflow(sortedBy: .artist)
-			case .green, .start:
-				gotodetailview()
+				showhistory()
 			case .plus:
-				displayoptions()
+				showrecentlyadded()
+			case .green, .start:
+				updatedetails()
 			case .select:
 				smanager.reflow(sortedBy: .song)
 			case .blue_c, .left:
-				smanager.moveselect(direction: .left)
+				smanager.moveselector(direction: .left)
 			case .green_c, .right:
-				smanager.moveselect(direction: .right)
+				smanager.moveselector(direction: .right)
 			case .blue, .down:
-				smanager.moveselect(direction: .down)
+				smanager.moveselector(direction: .down)
 			case .yellow, .up:
-				smanager.moveselect(direction: .up)
+				smanager.moveselector(direction: .up)
+			case .orange:
+				state = .help
 			default:
 				break;
 			}
@@ -105,10 +188,19 @@ private extension SongMenu {
 	
 	/// Active when the details screen is displayed for a song
 	/// - Parameter input: The button input - this changes with instrument, kida messy.
-	func songoptions(_ input: Button)  {
+	func detailsoptions(_ input: Button)  {
+		if state == .help {
+			state = help.hidehelp()
+			return
+		}
 		switch input {
+		case .minus:
+			showhistory()
+		case .plus:
+			showrecentlyadded()
 		case .red: // go back to menu
-			backtosongmenu()
+			// if songs are sorted by tier, revert current instrument to previous instrument
+			songmenuview()
 		case .green, .start:
 			if User.current.instrument.gettier() != -1 {
 				stagemc.loadstage()
@@ -122,14 +214,15 @@ private extension SongMenu {
 			User.current.diff.previous()
 		case .right:
 			User.current.instrument.next()
+			octopus.updatearms()
 		case .left:
 			User.current.instrument.previous()
-		case .minus:
-			scorekeeper.deleteallstats()
+			octopus.updatearms()
 		case .yellow_c:
 			showrelatedsongmenu()
+		case .orange :
+			state = .help
 		default:
-//			print(input)
 			break;
 		}
 	}
@@ -137,19 +230,27 @@ private extension SongMenu {
 	/// event handler for "related song" menu
 	/// - Parameter event: Button press
 	func relatedsongoptions(_ event: Button) {
+		if state == .help {
+			state = help.hidehelp()
+			return
+		}
 		switch event {
+		case .orange:
+			state = .help
 		case .blue, .down:
-			RelatedSongs.share.scrollup()
+			SongLister.shared.scrollup()
 		case .yellow, .up:
-			RelatedSongs.share.scrolldown()
-//			scrolldown()
+			SongLister.shared.scrolldown()
 		case .green, .start:
 			hiderelatedsongmenu()
-			if let song = smanager.songsystem.components.first(where: {$0.song == RelatedSongs.share.list[RelatedSongs.share.index]}){
+			if let song = smanager.songsystem.components.first(
+				where: {
+					$0.song == SongLister.shared.song
+			}){
 				smanager.updatesongselection(newsong: song, state: .detailview)
 				UpNext.shared.refreshlist(nexttitles: smanager.songrange(index: song.index))
-				let covers = mainView.nodesInsideFrustum(of: frustum!)
-				smanager.revealcoverart(covers: covers)
+				smanager.frustrumreveal()
+				updatedetails()
 			}
 		default:
 			smanager.selected.state = .detailview
@@ -157,35 +258,53 @@ private extension SongMenu {
 		}
 	}
 	
+	/// event handler for "Hisotry List" menu
+	/// - Parameter event: Button press
+	///
+	/// this is almost idential to "Related Song List"
+	func historyoptions(_ event: Button) {
+		if state == .help {
+			state = help.hidehelp()
+			return
+		}
+		switch event {
+		case .orange:
+			state = .help
+		case .blue, .down:
+			SongLister.shared.scrollup()
+		case .yellow, .up:
+			SongLister.shared.scrolldown()
+		case .green, .start:
+			if let song = smanager.songsystem.components.first(
+				where: {
+					$0.song == SongLister.shared.song
+			}){
+				smanager.updatesongselection(newsong: song, state: .detailview)
+				UpNext.shared.refreshlist(nexttitles: smanager.songrange(index: song.index))
+				smanager.frustrumreveal()
+			}
+			updatedetails()
+		default:
+			songmenuview()
+		}
+	}
+	
 	// MARK: - functions
 	
-	/// scroll song list up
-	func scrollup() {
-		//scroll up
-		print("scrolling up")
-	}
-	
-	/// scroll song list down
-	func scrolldown() {
-		//scroll down
-		print("scrolling down")
-	}
-	
-	func gotodetailview () {
-		UpNext.shared.hide()
+	/// updates and displays details view and sets the states. does not control other view labels
+	///
+	/// detail view can come from menu view, or other song views
+	func updatedetails () {
+		smanager.selected.state = .detailview
 		state 				= .details
 		labelphrase.text 	= smanager.selected.song.phrase
 		labelcharter.text 	= smanager.selected.song.charter
 		labelyear.text 		= smanager.selected.song.year.description
 		labelalbum.text		= smanager.selected.song.trackOf?.name
 		labelgenre.text 	= smanager.selected.song.genre
-//		let neon = menuScene.rootNode.childNode(withName: "neon", recursively: false)
-		labeldetails!.run(Actions.shared.fadein)
-		covernode.runAction(SCNAction.moveBy(x: 0, y: 0, z: -1.25, duration: 0.5))
-		smanager.selected.state = .detailview
 		
 		let countlabel = labeldetails?.childNode(withName: "morelabel") as! SKLabelNode
-		let morecount = RelatedSongs.share.loadlist(artistsong: smanager.selected.song)
+		let morecount =  SongLister.shared.loadreleatedsongs(artistsong: smanager.selected.song)
 		if morecount > 1 {
 			countlabel.text = "…\(morecount)+"
 		} else {
@@ -193,42 +312,67 @@ private extension SongMenu {
 		}
 	}
 	
-	
 	/// displays other songs by the same artist if any
+	///
+	/// this is only accessible from Details, so it's a good place to hide details from here
 	func showrelatedsongmenu () {
 		// if there are related songs this happens next
-		if RelatedSongs.share.list.count > 1 {
+		if SongLister.shared.songs.count > 1 {
 			Jukebox.shared.stop()
 			state = .relatedsongs
 			smanager.selected.state = .othersongs
-			labeldetails!.removeAllActions()
-			labeldetails!.run(SKAction.fadeOut(withDuration: 0.35))
-			othersongsg?.run(SKAction.fadeIn(withDuration: 0.75))
-			RelatedSongs.share.makesonglist(artist: smanager.selected.song.artist!)
+			SongLister.shared.relatedsongs(smanager.selected.song.artist!)
 		}
 	}
 	
-	/// hides the list of other songs by the same artist
-	func hiderelatedsongmenu () {
-		smanager.selected.cover.runAction(SCNAction.fadeOpacity(to: 1, duration: 0.25))
-		state = .details
-		othersongsg?.run(SKAction.fadeOut(withDuration: 0.4))
-		
-		labeldetails!.run(SKAction.fadeIn(withDuration: 0.5))
+	/// displays History List
+	///
+	/// only shown from menu list
+	func showhistory() {
+		if User.current.player.stats?.count == 0 { return }
+		Jukebox.shared.stop()
+		UpNext.shared.hide()
+		state = .history
+		smanager.selected.state = .notselected
+		SongLister.shared.songhistory()
 	}
 	
+	/// displays Recently Added List
+	///
+	/// only shown from menu list
+	func showrecentlyadded() {
+		Jukebox.shared.stop()
+		UpNext.shared.hide()
+		state = .history
+		smanager.selected.state = .notselected
+		SongLister.shared.recentlyadded()
+	}
 	
-	func displayoptions () {
+	/// hides the list of other songs by the same artist
+	///
+	/// always goes into details view so set the view here
+	func hiderelatedsongmenu() {
+		state = .details
+		smanager.selected.cover.runAction(SCNAction.fadeOpacity(to: 1, duration: 0.25))
+	}
+	
+	func displayoptions() {
 		state = .options
 		let optiondisplay = SKScene(fileNamed: "optionmenu.sks")
 		let bg 			= optiondisplay?.childNode(withName: "bg") as! SKSpriteNode
 		let snap 		= mainView.snapshot()
 		let snapdata 	= snap.tiffRepresentation
 		let ciimage 	= CIImage(data: snapdata!)
-		let filt 		= CIFilter(name: "CIGaussianBlur", parameters: [  "inputImage": ciimage!, "inputRadius" : 10])
+		let filt 		= CIFilter(
+			name: "CIGaussianBlur",
+			parameters: [  "inputImage": ciimage!, "inputRadius" : 10]
+		)
 		
 		var image 	= filt?.outputImage!
-		let filt2 	= CIFilter(name: "CICMYKHalftone", parameters: ["inputImage" : image!, "inputWidth": 16, "inputSharpness": 1])
+		let filt2 	= CIFilter(
+			name: "CICMYKHalftone",
+			parameters: ["inputImage" : image!, "inputWidth": 16, "inputSharpness": 1]
+		)
 		image 		= filt2?.outputImage!
 		let final 	= context.createCGImage(image!, from: ciimage!.extent)
 		bg.texture 	= SKTexture(cgImage: final!)
@@ -248,4 +392,6 @@ private extension SongMenu {
 	}
 }
 
+
+let frustum = menuScene.rootNode.childNode(withName: "frustum", recursively: false)
 fileprivate let context = CIContext()

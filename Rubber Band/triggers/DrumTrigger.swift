@@ -25,7 +25,7 @@ class DrumTrigger: Burstable {
 	let particle 	= SCNParticleSystem(named: "burst.scnp", inDirectory: particleDir)
 	let trigger		: SCNNode
 	let burst		: SCNNode
-	var reactor 		= SCNNode()
+	var reactor 	= SCNNode()
 
 	init(btn: Button, hwy: HWY){
 //		self.note 	= note
@@ -45,6 +45,7 @@ class DrumTrigger: Burstable {
 			self.kick 		= true
 			self.trigger 	= hwy.base.childNode(withName: "peg"		, recursively: false)!
 			self.burst 		= hwy.base.childNode(withName: "oburst"		, recursively: false)!
+//			self.burst.geometry?.firstMaterial?.shaderModifiers = [.geometry: wiggle]
 			self.reactor 	= hwy.base.childNode(withName: "reactor"	, recursively: false)!
 //			self.reactor 	=
 		default:
@@ -54,7 +55,7 @@ class DrumTrigger: Burstable {
 	}
 	
 	func hit() {
-		scorekeeper.scoreOneUp()
+//		scorekeeper.scoreOneUp()
 		nscore += 1
 		burstit()
 	}
@@ -65,11 +66,10 @@ class DrumTrigger: Burstable {
 			self.trigger.geometry?.firstMaterial?.diffuse.intensity = 1
 			self.trigger.addAnimation(shrinkx, forKey: "shrink")
 			self.reactor.addAnimation(kickback, forKey: "kickback")
-//			self.reactor.addAnimation(thumpmiss, forKey: "thumpmiss")
 		}
 	
 		self.trigger.addAnimation(thumpmiss, forKey: "selfllumination")
-		scorekeeper.scoreMiss()
+//		scorekeeper.scoreMiss()
 	}
 }
 

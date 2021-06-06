@@ -10,14 +10,13 @@ import SpriteKit
 
 class Actions {
 	static let shared = Actions()
-//	let fadeout = SKAction.fadeAlpha(to: 0, duration: 1)
 	var fadeout:SKAction{
-		let act = SKAction.fadeAlpha(to: 0, duration: 1)
+		let act = SKAction.fadeAlpha(to: 0, duration: 0.75)
 		act.timingMode = .easeOut
 		return act
 	}
 	var fadein:SKAction{
-		let act = SKAction.fadeAlpha(to: 1, duration: 2)
+		let act = SKAction.fadeAlpha(to: 1, duration: 1)
 		act.timingMode = .easeIn
 		return act
 	}

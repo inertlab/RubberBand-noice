@@ -9,23 +9,25 @@
 import Foundation
 import CoreData
 
+protocol UserDelegate {
+	func changedinstrument(tier: Int16)
+}
 
 class User {
 	static let current 		= User()
-
+	var delegate: UserDelegate?
 	let player:	Player
 	var diff: Difficulty 	= .expert
 	var instrument: Instrument  {
 		didSet {
 			updatekeycode(self.instrument)
 			lebelInst.text = instrument.name()
-			TextureMover.shared.updateTier(tier: instrument.gettier())
-			TextureMover.shared.updateStars()
+			delegate?.changedinstrument(tier: instrument.gettier())
 		}
 	}
 	
 	private init() {
-		self.player 	= Defaults.shared.defaultuser()
+		self.player 	= Defaults.config().currentplayer!
 		self.diff 		= Difficulty(rawValue: self.player.difficulty)!
 		self.instrument = Instrument(rawValue: self.player.instrument)!
 		labelDiff.text 	= self.diff.text()
@@ -33,8 +35,12 @@ class User {
 	}
 	
 	func updateUser() {
-		player.difficulty = diff.rawValue
-		player.instrument = instrument.rawValue
+		player.difficulty 			= diff.rawValue
+		player.instrument 			= instrument.rawValue
+		player.config?.vol_master 	= Jukebox.shared.volume
+		player.config?.vol_preview 	= Jukebox.shared.vol_prev
+		player.config?.vol_crowd 	= Jukebox.shared.vol_crowd
+		player.config?.kraken 		= stagemc.bg
 		do {
 			try pc.viewContext.save()
 		} catch  {

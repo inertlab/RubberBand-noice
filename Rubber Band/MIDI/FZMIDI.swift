@@ -1,10 +1,4 @@
-//
-//  MIDIFrobs.swift
-//  MusicSequence
-//
-//  Created by Gene De Lisa on 8/16/14.
-//  Copyright (c) 2014 Gene De Lisa. All rights reserved.
-//
+
 
 import Foundation
 
@@ -251,11 +245,11 @@ class FZMIDI {
         if status != OSStatus(noErr) {
             print("bad status \(status)")
         }
-        var eventType:MusicEventType = 0
-        var eventTimeStamp:MusicTimeStamp = -1
-        var eventData: UnsafeRawPointer?
-        var eventDataSize:UInt32 = 0
-        var results:[MIDINoteMessage] = []
+        var eventType		:MusicEventType = 0
+        var eventTimeStamp	:MusicTimeStamp = -1
+        var eventData		:UnsafeRawPointer?
+        var eventDataSize	:UInt32 = 0
+        var results			:[MIDINoteMessage] = []
         while hasCurrentEvent.boolValue {
             status = MusicEventIteratorGetEventInfo(iterator!, &eventTimeStamp, &eventType, &eventData, &eventDataSize)
             if status != OSStatus(noErr) {
@@ -284,11 +278,6 @@ class FZMIDI {
 		let results = [(Double, String)]() //results get stored here
 		var track:MusicTrack?
 		MusicSequenceGetTempoTrack(currentMusicSequence!, &track)
-//			let track = getTrackN(n: 0)
-//			print(track)
-//			var notetuple = (0.0, "")
-//			var tstamp = 0.0
-//			var tempnotes:[String: Double] = [:]
 		
 			var iterator:		MusicEventIterator?
 			var status = 		OSStatus(noErr)
@@ -320,17 +309,8 @@ class FZMIDI {
 //				print(eventType)
 				if Int(eventType) == kMusicEventType_ExtendedTempo {
 					_ = eventData?.assumingMemoryBound(to: MIDIMetaEvent.self)
-					//				let data2 = eventData?.assumingMemoryBound(to: MIDIMetaEvent.self)
-					
-//					let event = data?.pointee
-//					let datarray = asArrayDeep(data: (data?.pointee.data)!)
-					
-					
-//					let str = String(bytes: datarray, encoding: String.Encoding.macOSRoman)
-
-					
-//					print(data?.pointee)
 				}
+				
 				numberOfEvents += 1
 				status = MusicEventIteratorHasNextEvent(iterator!, &hasCurrentEvent)
 				if status != OSStatus(noErr) {
@@ -568,8 +548,6 @@ class FZMIDI {
 					isitdrums = true
 					print("found drums")
 				}
-				
-				
 			default:
 				print("Not Drums")
 			}

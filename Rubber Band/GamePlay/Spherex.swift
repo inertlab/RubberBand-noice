@@ -35,7 +35,6 @@ class Spherex {
 	func flow(multiplier: Int) {
 		switch multiplier {
 		case 1:
-//			orb.addAnimation(shinedown, forKey: "shinenot")
 			sphere_initialstate()
 		case 2, 3:
 			pulsenode(node: glow)

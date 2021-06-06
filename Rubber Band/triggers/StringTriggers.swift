@@ -55,6 +55,7 @@ class StringTrigger {
 	func hit(){
 //		node.addAnimation(thump, forKey: "thump")
 		burst.addParticleSystem(self.particle!)
+//		print(burst.particleSystems!.count)
 	}
 	
 	func thump(node: SCNNode)  {

@@ -14,6 +14,19 @@ import SceneKit
 import SpriteKit
 import GameplayKit
 
+protocol SongManagerDelegate {
+	func newsongselected(song: Song)
+}
+
+/// Directions the player press to navigate menu
+///
+/// - left: player pressed left
+/// - right: player pressed right
+/// - up: player pressed up
+/// - down: player pressed down
+enum Direction {
+	case left, right, up, down
+}
 
 let loadingscreen 	= SKScene(fileNamed: "LoadingScreen.sks")
 let loadcount 		= loadingscreen?.childNode(withName: "loadcount") as! SKLabelNode
@@ -25,16 +38,12 @@ let menuScene 		= SCNScene(named: "art.scnassets/scns/menu_song.scn")!
 var covernode 		= menuScene.rootNode.childNode(withName: "coverflow", recursively: true)!
 
 struct MenuText {
-//	let detailscene		= SKScene(fileNamed: "songDetails.sks")
-//	let detailslabel	: SKLabelNode
 	let detailnode 		= menuScene.rootNode.childNode(withName: "details", recursively: true)
 	init(){
-//		self.detailslabel = detailscene?.childNode(withName: "details") as! SKLabelNode
-		//		self.detailnode?.geometry?.firstMaterial?.diffuse.contents = detailscene
 	}
 }
 
-class RowCall {
+class ColCol {
 	var index 	= 0
 	var row 	= 0
 	var col 	= 0
@@ -42,62 +51,65 @@ class RowCall {
 
 let menutext = MenuText()
 
+
 /// Retrieves Song information from coredata and creates album art for menu display
 class SongManager {
+	
+	//MARK: - Vars
 	/// selected album always has the record component
+	var delegate	: SongManagerDelegate?
 	var songcount 	= 0
-	var loc 		= RowCall()
+	var loc 		= ColCol()
+	let noart		= NSImage(named: "noart")
+	
+	//MARK: ECS
 	let record 		= RecordComp()
 	let stars 		= StarsComp()
 	var selected 	= SongComp(song: Song())
 	var songenties 	= Set<GKEntity>()
+	
 	/// collection of song components
 	///
 	/// should not be sorted because it is access by Index
-	var songsystem 	= GKComponentSystem<SongComp>(componentClass: SongComp.self)
-	var colsystem 	= GKComponentSystem<ColumnComp>(componentClass: ColumnComp.self)
-	let noart		= NSImage(named: "noart")
+	var songsystem 	= GKComponentSystem<SongComp>	(componentClass: SongComp.self)
+	var colsystem 	= GKComponentSystem<ColumnComp>	(componentClass: ColumnComp.self)
+	
 	/// the scnnodes containing a row of covers
 	var sortkeypath:SortKeypath = .song
 	var sorting:SortKeypath 	= .song
+	
+	//MARK: Lists
 	/// array of ordered Stats used to arrange covers
 	/// - kept and reused trhoughout life of game
 	/// - updated every time user sorts music
 	var sorted = [Song]()
+	
 	/// array of the CoverArt (scnnodes with UUID)
 	/// - Loaded once at start, can take a while to build
 	/// - Needs to be rebuilt if cataloging songs again
 	var covers = [CoverArt]()
 	
+	//MARK: -  Funcs
 	/// Creates cover art and displays progress for songs in the core library arranged by Artist
 	///
 	/// Called at loading time once and only once
 	private func createcovers (songs: [Song]) {
-		covers = []
-		var count = sorted.count
-		let total = CGFloat(count)
+		covers 		= []
+		var count 	= sorted.count
+		let total 	= CGFloat(count)
 		var countup = 1
 		for song in songs {
 			count 	-= 1
 			countup += 1
-			noice.alpha = CGFloat(countup) / total
-			loadcount.text = String(format: "%04d", count)
-			
-			let entity = GKEntity()
-			let songcomp = SongComp(song: song)
+			noice.alpha 	= CGFloat(countup) / total
+			loadcount.text 	= String(format: "%04d", count)
+			let entity 		= GKEntity()
+			let songcomp 	= SongComp(song: song)
 			// assign entity to the covernode so it can be reference by the frusturm
 			songcomp.cover.entity = entity
 			entity.addComponent(songcomp)
 			songsystem.addComponent(foundIn: entity)
 			songenties.insert(entity)
-		}
-	}
-	
-	/// camera base culling of cover art
-	/// - Parameter covers: reveals cover art if within camera frustrum
-	func revealcoverart(covers: [SCNNode]) {
-		for cover in covers {
-			addcoverarttonode(cover: cover)
 		}
 	}
 	
@@ -118,11 +130,12 @@ class SongManager {
 	
 	/// Initializes Coverflow, run only once at beginning of game
 	func coverflow () {
-		sorted 	= fetchSongs(sortBy: sortkeypath.value())
-
-//		songenties.removeAll()
+		let sfinder = SongFinder()
 		
+		sfinder.librarymodified()
 		
+		sorted 	= fetchSongs(sortBy: sortkeypath.value(), nil, nil)
+	
 		createcovers(songs: sorted)
 
 		if !sorted.isEmpty{
@@ -146,7 +159,7 @@ class SongManager {
 		if keypath == .stars {
 			sorted = fetchSongs(sortByStat: keypath.value())
 		} else {
-			sorted = fetchSongs(sortBy: keypath.value())
+			sorted = fetchSongs(sortBy: keypath.value(), nil, nil)
 		}
 		
 		for child in covernode.childNodes {
@@ -172,16 +185,24 @@ class SongManager {
 //		tempcontainer.removeFromParentNode()
 	}
 	
+	//MARK: - Fetching
 	/// DEPRICATED - Retrieves list of Stats ordered by Artist or Album
 	/// - parameter sortBy: sorting key: Artist or Album
 	/// - Returns: An array of Stats sorted by Artist or Album
 	func fetchStats (sortBy: String) -> [Stats] {
 		let fet:NSFetchRequest<Stats> = Stats.fetchRequest()
-		let sorter 		= NSSortDescriptor(key: sortBy, ascending: true, selector: #selector(NSString.localizedCaseInsensitiveCompare))
-		let second 		= NSSortDescriptor(key: "song.title", ascending: true, selector: #selector(NSString.localizedCaseInsensitiveCompare))
+		let sorter = NSSortDescriptor(
+			key: sortBy,
+			ascending: true,
+			selector: #selector(NSString.localizedCaseInsensitiveCompare)
+		)
+		let second = NSSortDescriptor(
+			key: "song.title",
+			ascending: true,
+			selector: #selector(NSString.localizedCaseInsensitiveCompare)
+		)
 		fet.predicate 		= NSPredicate(format: "song != %@", "nil")
 		fet.sortDescriptors = [sorter, second]
-//		fet.fetchLimit 		= 100
 		let array 			= try? pc.viewContext.fetch(fet)
 		return array!
 	}
@@ -189,16 +210,22 @@ class SongManager {
 	/// Retrieves list of Songs ordered by Artist or Album
 	/// - parameter sortBy: sorting key: Artist or Album
 	/// - Returns: An array of Songs sorted by Artist or Album
-	func fetchSongs (sortBy: String) -> [Song] {
-		
+	func fetchSongs (sortBy: String, _ limit: Int?, _ ascending: Bool?) -> [Song] {
 		// what happends when sorting = .stars?
 		
 		let fet:NSFetchRequest<Song> = Song.fetchRequest()
-		let sorter = NSSortDescriptor(key: sortBy, ascending: true, selector: #selector(NSString.localizedCaseInsensitiveCompare))
-		let second = NSSortDescriptor(key: "title", ascending: true, selector: #selector(NSString.localizedCaseInsensitiveCompare))
-//		fet.predicate = NSPredicate(format: "song != %@", "nil")
+		let sorter = NSSortDescriptor(
+			key: sortBy,
+			ascending: ascending ?? true,
+			selector: #selector(NSString.localizedCaseInsensitiveCompare)
+		)
+		let second = NSSortDescriptor(
+			key: "title",
+			ascending: true,
+			selector: #selector(NSString.localizedCaseInsensitiveCompare)
+		)
 		fet.sortDescriptors = [sorter, second]
-		//		fet.fetchLimit = 100
+		if limit != nil { fet.fetchLimit = limit!}
 		let array = try? pc.viewContext.fetch(fet)
 		print("ist me margaret")
 		return array!
@@ -210,9 +237,16 @@ class SongManager {
 	func fetchSongs (sortByStat: String) -> [Song] {
 		
 		let fet:NSFetchRequest<Stats> = Stats.fetchRequest()
-		let sorter 		= NSSortDescriptor(key: sortByStat, ascending: true, selector: #selector(NSString.localizedCaseInsensitiveCompare))
-		let second 		= NSSortDescriptor(key: "song.title", ascending: true, selector: #selector(NSString.localizedCaseInsensitiveCompare))
-//		fet.predicate 	= NSPredicate(format: "song != %@", "nil")
+		let sorter 		= NSSortDescriptor(
+			key: sortByStat,
+			ascending: true,
+			selector: #selector(NSString.localizedCaseInsensitiveCompare)
+		)
+		let second 		= NSSortDescriptor(
+			key: "song.title",
+			ascending: true,
+			selector: #selector(NSString.localizedCaseInsensitiveCompare)
+		)
 		fet.sortDescriptors = [sorter, second]
 		
 		var songs = [Song]()
@@ -239,8 +273,8 @@ class SongManager {
 	
 	func fetchStatByID (id: String) -> Stats {
 		let fetch:NSFetchRequest<Stats> = Stats.fetchRequest()
-		fetch.predicate 	= NSPredicate(format: "songid == %@", id)
-		fetch.fetchLimit 	= 1
+			fetch.predicate 	= NSPredicate(format: "songid == %@", id)
+			fetch.fetchLimit 	= 1
 		let array = try? pc.viewContext.fetch(fetch)
 		if array!.isEmpty {
 			return createstats(uuid: id)!
@@ -278,7 +312,6 @@ class SongManager {
 	func connectsongtostats() {
 		let fetstat:NSFetchRequest<Stats> = Stats.fetchRequest()
 		fetstat.predicate = NSPredicate(format: "song == %@", "nil")
-		
 		do {
 			let stats = try pc.viewContext.fetch(fetstat)
 			for s in stats {
@@ -298,100 +331,69 @@ class SongManager {
 		deletealbums()
 		let sfinder = SongFinder()
 		sfinder.catalogSongs()
-//		coverflow()
 	}
 	
 	func allsongsfromartist(song: Song) -> [Song] {
 		let fetch:NSFetchRequest<Song> = Song.fetchRequest()
-		fetch.predicate 	= NSPredicate(format: "artist == %@", song.artist!)
-		let sorter 		= NSSortDescriptor(key: "title", ascending: true, selector: #selector(NSString.localizedCaseInsensitiveCompare))
-		//		fet.predicate 	= NSPredicate(format: "song != %@", "nil")
+		fetch.predicate = NSPredicate(format: "artist == %@", song.artist!)
+		let sorter 		= NSSortDescriptor(
+			key: "title",
+			ascending: true,
+			selector: #selector(NSString.localizedCaseInsensitiveCompare)
+		)
 			fetch.sortDescriptors = [sorter]
-//			fetch.fetchLimit 	= 1
 		let array = try? pc.viewContext.fetch(fetch)
 
 		return array!
 	}
-	
-	func selectfirstsong() -> Bool {
-		if songsystem.components.isEmpty {
-			return false
-		}
-		selected = songsystem[0]
-		selected.state = .selected
-		TextureMover.shared.updatechartericon(icon: selected.song.icon!)
-		return true
-	}
-	
+
+//MARK: Song Selection
 	/// makes a record selection with animation
 	/// - Parameter newsong: the song to be selected
 	///
 	/// a different seleciton function needs to be made without the animating
 	func updatesongselection(newsong: SongComp, state: SelState) {
 	
-		let oldcolumn = selected.entity?.component(ofType: ColumnComp.self)
+		let oldcolumn 	= selected.entity?.component(ofType: ColumnComp.self)
+		selected.state 	= .notselected
+		selected 		= newsong
+		newsong.state 	= state
 		
-		selected.state = .notselected
+		delegate?.newsongselected(song: selected.song)
 		
-		selected = newsong
-		newsong.state = state
-		
-//		print(selected.song.folder)
-		TextureMover.shared.updatechartericon(icon: newsong.song.icon!)
+//		TextureMover.shared.updatechartericon(icon: newsong.song.icon!)
 		
 		if newsong.song.length > 0 {
-			var secs = DateComponents()
+			var secs 	= DateComponents()
 			secs.second = Int(newsong.song.length)
 			labelt.text = format.string(for: secs)
 		}else{
 			labelt.text = ""
 		}
 		
-		let column = selected.entity?.component(ofType: ColumnComp.self)
+		let column 		= selected.entity?.component(ofType: ColumnComp.self)
+		rowcall.posx 	= -column!.posx + 1
 		
-		if -column!.posx + 1 != covernode.position.x {
-			
-			covernode.removeAllActions()
-			var posz:CGFloat = 0
-			if state == .detailview {
-				posz = -1.25
-			}
-			// find out if leap is really big
-			let offset:CGFloat = column!.posx - oldcolumn!.posx
-			if offset > 8 {
-				//needs to travel to the end (move left)
-				// first go off scren to the rigt
-				covernode.runAction(SCNAction.move(to: SCNVector3(x: 5 , y: 0, z: posz), duration: 0.15)) {
-					// then move everything all the way to the left to slide in gracefully
-					covernode.position.x = -CGFloat(self.colsystem.components.count + 1)
-					covernode.runAction(SCNAction.move(to: SCNVector3(x: -column!.posx + 1 , y: 0, z: posz), duration: 0.15))
-//					self.frustrumreveal()
-				}
-			}else if offset < -8 {
-				// needs to travel to begining
-				covernode.runAction(SCNAction.move(to: SCNVector3(x: -CGFloat(self.colsystem.components.count + 1) , y: 0, z: posz), duration: 0.10)){
-					covernode.position.x = 5
-					// covernode has to moved sideways so update index
-					covernode.runAction(SCNAction.move(to: SCNVector3(x: -column!.posx + 1 , y: 0, z: posz), duration: 0.2))
-//					self.frustrumreveal()
-				}
-			} else {
-				
-				// covernode has to moved sideways so update index
-				covernode.runAction(SCNAction.move(to: SCNVector3(x: -column!.posx + 1 , y: 0, z: posz), duration: 0.25))
-			}
+		if column != oldcolumn {
 			oldcolumn?.node.position.z = 0
 			loc.col = Int(column!.posx - 1)
 			column!.highlight()
 			oldcolumn?.unhilight()
 		}
+		
+		// update column vertically
 		column!.node.runAction(SCNAction.move(to: SCNVector3(x: column!.node.position.x, y: -selected.row, z: 0.25), duration: 0.125)){
-			
 			self.frustrumreveal()
 		}
+		UpNext.shared.rowcount(count: column!.node.childNodes.count, row: Int(-selected.row))
 	}
 	
-	func moveselect(direction: Direction)  {
+	func selectrandom() {
+		updatesongselection(newsong: songsystem.components.randomElement()!, state: .detailview)
+//		selected = songsystem.components.randomElement()!
+	}
+	
+	func moveselector(direction: Direction)  {
 		var i = selected.index
 		switch direction {
 		case .left:
@@ -432,6 +434,24 @@ class SongManager {
 		}
 	}
 	
+	func selectfirstsong() -> Bool {
+		if songsystem.components.isEmpty {
+			return false
+		}
+		selected 		= songsystem[0]
+		selected.state 	= .selected
+		
+		// texturemover needs to be called so it instantiates or else delegate doesn't work
+		TextureMover.shared.updatechartericon(icon: selected.song.icon ?? "blank")
+		updatesongselection(newsong: selected, state: .selected)
+		let column 		= selected.entity?.component(ofType: ColumnComp.self)
+		column!.highlight()
+		return true
+	}
+	
+	//MARK: UpNext Helper
+	/// returns a lis of songs tiles for the UpNext list
+	/// - Parameter index: The currently selected Index
 	func songrange(index: Int) -> [String] {
 		var titles = [String]()
 		var base = index - 4
@@ -448,10 +468,22 @@ class SongManager {
 		return titles
 	}
 	
-	
+	/// adds cover art to art within frustrum camera after a 0.15 second delay
+	func frustrumreveal() {
+		frustrumreveal(after: 0.15)
+	}
+	/// adds cover art to art within frustrum camera after a given delay
+	/// - Parameter after: delay to wait for reveal
+	func frustrumreveal(after: Double) {
+		DispatchQueue.main.asyncAfter(deadline: .now() + after){
+			let covers = mainView.nodesInsideFrustum(of: frustum!)
+			smanager.revealcoverart(covers: covers)
+		}
+	}
 }
 
 
+//MARK: - Private Funcs
 private extension SongManager {	
 	/// lays out cover art into a grid of columns
 	func flowcoverart () {
@@ -565,12 +597,13 @@ private extension SongManager {
 		return tempcol
 	}
 	
-	func frustrumreveal() {
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-			let covers = mainView.nodesInsideFrustum(of: frustum!)
-			smanager.revealcoverart(covers: covers)
+	/// camera base culling of cover art
+	/// - Parameter covers: reveals cover art if within camera frustrum
+	func revealcoverart(covers: [SCNNode]) {
+		for cover in covers {
+			addcoverarttonode(cover: cover)
 		}
 	}
 }
 
-let smanager 	= SongManager()
+let smanager = SongManager()

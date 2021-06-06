@@ -29,9 +29,9 @@ class TimeCode {
 	///
 	/// Depricated
 	func convertmtstosec(notes: [( Double, Button)]) -> [(Double, Button)]{
-		var newnotes = [(Double, Button)]()
-		var oldnote = 0.0
-		var oldtime = 0.0
+		var newnotes 	= [(Double, Button)]()
+		var oldnote 	= 0.0
+		var oldtime 	= 0.0
 		for note in notes {
 			var newnote = (0.0, note.1)
 			
@@ -82,10 +82,10 @@ class TimeCode {
 	///
 	/// - Parameter seq: musicSequence - aka midi file track
 	func initTimeCode(seq: MIKMIDISequence) {
-		self.events = []
-		let totalbeats = seq.length
-		let tempos = seq.tempoEvents()
-		var bpm = 100.0
+		self.events 	= []
+		let totalbeats 	= seq.length
+		let tempos 		= seq.tempoEvents()
+		var bpm 		= 100.0
 		
 		var prev_tstamp = 0.0
 		
@@ -158,9 +158,9 @@ struct fzTempoEvent {
 
 struct FZNoteEvent {
 	let button: 	Button
-	let start: 	Double
+	let start: 		Double
 	let end:		Double
 }
 
-typealias fzNote = (button:Button, time:Double, length:Double)
-typealias fzNoteList = [fzNote]
+typealias fzNote 		= (button:Button, time:Double, length:Double)
+typealias fzNoteList 	= [fzNote]

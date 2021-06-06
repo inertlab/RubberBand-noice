@@ -13,7 +13,22 @@ import SceneKit
 
 enum SelState {
 	case selected, notselected, detailview, othersongs
+	
+	func z() -> CGFloat {
+		switch self {
+		case .selected:
+			return 2.25
+		case .detailview:
+			return 3.5
+		case .othersongs:
+			return 3
+		default:
+			return 0
+		}
+	}
 }
+
+//MARK: - Song Comp
 /// geometry node component
 ///
 /// initially conatins no album art - to be loaded when it comes into scene
@@ -30,7 +45,7 @@ class SongComp: GKComponent {
 					previewsong(song: self)
 					fallthrough
 					case .detailview:
-					cover.runAction(SCNAction.move(to: SCNVector3(x: 0.42, y: row, z: 2.25), duration: 0.4))
+						cover.runAction(SCNAction.move(to: SCNVector3(x: 0.42, y: row, z: state.z()), duration: 0.4))
 				default:
 					break
 				}
@@ -45,18 +60,18 @@ class SongComp: GKComponent {
 					initiateselected()
 					cover.runAction(waddle3)
 				}
-				cover.runAction(SCNAction.move(to: SCNVector3(x: 0.42, y: row, z: 3.5), duration: 0.5))
+				cover.runAction(SCNAction.move(to: SCNVector3(x: 0.42, y: row, z: state.z()), duration: 0.5))
 			case .othersongs:
-				cover.runAction(SCNAction.move(to: SCNVector3(x: 0.42, y: row, z: 3), duration: 0.5))
+				cover.runAction(SCNAction.move(to: SCNVector3(x: 0.42, y: row, z: state.z()), duration: 0.5))
 				cover.runAction(SCNAction.fadeOpacity(to: 0.05, duration: 0.75))
 			}
 		}
 	}
 	
 	let song:Song
-	var index = 0
+	var index 		= 0
 	var row:CGFloat = 0
-	let cover = makecoverart()
+	let cover 		= makecoverart()
 	
 	init(song:Song){
 		self.song = song
@@ -86,10 +101,11 @@ private extension SongComp {
 	func reset() {
 		cover.removeAllActions()
 		cover.runAction(SCNAction.move(to: SCNVector3(x: 0, y: row, z: 0), duration: 0.4))
-		cover.runAction(rotateto0)
+		cover.runAction(SCNAction.rotateTo(x: 0, y: 0, z: 0, duration: 0.4))
 	}
 }
 
+//MARK: - Record
 class RecordComp: GKComponent {
 	let node = menuScene.rootNode.childNode(withName: "record", recursively: false)!
 
@@ -97,9 +113,8 @@ class RecordComp: GKComponent {
 		reset()
 		let song = self.entity?.component(ofType: SongComp.self)
 		song?.cover.addChildNode(self.node)
-		TextureMover.shared.updateTier()
-		self.node.runAction(slideout)
-		self.node.runAction(spinrecord)
+		self.node.runAction(SCNAction.move(to: SCNVector3(0.53, 0, -0.01 ), duration: 0.5))
+		self.node.runAction(SCNAction.rotateTo(x: 0, y: 0, z: -0.25, duration: 0.5))
 	}
 }
 private extension RecordComp {
@@ -111,10 +126,11 @@ private extension RecordComp {
 	}
 }
 
+//MARK: - Column
 /// Column node entity belongs to
 class ColumnComp: GKComponent {
-	let posx: CGFloat
-	let node: SCNNode
+	let posx	: CGFloat
+	let node	: SCNNode
 	var letter 	= SCNNode()
 	var index 	= 0
 	init(column: CGFloat, node: SCNNode){
@@ -149,22 +165,16 @@ class ColumnComp: GKComponent {
 	}
 }
 
-fileprivate let marker = covernode.childNode(withName: "marker", recursively: false)
-
 class StarsComp: GKComponent {
 	let node = menuScene.rootNode.childNode(withName: "details", recursively: false)!
 
 	override func didAddToEntity() {
 		let song = self.entity?.component(ofType: SongComp.self)
 		song?.cover.addChildNode(self.node)
-		TextureMover.shared.updateStars()
 	}
 }
 
-
-//	lastnode.removeAction(forKey: "looper")
-//	lastnode.runAction(movebackward)
-//	lastnode.runAction(rotateto0)
+//MARK: - Functions
 
 fileprivate func makecoverart() -> SCNNode {
 	let plane = SCNPlane(width: 0.8, height: 0.8)
@@ -173,9 +183,6 @@ fileprivate func makecoverart() -> SCNNode {
 	let node = SCNNode(geometry: plane)
 	return node
 }
-
-fileprivate let albumscn = SCNScene(named: "art.scnassets/scns/album.scn")!
-fileprivate let cover 	= albumscn.rootNode.childNode(withName: "cover", recursively: false)!
 
 
 fileprivate func previewsong(song: SongComp) {
@@ -188,7 +195,6 @@ fileprivate func previewsong(song: SongComp) {
 		} else {
 			if song.song.length < 1 {
 				song.song.length = Jukebox.shared.players[.guitar]!.duration
-				print("song length", song.song.length)
 				labelt.text = format.string(from: song.song.length)
 				try? pc.viewContext.save()
 			}
@@ -200,3 +206,35 @@ fileprivate func previewsong(song: SongComp) {
 		}
 	}
 }
+
+
+fileprivate let albumscn = SCNScene(named: "art.scnassets/scns/album.scn")!
+fileprivate let cover 	= albumscn.rootNode.childNode(withName: "cover", recursively: false)!
+
+//MARK: - Waddle Animations
+fileprivate var waddle1:SCNAction {
+	let scna = SCNAction.rotateTo(x: 0, y: 0.5, z: 0, duration: 1.25)
+	scna.timingMode = .easeIn
+	return scna
+}
+
+fileprivate var waddle2:SCNAction {
+	let scna = SCNAction.rotateTo(x: 0, y: 0.6, z: 0, duration: 1.25)
+	scna.timingMode = .easeIn
+	return scna
+}
+
+fileprivate var waddle3:SCNAction {
+	let scna = SCNAction.rotateTo(x: 0, y: 0.55, z: 0, duration: 1.25)
+	scna.timingMode = .easeOut
+	return scna
+}
+
+fileprivate var wad:SCNAction {
+	let scna = SCNAction.rotateTo(x: 0, y: 0.65, z: 0, duration: 1.25)
+	scna.timingMode = .easeIn
+	return scna
+}
+
+fileprivate let wadtwice = SCNAction.sequence([waddle1, waddle2, waddle3])
+

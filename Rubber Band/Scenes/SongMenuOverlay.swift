@@ -11,12 +11,12 @@ import SpriteKit
 
 final class SongMenuOverlay {
 	static let shared = SongMenuOverlay()
-	let scn = SKScene(fileNamed: "titleDisplay")
-	let title:SKLabelNode
-	let details:SKNode
+	let scn 	= SKScene(fileNamed: "titleDisplay")
+	let title	:SKLabelNode
+	let details	:SKNode
 	private init() {
-		self.title = scn?.childNode(withName: "name") as! SKLabelNode
-		self.details = (scn?.childNode(withName: "details"))!
+		self.title 		= scn?.childNode(withName: "name") as! SKLabelNode
+		self.details 	= (scn?.childNode(withName: "details"))!
 	}
 }
 

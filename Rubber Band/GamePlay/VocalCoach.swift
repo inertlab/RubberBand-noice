@@ -97,9 +97,9 @@ private extension Vocalcoach {
 	}
 	
 	func resetyrlics() {
-		phrases[abc[0]].text 		= lyrics[0].1
-		phrases[abc[1]].text 		= lyrics[1].1
-		phrases[abc[2]].text 		= lyrics[2].1
+		phrases[abc[0]].text = lyrics[0].1
+		phrases[abc[1]].text = lyrics[1].1
+		phrases[abc[2]].text = lyrics[2].1
 	}
 	
 	func resetloc(){

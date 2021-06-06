@@ -39,12 +39,14 @@ let labelicon 		= menuOverlay?.childNode(withName: "icon") 		as! SKSpriteNode
 /// - precondition: requires pc (persistent container) to be defined already
 /// - bug: Will duplicate data if run more than once without deleting current data
 class SongFinder {
+	//MARK: - Vars
 	/// Players home directory on the computer
 	let homeDirectory 	= NSHomeDirectory()
 	/// location of music folder/folders
 	let library:String
 	/// instance of FileManager
 	let fileManager 	= FileManager()
+	//MARK: - Inits
 	/// init with default song path "user/rubberband/"
 	init() {
 		self.library = self.homeDirectory.description + "/Music/noice/"
@@ -60,27 +62,34 @@ class SongFinder {
 		fileManager.changeCurrentDirectoryPath(self.library)
 	}
 	
+	//MARK: - Public Funcs
 	///	parses data from ini files and adds them to Catalog (coredata)
 	///
 	/// This is to catalog all songs in the library
 	func catalogSongs () {
 		/// array of paths to song folders
-		let inis 	= songIniPaths()
+		if let inis = songIniPaths() {
+			catalogSongs(inis: inis)
+		}
+	}
+	
+	/// parses data from ini files and adds them to Catalog (coredata)
+	/// - Parameter inis: A list of paths to ini files
+	func catalogSongs (inis: [String]) {
 		/// array of songs to be added to catalog
 		var songs 	= [String:Song]()
 		/// array of albums to be added to catalog
 		var albums 	= [String:Album]()
 
-		for ini in inis! {
+		for ini in inis {
 			/// managed object Album to be inserted into pc context
 			var album:Album
+			let songmeta 	= iniToMeta(iniPath: ini)
+			let song		= newsongfrominipath(songmeta: songmeta)
 			
-			let songmeta = iniToMeta(iniPath: ini)
-			
-			let song	= newsongfrominipath(songmeta: songmeta)
 			addstattosong(song: song)
 
-//				this combines artis + album to indentify unique albulms
+			// this combines artis + album to indentify unique albulms
 			let albumID = songmeta[SongData.artist]!.lowercased() + songmeta[SongData.album]!.lowercased()
 			
 			// look for album in current album dictionary else make a new album
@@ -93,7 +102,6 @@ class SongFinder {
 			}
 			
 			song.trackOf 		= album
-			
 			songs[song.title!] 	= song
 			albums[albumID] 	= album
 		}
@@ -105,71 +113,155 @@ class SongFinder {
 		}
 	}
 	
-	/// refernce library ini files against cataloged song directories to find new ones
+	enum Status {
+		case noinis, nosongs, nonothing
+	}
+	
+	/// checks if library folder has been modified
+	///
+	/// does not check if inis have been modified
+	func librarymodified () {
+		do {
+			let modate 	= try fileManager.attributesOfItem(atPath:library)[.modificationDate]
+			let config 	= Defaults.config()
+			
+			if let libdate = config.libupdate {
+				if modate as! Date > libdate {
+				// library has been modified
+					print("library changed")
+					scanlibrarychanges(date: libdate)
+					savedate(config: config)
+					return
+				}
+				print("no changes to library")
+				return // library hasn't changed do nothing
+			}
+			// there is no saved date, catalog library for the first time
+			print("this is first time scanning library")
+			smanager.deleteCatalog()
+			catalogSongs()
+			savedate(config: config)
+		} catch let err as NSError {
+			print(err)
+		}
+	}
+	
+	func savedate(config: Config) {
+		config.libupdate = Date()
+		do{
+			try pc.viewContext.save()
+		} catch let err as NSError {
+			print(err)
+		}
+	}
+	
+	func scanlibrarychanges (date: Date) {
+		if let inipaths = songIniPaths() {
+			if let songs = fetchaallsongs() {
+				for song in songs {
+					// delete songs from database if folder does not exist
+					if !fileManager.fileExists(atPath: (song.folder?.appendingPathComponent("song.ini").path)!) {
+						print("deleting ", song.folder?.path ?? "no path")
+						pc.viewContext.delete(song)
+						do{
+							try pc.viewContext.save()
+						} catch {
+							print("could not delete songs")
+						}
+					}
+				}
+				// add songs not found in library
+				scanfornewsongs(inis: inipaths)
+				return
+			}
+			// no songs found in coredata
+			print("cataloging")
+			catalogSongs(inis: inipaths)
+			return
+		}
+		// no ini paths found, delete
+		print("deleeting your shit")
+		smanager.deleteCatalog()
+	}
+	
+	/// reference library ini files against cataloged song directories to find new ones
 	func scanfornewsongs() {
 		if let inipaths = songIniPaths() {
-			for path in inipaths {
-				let pathstring = path.components(separatedBy: "song.ini")[0]
-				let url = URL(fileURLWithPath: pathstring)
-				if !fetchsongbyfolder(folder: url.absoluteString) {
-					print("adding:", pathstring, "to catalog")
-					addsongtocatalog(inipath: path)
-				}
+			scanfornewsongs(inis: inipaths)
+		}
+	}
+	
+	/// reference library ini files against cataloged song directories to find new ones
+	func scanfornewsongs(inis: [String]) {
+		for path in inis {
+			let pathstring 	= path.components(separatedBy: "song.ini")[0]
+			let url	 		= URL(fileURLWithPath: pathstring)
+			if let _ = fetchsongbyfolder(folder: url.absoluteString) {
+			} else {
+				print("song not found, add to library")
+				addsongtocatalog(inipath: path)
 			}
-			print("done scanning")
+		}
+		print("done scanning")
+	}
+	
+	func updatemetadata() {
+		if let inis = songIniPaths() {
+			let date = Defaults.config().libupdate ?? Date()
+			scanforinichanges(inis: inis, date: date)
 		}
 	}
 	
 	/// compares Song.modified to ini file modification date to check for changes
-	func scanforinichanges() {
-		if let songs = fetchaallsongs() {
-			let finder = FileManager()
-			for s in songs {
-				do {
-					let inipath = s.folder!.appendingPathComponent("song.ini").path
-					let modate = try finder.attributesOfItem(atPath:inipath)[.modificationDate]
-					if modate as! Date > s.modfied! {
+	/// - Parameters:
+	///   - songs: list of Song
+	///   - date: Date the music library was last updated
+	func scanforinichanges(inis: [String], date: Date) {
+		for inipath in inis {
+			do {
+				let modate 	= try fileManager.attributesOfItem(atPath:inipath)[.modificationDate]
+				if modate as! Date > date {
+					let pathstring 	= inipath.components(separatedBy: "song.ini")[0]
+					let url	 		= URL(fileURLWithPath: pathstring)
+					if let song = fetchsongbyfolder(folder: url.absoluteString) {
 						let meta = iniToMeta(iniPath: inipath)
-						mapSongMetatoSong(song: s, meta: meta)
-						s.trackOf?.name = meta[.album]
-						do{
-							try pc.viewContext.save()
-						} catch let err as NSError {
-							print(err)
-						}
+						mapSongMetatoSong(song: song, meta: meta)
 					}
-					
-				} catch let err as NSError {
-					print(err)
 				}
+			} catch let err as NSError {
+				print(err)
 			}
-			print("done scanning for ini changes")
+		}
+		do{
+			try pc.viewContext.save()
+		} catch let err as NSError {
+			print(err)
 		}
 	}
 }
 
 private extension SongFinder {
-	
-	func fetchaallsongs() -> [Song]? {
-		let request:NSFetchRequest<Song> = Song.fetchRequest()
+	//MARK: - Private Funcs
+	func libmoddate() -> Date? {
 		do {
-			return try pc.viewContext.fetch(request)
-		}catch let err as NSError {
+			let modate 	= try fileManager.attributesOfItem(atPath:library)[.modificationDate]
+			return (modate as! Date)
+		} catch let err as NSError {
 			print(err)
+			return nil
 		}
-		return nil
 	}
 	
 	func addsongtocatalog(inipath: String) {
-		let songmeta = iniToMeta(iniPath: inipath)
-		let song = newsongfrominipath(songmeta: songmeta)
+		let songmeta 	= iniToMeta(iniPath: inipath)
+		let song 		= newsongfrominipath(songmeta: songmeta)
 		addstattosong(song: song)
 		if let album = getsongalbum(songmeta: songmeta) {
 			song.trackOf = album
 		} else {
-			song.trackOf = Album(context: pc.viewContext)
-			song.trackOf?.name = songmeta[.album]
-			song.trackOf?.albumArt = song.folder?.appendingPathComponent("album.png")
+			song.trackOf 			= Album(context: pc.viewContext)
+			song.trackOf?.name 		= songmeta[.album]
+			song.trackOf?.albumArt 	= song.folder?.appendingPathComponent("album.png")
 		}
 		do{
 			try pc.viewContext.save()
@@ -217,22 +309,21 @@ private extension SongFinder {
 		let stat = stata.first(where: {$0.songid == song.uuid})
 		
 		if stat != nil {
-			stat!.song			= song
-			stat!.songid		= song.uuid
-			stat!.pindex		= 0
-			stat!.setby			= User.current.player
+			stat!.song		= song
+			stat!.songid	= song.uuid
+			stat!.pindex	= 0
+			stat!.setby		= User.current.player
 		}
 	}
 	
 	/// creates a new song in coredata from midi file path
 	/// - Parameter inipath: the path string to the ini file
 	func newsongfrominipath(songmeta: SongMeta) -> Song {
-		let song 			= Song(context: pc.viewContext)
-			song.tier 		= maketier()
+		let song 		= Song(context: pc.viewContext)
+			song.tier 	= Tiers(context: pc.viewContext)
 			mapSongMetatoSong(song: song, meta: songmeta)
 		return song
 	}
-	
 	
 	/// maps data from ini SongMeta to a Song
 	/// - Parameter song: song to be updated
@@ -242,9 +333,9 @@ private extension SongFinder {
 		for s in meta {
 			switch s.key {
 			case .artist:
-				song.artist 	= s.value
+				song.artist = s.value
 			case .name:
-				song.title 		= s.value
+				song.title 	= s.value
 			case .year:
 				if s.value.count == 4{
 					song.year 	= Int16(s.value)!
@@ -300,50 +391,51 @@ private extension SongFinder {
 		song.uuid = uuidfrommeta(song: song)
 	}
 	
+	//MARK: Fetching
 	/// Fetches song by URL.string
 	/// - Parameter folder: folder URL in string format
-	func fetchsongbyfolder(folder: String) -> Bool {
+	func fetchsongbyfolder(folder: String) -> Song? {
 		let fetch:NSFetchRequest<Song> = Song.fetchRequest()
 		fetch.predicate 	= NSPredicate(format: "folder == %@", folder)
 		fetch.fetchLimit 	= 1
 		let array = try? pc.viewContext.fetch(fetch)
 		if array!.isEmpty {
-			return false
+			return nil
 		}
-		return true
+		return array![0]
 	}
 	
+	func fetchaallsongs() -> [Song]? {
+		let request:NSFetchRequest<Song> = Song.fetchRequest()
+		do {
+			let songs = try pc.viewContext.fetch(request)
+			if songs.count == 0 { return nil}
+			return songs
+		}catch let err as NSError {
+			print(err)
+			return nil
+		}
+	}
 	
 	func fetchstats () -> [Stats] {
 		let fet:NSFetchRequest<Stats> = Stats.fetchRequest()
-//		let sorter = NSSortDescriptor(key: sortBy, ascending: true)
-//				fet.fetchLimit = 5
-//		fet.predicate = NSPredicate(format: "song != %@", "nil")
-//		fet.sortDescriptors = [sorter]
 		let array = try? pc.viewContext.fetch(fet)
 		return array!
 	}
 	
-	func maketier() -> Tiers {
-		return Tiers(context: pc.viewContext)
-	}
-	
-	func fetchstat () -> [Stats] {
-		let fet:NSFetchRequest<Stats> = Stats.fetchRequest()
-		let array = try? pc.viewContext.fetch(fet)
-		return array!
-	}
-	
+	//MARK: ini Files
 	/// Finds all ini files in all subdirectories
 	///
 	/// - Returns: an Array of paths to the song folders containing ini files
-	func songIniPaths () -> [String]?{
-		var songInis = [String]()
+	func songIniPaths () -> [String]? {
 		if let enumPaths 	= fileManager.enumerator(atPath: self.library){
 			let	allPaths 	= enumPaths.allObjects as! [String]
-			songInis 		= allPaths.filter{$0.contains("song.ini")}
+			let songInis 	= allPaths.filter{$0.contains("song.ini")}
+			if songInis.count != 0 {
+				return songInis
+			}
 		}
-		return songInis.sorted()
+		return nil
 	}
 	
 	/// opens ini file and returns lines containing " = " as an array
@@ -353,7 +445,7 @@ private extension SongFinder {
 	func songIniLines (path: String) -> [String] {
 		var lines = [String]()
 		do{
-			let filestring = try String(contentsOfFile: path, encoding: String.Encoding.isoLatin1 )
+			let filestring = try String(contentsOfFile: path, encoding: String.Encoding.isoLatin1)
 			filestring.enumerateLines{l, _ in lines.append(l)}
 		}catch let err as NSError {
 			print(err)

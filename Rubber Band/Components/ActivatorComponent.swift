@@ -26,9 +26,6 @@ class ActivatorComp: GKComponent {
 	}
 
 	override func didAddToEntity() {
-//		if let notecomp = entity?.component(ofType: NoteComp.self) {
-//			notecomp.node.geometry?.firstMaterial?.diffuse.intensity = 6
-//		}
 		changeopacity(0)
 		updatestatus(.skip)
 	}

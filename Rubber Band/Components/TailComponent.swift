@@ -103,10 +103,7 @@ class TailComp: GKComponent {
 		
 		for n in node.childNodes {
 			n.geometry?.firstMaterial?.multiply.contents = NSColor.rbRed
-			
-			//				n.geometry?.firstMaterial?.transparent.contentsTransform.m42 = lapse
 		}
-		//			node.scale.z = lapse
 	}
 	
 	func maketailgray() {

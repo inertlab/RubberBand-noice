@@ -10,9 +10,6 @@ import Foundation
 import SpriteKit
 import SceneKit
 
-
-
-
 enum GameState {
 	case drumsPlaying
 	case songSelection
@@ -65,13 +62,9 @@ private extension SwitchBoard {
 	
 	func rotatecamera () {
 		let cam = menuScene.rootNode.childNode(withName: "menucam", recursively: true)
-		cam?.addChildNode(lastnode)
-		lastnode.position.x = -1.6
-		lastnode.position.y	= 0
-		lastnode.position.z = -4
 		cam?.runAction(SCNAction.rotateBy(x: 0, y: 1, z: 0, duration: 0.5))
 	}
 }
 
-let switchboard = SwitchBoard()
+//let switchboard = SwitchBoard()
 

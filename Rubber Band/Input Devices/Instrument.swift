@@ -8,6 +8,37 @@
 
 import Foundation
 
+/// extend to different handle different diffs later
+enum DrumEvent: String {
+	typealias RawValue = String
+	case 	mix3d0		= "[mix 3 drums0]" ,
+			mix3d1 		= "[mix 3 drums1]" ,
+			mix3d2 		= "[mix 3 drums2]" ,
+			mix3d3 		= "[mix 3 drums3]" ,
+			mix3d4 		= "[mix 3 drums4]" ,
+			mix3d0d 	= "[mix 3 drums0d]",
+			mix3d1d		= "[mix 3 drums1d]",
+			mix3d2d 	= "[mix 3 drums2d]",
+			mix3d3d 	= "[mix 3 drums3d]",
+			mix3d4d 	= "[mix 3 drums4d]"
+	func flip() -> Bool {
+		switch self {
+		case .mix3d0d, .mix3d1d, .mix3d2d, .mix3d3d, .mix3d4d:
+			return true
+		default:
+			return false
+		}
+	}
+	func noflip() -> Bool {
+		switch self {
+		case .mix3d0, .mix3d1, .mix3d2, .mix3d3, .mix3d4:
+			return true
+		default:
+			return false
+		}
+	}
+}
+
 
 enum Difficulty:Int16 {
 	case easy, medium, hard, expert
@@ -34,6 +65,19 @@ enum Difficulty:Int16 {
 		}
 	}
 	
+	func short() -> String {
+		switch self {
+		case .easy:
+			return "E"
+		case .medium:
+			return "M"
+		case .hard:
+			return "H"
+		case .expert:
+			return "X"
+		}
+	}
+	
 	func noflipevent() -> String {
 		switch self {
 		case .easy:
@@ -46,7 +90,8 @@ enum Difficulty:Int16 {
 			return "[mix 3 drums0]"
 		}
 	}
-
+	
+	/// doesn't cover all disco flip cases like [mix 3 drums3d]
 	func flipevent() -> String {
 		switch self {
 		case .easy:
@@ -60,6 +105,7 @@ enum Difficulty:Int16 {
 		}
 	}
 }
+
 
 /// The playable instruments
 enum Instrument: Int16 {
@@ -87,34 +133,17 @@ enum Instrument: Int16 {
 	}
 	
 	func getstars(_ stat: Stats) -> Int16 {
-		
-		switch self {
-		case .prodrums:
-			return stat.prodrums?.stars ?? 0
-		case .drums:
-			return stat.drums?.stars ?? 0
-		case .bass:
-			return stat.bass?.stars ?? 0
-		case .keys:
-			return stat.bass?.stars ?? 0
-		case .guitar:
-			return stat.guitar?.stars ?? 0
-		}
+		return getscore(stat)?.stars ?? 0
 	}
 	
 	func getscoredif(_ stat: Stats) -> Int16 {
-		switch self {
-		case .prodrums:
-			return stat.prodrums?.difficulty ?? 0
-		case .drums:
-			return stat.drums?.difficulty ?? 0
-		case .bass:
-			return stat.bass?.difficulty ?? 0
-		case .keys:
-			return stat.keys?.difficulty ?? 0
-		case .guitar:
-			return stat.guitar?.difficulty ?? 0
-		}
+		return getscore(stat)?.difficulty ?? 0
+	}
+	
+	/// Retrieves a Score entity from coreData for the selected instrument
+	/// - Parameter stat: Stats entity for current song
+	func getscore(_ stat: Stats) -> Score? {
+		return (stat.scores as! Set<Score>).first(where: {$0.instrument == self.rawValue}) ?? nil
 	}
 	
 	func name() -> String {
@@ -133,7 +162,7 @@ enum Instrument: Int16 {
 	}
 	/// returns the track name to retrive from MIDI file
 	///
-	/// - Returns: MIDI track name - ei: "PART BASS"
+	/// - Returns: MIDI track name - ie: "PART BASS"
 	func track() -> TrackName {
 		switch self {
 		case .drums, .prodrums:
@@ -173,7 +202,6 @@ enum Instrument: Int16 {
 			case .hard:
 				return fiveHard
 			case .expert:
-				print("i'm sending 5 expert")
 				return fiveExpert
 			}
 		}
@@ -183,5 +211,11 @@ enum Instrument: Int16 {
 /// MIDI Track part name
 ///
 enum TrackName: String {
-	case drums = "PART DRUMS", bass = "PART BASS", guitar = "PART GUITAR", keys = "PART KEYS", vocals = "PART VOCALS", beat = "BEAT", events = "EVENTS"
+	case drums 	= "PART DRUMS",
+		 bass 	= "PART BASS",
+		 guitar = "PART GUITAR",
+		 keys 	= "PART KEYS",
+		 vocals = "PART VOCALS",
+		 beat 	= "BEAT",
+		 events = "EVENTS"
 }

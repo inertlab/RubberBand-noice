@@ -17,6 +17,8 @@ enum Songstate {
 /// confroms to hwy track animation
 protocol Track: class {
 //	var particle: SCNNode {get}
+	var backdrop 	:Backdrop {get}
+	var scorekeeper :ScoreKeeper {get}
 	var hwy			:HWY  {get}
 	var sp			:StarPower {get}
 	var state		:Songstate {get set}
@@ -27,7 +29,7 @@ protocol Track: class {
 	func tracker(_ cgsongtime: CGFloat, _ hwytime: CGFloat)
 	func showstats()
 	/// convenience method for laying track
-	func laytrack() -> Int
+	func laytrack()
 }
 
 extension Track {
@@ -52,41 +54,34 @@ extension Track {
 	///
 	/// options to replay song should be added here
 	func showstats() {
-		
 		self.state = .stats
-		
-		scorekeeper.updatestats(song: smanager.selected.song)
-		scorekeeper.displaystat()
-	
-		hwy.base.runAction(crankdownaction) {
-//			self.sp.resetvars()
-			// shange this to fade out in the future
+		let scoreboard = ScoreBoard(scorekeeper: self.scorekeeper)
+
+		scoreboard.displaystat()
+		hwy.base.removeAllActions()
+		hwy.base.runAction(SCNAction.move(to: SCNVector3(0, -11, 1.5), duration: 0.75)) {
 			Jukebox.shared.stop()
 		}
 	}
 	
 	func startparticle () {
-		let box = SCNNode()
-		box.name = "box"
-		self.hwy.base.parent?.addChildNode(box)
-		box.position.z = -22
-		box.position.y = 2
-		box.renderingOrder = -2
+		let box 			= SCNNode()
+		box.name 			= "box"
+		box.position.z 		= -22
+		box.position.y 		= 2
+		box.renderingOrder 	= -2
 		box.addParticleSystem(spartiscle!)
+//		spartiscle?.blendMode = .alpha
+		self.hwy.base.parent?.addChildNode(box)
 	}
 	
 	func crankup () {
-		self.hwy.base.position.y = -10.5
-//		self.restartparticle()
-		self.hwy.base.runAction(crankupaction)
-		
+		self.hwy.base.position.y = -11
+		self.hwy.base.position.z = 1.5
+		self.hwy.base.runAction(SCNAction.move(to: SCNVector3(0, 0, 0), duration: 1))
 	}
 	
-	func crankdown () {
-		self.hwy.base.position.y = 0
-		self.hwy.base.runAction(crankdownaction)
-	}
-	
+	//MARK: - Star Hit Test
 	func starmissed (_ entity: GKEntity) {
 		if let star = entity.component(ofType: StarNoteComp.self) {
 			
@@ -123,7 +118,3 @@ extension Track {
 }
 
 fileprivate let spartiscle = SCNParticleSystem(named: "sparticle.scnp", inDirectory: particleDir)
-
-
-fileprivate let crankupaction 	= SCNAction.move(to: SCNVector3(0, 0, 0), duration: 0.75)
-fileprivate let crankdownaction = SCNAction.move(to: SCNVector3(0, -10.5, 0), duration: 0.75)

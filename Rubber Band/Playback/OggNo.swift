@@ -9,9 +9,10 @@ import AVFoundation
 
 var playa = URL(string: "")
 
+
 /// creates audi players, finds audio files (m4v, aac, mp3) in Song folder and plays all files found
 class OggNo: NSObject, AVAudioPlayerDelegate {
-	
+
 	static let sharedInstance = OggNo()
 	
 	private override init() {}
@@ -65,7 +66,6 @@ class OggNo: NSObject, AVAudioPlayerDelegate {
 		for path in aacURL {
 			playSound(aacURL: path)
 		}
-		totaltime = (players[playa!]!.duration)
 	}
 	
 	func pauseSounds() {
@@ -125,13 +125,3 @@ class OggNo: NSObject, AVAudioPlayerDelegate {
 	}
 }
 
-
-/// creates new mikplayer and instructs playback
-///
-/// - Parameter seq: midi sequequence loaded from song.mid file
-func preparePlayback(){
-	/// all the song files inside the current song folder of the them type
-	let aacUrls = OggNo.sharedInstance.aacPaths(folder: smanager.selected.song.folder!)
-	OggNo.sharedInstance.playSounds(aacURL: aacUrls)
-	
-}

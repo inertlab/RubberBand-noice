@@ -12,6 +12,8 @@ import GameplayKit
 
 
 final class PianoStage: Performing, Track, KeyUp {
+	let backdrop:Backdrop = Pentapuss()
+	let scorekeeper = ScoreKeeper()
 
 	var tailsystem 	= GKComponentSystemCGF(componentClass: Tailanimate.self)
 	var starsystem	: GKComponentSystem<StarNoteComp>
@@ -37,8 +39,8 @@ final class PianoStage: Performing, Track, KeyUp {
 			Button.red: 	StringTrigger(note: .red, 	hwy: self.hwy)	,
 			Button.blue: 	StringTrigger(note: .blue, 	hwy: self.hwy)	,
 			Button.green: 	StringTrigger(note: .green,	hwy: self.hwy)	,
-			Button.orange: 	StringTrigger(note: .orange, 	hwy: self.hwy)	,
-			Button.yellow: 	StringTrigger(note: .yellow, 	hwy: self.hwy)	,
+			Button.orange: 	StringTrigger(note: .orange, hwy: self.hwy)	,
+			Button.yellow: 	StringTrigger(note: .yellow, hwy: self.hwy)	,
 		]
 		self.sp = StarPower(self.hwy)
 		startparticle()
@@ -52,7 +54,6 @@ final class PianoStage: Performing, Track, KeyUp {
 				hand.insert(event)
 				triggers[event]?.fretted()
 			case .start:
-				state = .stats
 				showstats()
 			default:
 				break
@@ -67,8 +68,8 @@ final class PianoStage: Performing, Track, KeyUp {
 		triggers[event]?.open()
 	}
 	
-	func laytrack() -> Int {
-		return MusicSheet.shared.layStringTrack()
+	func laytrack(){
+		MusicSheet.shared.layStringTrack()
 	}
 	
 	deinit {
@@ -76,7 +77,6 @@ final class PianoStage: Performing, Track, KeyUp {
 	}
 }
 
-//let mana = GKComponentSystem(componentClass: <#T##AnyClass#>)
 
 private extension PianoStage {
 	

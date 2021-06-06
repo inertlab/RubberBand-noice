@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "0027CFBD-87E6-48AF-83CA-015D1C465FC5"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8A275677-4B9D-4EB6-9120-A935088326C4"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Rubber Band/User Data/CoreData.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "13"
+            endingLineNumber = "13"
+            landmarkName = "unknown"
+            landmarkType = "0">
+            <Locations>
+               <Location
+                  uuid = "8A275677-4B9D-4EB6-9120-A935088326C4 - 502c91dcceac4ed4"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "globalinit_33_38C841D42656C5F68C8E586725D828A3_func0"
+                  moduleName = "RubberBand"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/fernando/Library/Mobile%20Documents/com~apple~CloudDocs/xcode/Rubberband/RubberBand/Rubber%20Band/User%20Data/CoreData.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14"
+                  offsetFromSymbolStart = "4">
+               </Location>
+               <Location
+                  uuid = "8A275677-4B9D-4EB6-9120-A935088326C4 - 1b0b7ae32606431b"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; __C.NSPersistentContainer in variable initialization expression of RubberBand.pc : __C.NSPersistentContainer"
+                  moduleName = "RubberBand"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/fernando/Library/Mobile%20Documents/com~apple~CloudDocs/xcode/Rubberband/RubberBand/Rubber%20Band/User%20Data/CoreData.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "15"
+                  endingLineNumber = "15"
+                  offsetFromSymbolStart = "13">
+               </Location>
+               <Location
+                  uuid = "8A275677-4B9D-4EB6-9120-A935088326C4 - a9c4f7aa160622af"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "RubberBand.pc.unsafeMutableAddressor : __C.NSPersistentContainer"
+                  moduleName = "RubberBand"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/fernando/Library/Mobile%20Documents/com~apple~CloudDocs/xcode/Rubberband/RubberBand/Rubber%20Band/User%20Data/CoreData.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14"
+                  offsetFromSymbolStart = "4">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.SymbolicBreakpoint">
+         <BreakpointContent
+            uuid = "460D3B18-8B48-4E71-9513-E11BD7A493E6"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            symbolName = "0x00007fff31e31cf9"
+            moduleName = "">
+            <Locations>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.SymbolicBreakpoint">
+         <BreakpointContent
+            uuid = "6D35962A-9FFC-426E-A8FF-B8BC21A3C947"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            symbolName = "__exceptionPreprocess"
+            moduleName = "">
+            <Locations>
+               <Location
+                  uuid = "6D35962A-9FFC-426E-A8FF-B8BC21A3C947 - 5caf6168d91a0166"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__exceptionPreprocess"
+                  moduleName = "CoreFoundation"
+                  usesParentBreakpointCondition = "Yes"
+                  offsetFromSymbolStart = "0">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.SymbolicBreakpoint">
+         <BreakpointContent
+            uuid = "863B4FFA-599A-40D3-A15F-871960F4263D"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            symbolName = "setUniquenessConstraints"
+            moduleName = "">
+            <Actions>
+               <BreakpointActionProxy
+                  ActionExtensionID = "Xcode.BreakpointAction.Log">
+                  <ActionContent
+                     message = "fdkflkd"
+                     conveyanceType = "0">
+                  </ActionContent>
+               </BreakpointActionProxy>
+            </Actions>
+            <Locations>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

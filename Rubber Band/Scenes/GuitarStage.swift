@@ -12,6 +12,9 @@ import GameplayKit
 
 
 final class GuitarStage: Performing, Track, KeyUp {
+	let backdrop:Backdrop = Pentapuss()
+	let scorekeeper = ScoreKeeper()
+	
 	var tailsystem 	= GKComponentSystemCGF(componentClass: Tailanimate.self)
 	var starsystem	: GKComponentSystem<StarNoteComp>
 	var notesystem	: GKComponentSystem<NoteComp>
@@ -21,23 +24,23 @@ final class GuitarStage: Performing, Track, KeyUp {
 	
 	let scn: SCNScene
 	let hwy: HWY
-	let triggers		:[Button: StringTrigger]
-	var hand:Chord 		= []
+	let triggers	:[Button: StringTrigger]
+	var hand:Chord 	= []
 	
 	var state:Songstate = .playing
 	var power = 2
 	
 	init() {
-		self.notesystem 	= GKComponentSystem(componentClass: NoteComp.self)
-		self.starsystem		= GKComponentSystem(componentClass: StarNoteComp.self)
-		self.scn = SCNScene(named: "art.scnassets/scns/strings.scn")!
-		self.hwy = HWY(self.scn)
-		self.triggers = [
-			Button.red: 	StringTrigger(note: .red, 	hwy: self.hwy)	,
-			Button.blue: 	StringTrigger(note: .blue, 	hwy: self.hwy)	,
-			Button.green: 	StringTrigger(note: .green,	hwy: self.hwy)	,
-			Button.orange: 	StringTrigger(note: .orange, 	hwy: self.hwy)	,
-			Button.yellow: 	StringTrigger(note: .yellow, 	hwy: self.hwy)	,
+		self.notesystem = GKComponentSystem(componentClass: NoteComp.self)
+		self.starsystem	= GKComponentSystem(componentClass: StarNoteComp.self)
+		self.scn 		= SCNScene(named: "art.scnassets/scns/strings.scn")!
+		self.hwy 		= HWY(self.scn)
+		self.triggers 	= [
+			Button.red		: StringTrigger(note: .red, 	hwy: self.hwy),
+			Button.blue		: StringTrigger(note: .blue, 	hwy: self.hwy),
+			Button.green	: StringTrigger(note: .green,	hwy: self.hwy),
+			Button.orange	: StringTrigger(note: .orange, 	hwy: self.hwy),
+			Button.yellow	: StringTrigger(note: .yellow, 	hwy: self.hwy),
 		]
 		self.sp = StarPower(self.hwy)
 		startparticle()
@@ -68,7 +71,6 @@ final class GuitarStage: Performing, Track, KeyUp {
 					sp.activateSP(power)
 				}
 			case .start:
-				state = .stats
 				showstats()
 			default:
 				break
@@ -87,8 +89,8 @@ final class GuitarStage: Performing, Track, KeyUp {
 		}
 	}
 	
-	func laytrack() -> Int {
-		return  MusicSheet.shared.layStringTrack()
+	func laytrack() {
+		MusicSheet.shared.layStringTrack()
 	}
 	
 	func tracker(_ cgsongtime: CGFloat, _ hwytime: CGFloat) {
@@ -202,7 +204,7 @@ private extension GuitarStage {
 		var lapse:CGFloat 	= 0
 		tail.node.childNodes[0].geometry?.firstMaterial?.transparent.contentsTransform.m42 = 0.5
 		while lapse < 1 {
-			let remain = time - ( CGFloat(Jukebox.shared.players[.guitar]!.currentTime) * pace.fps )
+			let remain = time - (CGFloat(Jukebox.shared.players[.guitar]!.currentTime) * pace.fps)
 			lapse = ((remain / tail.length) - 1) * -1
 			tail.node.childNodes[0].geometry?.firstMaterial?.transparent.contentsTransform.m42 = lapse
 		}

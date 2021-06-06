@@ -10,42 +10,41 @@ import Foundation
 import GameplayKit
 import SceneKit
 
+struct SPCount {
+	let base:Double
+	let bonus:Double
+}
+
 /// Drums defers from Strings in that it does not contain duration
 //class Drums {
 extension MusicSheet {
-//	static let shared = Drums()
-//
-//	private init() {}
-	
 	/// creates gems out of midi track and places them on highway
-	func layDrumTrack(_ stage: DrumStage) -> Int {
-		
-//		stage.notes.removeAll() this is no longer needed as a new stage is instanced every time
+	func layDrumTrack(_ stage: DrumStage) {
 		
 		var activatortimes 	= [CGFloat]()
 	
 		let gemmaker 		= GemMaker() // turn this into a singleton
 		
-		// stagemc.track.sp.resetvars()
-		
-		layBeat()
+		let beats = layBeat()
 		
 		/// Sorted drum notes from midi sequence
 		let drumNotes = getDrumNotes()
 		
 		var starset		= 0
-		let starnotes 	= stage.sp.starnotes
+		var starnotes 	= stage.sp.starnotes
+		// if there is no starpower notes, add 1 so it doesn't crash
+		if starnotes.count == 0 {
+			starnotes.append(([.plus], 0, 0))
+		}
 		let setcount	= starnotes.count - 1
+
 		var starnote 	= starnotes[starset]
 		var lastStar  	= StarNoteComp(0)
 
 		for note in drumNotes {
-			
 			let entity 		= NoteEntity()
-			
 			let start		= CGFloat(note.start * pace.fps_d)
-			
-			let notecomp 	= entity.component(ofType: NoteComp.self)!
+			let notecomp	= entity.component(ofType: NoteComp.self)!
 			
 			notecomp.node = gemmaker.makegem(controller: note.btn)
 			notecomp.chord.insert(note.btn)
@@ -83,11 +82,14 @@ extension MusicSheet {
 			stage.hwy.notes.addChildNode(notecomp.node)
 		}
 		
-		print("star power sets = ", starset)
-		print(stage.notes.count)
+		print("star power sets = ", starnotes.count)
+
 		for time in activatortimes {
 			for note in stage.notesystem.components {
+				// if it's a kick, we don't hide it. in the future, make and optional state so it doesn't have to be hit
+				if note.chord.contains(.orange) {continue}
 				if let _ = note.entity?.component(ofType: ActivatorComp.self) {continue}
+				
 				if note.node.position.z > time - 0.1 && note.node.position.z < time + 0.1  {
 					let hide = HiddenComp()
 					note.entity?.addComponent(hide)
@@ -95,7 +97,9 @@ extension MusicSheet {
 				}
 			}
 		}
-		
-		return drumNotes.count
+		let count = drumNotes.count - stage.activesystem.components.count
+		print("allnotes = ", drumNotes.count)
+		print("the count is ", count)
+		stage.scorekeeper.starvalues = Starvalues(count: count, sets: starnotes.count, beats: beats)
 	}
 }

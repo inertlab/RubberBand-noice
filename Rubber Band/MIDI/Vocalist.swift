@@ -36,7 +36,7 @@ private extension Vocalist {
 		var phrase 		= (0.0, "")
 		var text 	 	= ""
 		var time 		= 0.0
-		let levents = track.events(of: MIKMIDIMetaLyricEvent.self, fromTimeStamp: 0, toTimeStamp: (track.events.last?.timeStamp)!)
+		_ = track.events(of: MIKMIDIMetaLyricEvent.self, fromTimeStamp: 0, toTimeStamp: (track.events.last?.timeStamp)!)
 		
 		
 		for e in track.events{

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15400"/>
-        <plugIn identifier="com.apple.SceneKitIBPlugin" version="15400"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.SceneKitIBPlugin" version="17701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -13,11 +13,11 @@
                 <application id="hnw-xV-0zn" sceneMemberID="viewController">
                     <menu key="mainMenu" title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
                         <items>
-                            <menuItem title="Noice" id="1Xt-HY-uBw">
+                            <menuItem title="noice" id="1Xt-HY-uBw">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Noice" systemMenu="apple" id="uQy-DD-JDr">
+                                <menu key="submenu" title="noice" systemMenu="apple" id="uQy-DD-JDr">
                                     <items>
-                                        <menuItem title="About Noice" id="5kV-Vb-QxS">
+                                        <menuItem title="About noice" id="5kV-Vb-QxS">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="orderFrontStandardAboutPanel:" target="Ady-hI-5gd" id="Exp-CZ-Vem"/>
@@ -27,7 +27,7 @@
                                         <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW"/>
                                         <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
                                         <menuItem isSeparatorItem="YES" id="4je-JR-u6R"/>
-                                        <menuItem title="Hide Noice" keyEquivalent="h" id="Olw-nP-bQN">
+                                        <menuItem title="Hide noice" keyEquivalent="h" id="Olw-nP-bQN">
                                             <connections>
                                                 <action selector="hide:" target="Ady-hI-5gd" id="PnN-Uc-m68"/>
                                             </connections>
@@ -81,6 +81,12 @@
                                                 <action selector="printStat:" target="Voe-Tx-rLC" id="4c8-YS-t3t"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Print History" id="ddd-zy-CuP">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="printhistory:" target="Voe-Tx-rLC" id="5ET-IG-555"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="dof-n6-ubV"/>
                                         <menuItem title="Delete Stat" id="fn4-ul-4al">
                                             <modifierMask key="keyEquivalentModifierMask"/>
@@ -97,53 +103,108 @@
                                     </items>
                                 </menu>
                             </menuItem>
-                            <menuItem title="Catalog" id="7Ib-PK-Fgx">
+                            <menuItem title="Catalog" id="uhK-uU-hV9">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Catalog" id="y11-Qd-b9o">
+                                <menu key="submenu" title="Catalog" id="Bw1-t7-tYI">
                                     <items>
-                                        <menuItem title="Sort By" id="Igj-Ae-X9a">
+                                        <menuItem title="Sort By" id="n2l-pd-HTt">
                                             <modifierMask key="keyEquivalentModifierMask"/>
-                                            <menu key="submenu" title="Sort By" id="Gcd-8s-DVh">
+                                            <menu key="submenu" title="Sort By" id="K9L-tG-KoC">
                                                 <items>
-                                                    <menuItem title="Artist" id="vh1-eN-UBz" userLabel="Artist">
+                                                    <menuItem title="Artist" id="l9E-Ol-oBM" userLabel="Artist">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                         <connections>
-                                                            <action selector="sortbyartist:" target="Voe-Tx-rLC" id="WYO-wG-Jcd"/>
+                                                            <action selector="sortbyartist:" target="Voe-Tx-rLC" id="hFM-Fk-eZR"/>
                                                         </connections>
                                                     </menuItem>
-                                                    <menuItem title="Difficulty" id="5ij-Hi-RGp">
+                                                    <menuItem title="Stars" id="Em6-FR-wZs">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                         <connections>
-                                                            <action selector="sortbydifficult:" target="Voe-Tx-rLC" id="KOh-hb-YtA"/>
+                                                            <action selector="sortbyscore:" target="Voe-Tx-rLC" id="Ywg-HW-O0t"/>
                                                         </connections>
                                                     </menuItem>
-                                                    <menuItem title="Score" id="nqI-GM-4Cc">
+                                                    <menuItem title="Song" id="Tkv-Pq-0WC">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                         <connections>
-                                                            <action selector="sortbyscore:" target="Voe-Tx-rLC" id="lmR-WQ-fBC"/>
+                                                            <action selector="sortbysong:" target="Voe-Tx-rLC" id="jhd-6F-het"/>
                                                         </connections>
                                                     </menuItem>
-                                                    <menuItem title="Song" id="gfH-Uz-PlO">
+                                                    <menuItem title="Tier" id="DtZ-6F-gHo">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                         <connections>
-                                                            <action selector="sortbysong:" target="Voe-Tx-rLC" id="PgA-fx-8rV"/>
+                                                            <action selector="sortbydifficult:" target="Voe-Tx-rLC" id="2uN-Zz-an8"/>
                                                         </connections>
                                                     </menuItem>
                                                 </items>
                                             </menu>
                                         </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="x6s-fm-3zm"/>
-                                        <menuItem title="Scan for new Songs" id="Hdt-ek-Uv5">
+                                        <menuItem isSeparatorItem="YES" id="zr4-Vb-oC5"/>
+                                        <menuItem title="Update Metadata" id="gOq-Vc-ecT">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="scanfornewsongs:" target="Voe-Tx-rLC" id="pw8-VH-wha"/>
+                                                <action selector="scanfornewsongs:" target="Voe-Tx-rLC" id="Qh6-HR-p37"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="RUN-qB-jl0"/>
-                                        <menuItem title="reCatalog" id="Q73-Tv-viq">
+                                        <menuItem isSeparatorItem="YES" id="5d6-h8-Mto"/>
+                                        <menuItem title="reCatalog" id="wfU-fB-Rel">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="recatalog:" target="Voe-Tx-rLC" id="i3N-61-fuK"/>
+                                                <action selector="recatalog:" target="Voe-Tx-rLC" id="uvs-xJ-2LZ"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem title="Mixer" id="7Ib-PK-Fgx">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Mixer" userInterfaceLayoutDirection="leftToRight" id="y11-Qd-b9o">
+                                    <items>
+                                        <menuItem title="Master:" enabled="NO" id="MKE-VX-t0O">
+                                            <attributedString key="attributedTitle"/>
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
+                                        <menuItem title="volume slider" id="rcK-Cf-l1c">
+                                            <attributedString key="attributedTitle"/>
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <outlet property="view" destination="Lrt-Z8-6iK" id="hME-pr-esn"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Preview:" enabled="NO" id="eWa-BN-SOw">
+                                            <attributedString key="attributedTitle"/>
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
+                                        <menuItem title="volume slider" id="mSw-xh-wv5">
+                                            <attributedString key="attributedTitle"/>
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <outlet property="view" destination="Trg-09-0dO" id="YAB-ZB-REs"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Crowd:" enabled="NO" id="Mzc-PD-ppD">
+                                            <attributedString key="attributedTitle"/>
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
+                                        <menuItem title="volume slider" id="1dM-4M-9Po">
+                                            <attributedString key="attributedTitle"/>
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="crowdnoise:" target="Voe-Tx-rLC" id="hkQ-Tu-BFc"/>
+                                                <outlet property="view" destination="o7f-NR-slc" id="xqV-GR-D3t"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem title="Kraken" id="R4u-9d-YbD">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Kraken" userInterfaceLayoutDirection="leftToRight" id="PeT-ml-yqR">
+                                    <items>
+                                        <menuItem title="Release it?" id="nCx-0f-Bsk">
+                                            <attributedString key="attributedTitle"/>
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="releasekraken:" target="Voe-Tx-rLC" id="QSO-HS-DDP"/>
                                             </connections>
                                         </menuItem>
                                     </items>
@@ -151,7 +212,7 @@
                             </menuItem>
                             <menuItem title="Window" id="jZR-qA-vpo">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Window" systemMenu="window" id="mTU-Z9-qrz">
+                                <menu key="submenu" title="Window" systemMenu="window" userInterfaceLayoutDirection="leftToRight" id="mTU-Z9-qrz">
                                     <items>
                                         <menuItem title="Minimize" keyEquivalent="m" id="9gR-Ge-Ldv">
                                             <modifierMask key="keyEquivalentModifierMask" shift="YES" control="YES" option="YES" command="YES"/>
@@ -179,7 +240,7 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Help" systemMenu="help" id="F2S-fz-NVQ">
                                     <items>
-                                        <menuItem title="Noice Help" keyEquivalent="?" id="FKE-Sm-Kum">
+                                        <menuItem title="noice Help" keyEquivalent="?" id="FKE-Sm-Kum">
                                             <connections>
                                                 <action selector="showHelp:" target="Ady-hI-5gd" id="y7X-2Q-9no"/>
                                             </connections>
@@ -193,21 +254,70 @@
                         <outlet property="delegate" destination="Voe-Tx-rLC" id="PrD-fu-P6m"/>
                     </connections>
                 </application>
-                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="RubberBand" customModuleProvider="target"/>
+                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="noice" customModuleProvider="target">
+                    <connections>
+                        <outlet property="crowdslider" destination="CLc-qd-ccU" id="5uX-aE-GBM"/>
+                        <outlet property="kraken" destination="nCx-0f-Bsk" id="aRn-Ge-EVF"/>
+                        <outlet property="mastervolume" destination="8aS-dn-y2k" id="VA2-wa-Pj7"/>
+                        <outlet property="previewvolume" destination="liJ-ev-un9" id="BF3-aq-9cy"/>
+                    </connections>
+                </customObject>
+                <customView id="Lrt-Z8-6iK">
+                    <rect key="frame" x="0.0" y="0.0" width="200" height="20"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <subviews>
+                        <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8aS-dn-y2k">
+                            <rect key="frame" x="18" y="-2" width="170" height="23"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <sliderCell key="cell" continuous="YES" refusesFirstResponder="YES" alignment="left" tag="1" maxValue="1" doubleValue="0.86619127516778527" tickMarkPosition="above" sliderType="linear" id="zPV-Z2-EB0"/>
+                            <connections>
+                                <action selector="mastervolume:" target="Voe-Tx-rLC" id="itf-GR-Ubp"/>
+                            </connections>
+                        </slider>
+                    </subviews>
+                </customView>
+                <customView id="Trg-09-0dO">
+                    <rect key="frame" x="0.0" y="0.0" width="200" height="20"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <subviews>
+                        <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="liJ-ev-un9">
+                            <rect key="frame" x="18" y="-2" width="170" height="23"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <sliderCell key="cell" continuous="YES" refusesFirstResponder="YES" state="on" alignment="left" tag="2" maxValue="1" tickMarkPosition="above" sliderType="linear" id="Md4-td-ayu"/>
+                            <connections>
+                                <action selector="previewvolume:" target="Voe-Tx-rLC" id="NKK-bw-Ynu"/>
+                            </connections>
+                        </slider>
+                    </subviews>
+                </customView>
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <customView id="o7f-NR-slc">
+                    <rect key="frame" x="0.0" y="0.0" width="200" height="20"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <subviews>
+                        <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CLc-qd-ccU">
+                            <rect key="frame" x="18" y="-2" width="170" height="23"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <sliderCell key="cell" continuous="YES" refusesFirstResponder="YES" state="on" alignment="left" tag="2" maxValue="1" doubleValue="0.5" tickMarkPosition="above" sliderType="linear" id="bjR-xq-7wf"/>
+                            <connections>
+                                <action selector="crowdnoise:" target="Voe-Tx-rLC" id="Fa5-0i-6A6"/>
+                            </connections>
+                        </slider>
+                    </subviews>
+                </customView>
             </objects>
-            <point key="canvasLocation" x="75" y="0.0"/>
+            <point key="canvasLocation" x="33" y="179"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController storyboardIdentifier="one" showSeguePresentationStyle="single" id="B8D-0N-5wS" sceneMemberID="viewController">
-                    <window key="window" title="noice" allowsToolTipsWhenApplicationIsInactive="NO" animationBehavior="none" tabbingMode="disallowed" id="IQv-IB-iLA">
+                    <window key="window" title="noice - alpha" allowsToolTipsWhenApplicationIsInactive="NO" animationBehavior="none" tabbingMode="disallowed" titlebarAppearsTransparent="YES" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" resizable="YES" fullSizeContentView="YES"/>
                         <windowCollectionBehavior key="collectionBehavior" fullScreenDisallowsTiling="YES"/>
                         <rect key="contentRect" x="196" y="200" width="768" height="480"/>
-                        <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
                         <value key="minSize" type="size" width="768" height="480"/>
                         <connections>
                             <outlet property="delegate" destination="B8D-0N-5wS" id="k2e-pw-aVG"/>
@@ -220,13 +330,13 @@
                 <customObject id="Oky-zY-oP4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
                 <userDefaultsController representsSharedInstance="YES" id="83F-mX-4cB"/>
             </objects>
-            <point key="canvasLocation" x="75" y="327"/>
+            <point key="canvasLocation" x="60" y="501"/>
         </scene>
-        <!--Noice-->
+        <!--noice-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
-                <viewController title="Noice" storyboardIdentifier="two" showSeguePresentationStyle="single" id="XfG-lQ-9wD" customClass="GameViewController" customModule="RubberBand" customModuleProvider="target" sceneMemberID="viewController">
-                    <sceneView key="view" wantsLayer="YES" loops="NO" preferredRenderingAPI="1" id="RvT-eo-GD2" customClass="GameView" customModule="RubberBand" customModuleProvider="target">
+                <viewController title="noice" storyboardIdentifier="two" showSeguePresentationStyle="single" id="XfG-lQ-9wD" customClass="GameViewController" customModule="noice" customModuleProvider="target" sceneMemberID="viewController">
+                    <sceneView key="view" wantsLayer="YES" loops="NO" preferredRenderingAPI="1" id="RvT-eo-GD2" customClass="GameView" customModule="noice" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="720" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     </sceneView>
@@ -236,7 +346,7 @@
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-109" y="953"/>
+            <point key="canvasLocation" x="-27" y="599"/>
         </scene>
     </scenes>
 </document>

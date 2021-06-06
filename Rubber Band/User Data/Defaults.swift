@@ -11,13 +11,46 @@ import CoreData
 
 
 class Defaults {
-	static let shared = Defaults()
 	
-	let global = UserDefaults(suiteName: "global")
+	/// checks if library folder has been modified
+	static func modifiedlib () -> Bool {
+		
+		return false
+	}
 	
-	private init() {}
+	static func config () -> Config {
+		let fetconfig:NSFetchRequest<Config> = Config.fetchRequest()
+		
+		let configs = try? pc.viewContext.fetch(fetconfig)
+		
+		if configs!.isEmpty {
+			let newconfig = Config(context: pc.viewContext)
+			let player = Defaults.getplayer()
+			newconfig.currentplayer = player
+			do{
+				try pc.viewContext.save()
+				print("new config saved")
+				return newconfig
+			}catch{
+				print(error)
+			}
+		}
+		let config = configs![0]
+		if config.currentplayer == nil {
+			let player = Defaults.getplayer()
+			config.currentplayer = player
+			do{
+				try pc.viewContext.save()
+				print("new config saved")
+			}catch{
+				print(error)
+			}
+		}
+		return config
+	}
 	
-	func defaultuser () -> Player {
+	/// checks for players and returns player[0], makes one
+	static func getplayer () -> Player {
 		let fet:NSFetchRequest<Player> = Player.fetchRequest()
 		let array = try? pc.viewContext.fetch(fet)
 		
@@ -29,22 +62,10 @@ class Defaults {
 			do{
 				try pc.viewContext.save()
 				print("default player saved")
-				global?.set(0, forKey: "userindex")
-				global?.set("guest", forKey: "username")
 				return dplayer
 			}catch{
 				print(error)
 				print("default player failed to save")
-			}
-		}else{
-			print("players found, selecting player")
-			if let selecteduser = global?.integer(forKey: "userindex"){
-				print("userindex found")
-				for p in array! {
-					if p.index == selecteduser {
-						return p
-					}
-				}
 			}
 		}
 		return (array?.first)!

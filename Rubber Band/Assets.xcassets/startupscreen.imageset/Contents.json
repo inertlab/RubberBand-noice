@@ -11,6 +11,20 @@
       "scale" : "2x"
     },
     {
+      "resizing" : {
+        "mode" : "9-part",
+        "center" : {
+          "mode" : "tile",
+          "width" : 1,
+          "height" : 1
+        },
+        "cap-insets" : {
+          "bottom" : 720,
+          "top" : 719,
+          "right" : 960,
+          "left" : 959
+        }
+      },
       "idiom" : "universal",
       "filename" : "startupscreen@3x.jpg",
       "scale" : "3x"

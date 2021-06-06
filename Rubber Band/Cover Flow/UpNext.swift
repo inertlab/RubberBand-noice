@@ -13,21 +13,22 @@ import SpriteKit
 
 /// controls the list of songs in the main menu. currently crashes if there is less that 7 songs
 final class UpNext {
+	
 	static let shared = UpNext()
+	
 	private init() {
-		let list = upnextgroup?.childNode(withName: "nextlist")
+		self.moreup 	= upnextgroup?.childNode(withName: "moreup") 	as! SKLabelNode
+		self.moredown 	= upnextgroup?.childNode(withName: "moredown") 	as! SKLabelNode
+		let list 		= upnextgroup?.childNode(withName: "nextlist")
 		for node in list!.children as! [SKLabelNode] {
-//			node.preferredMaxLayoutWidth = 50
-//			node.numberOfLines = 1
-//			node.lineBreakMode = .byTruncatingMiddle
 			listnodes.append(node)
 		}
 	}
-	
+	let moreup		:SKLabelNode
+	let moredown	:SKLabelNode
 	let upnextgroup = menuOverlay?.childNode(withName: "upnext")
 	var listnodes 	= [SKLabelNode]()
-	// this doesn't work because there might only be 1 song total
-	// it also doesn't work because the middle song is to be discarded
+	
 	var list 		= ["","","","","","",""]
 	
 	func scrollup (title: String) {
@@ -47,6 +48,21 @@ final class UpNext {
 		updatenodes()
 	}
 	
+	func rowcount(count:Int, row:Int) {
+		let above = row - 2
+		if above > 0 {
+			moreup.text = "…\(above)+"
+		} else {
+			moreup.text = ""
+		}
+		let below = count - 3 - row
+		if below > 0 {
+			moredown.text = "…\(below)+"
+		} else {
+			moredown.text = ""
+		}
+	}
+	
 	func show() {
 		upnextgroup?.run(SKAction.fadeIn(withDuration: 0.25))
 	}
@@ -63,6 +79,7 @@ final class UpNext {
 			listnodes[i].text = list[i]
 		}
 	}
+
 }
 
 

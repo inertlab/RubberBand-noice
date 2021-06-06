@@ -11,29 +11,37 @@ import MIKMIDI
 import SpriteKit
 import AVFoundation
 
-fileprivate var beat: TimeInterval = 0
-
-var totaltime 	= 0.0
-//var asphalt 	= hwy.base.childNode(withName: "asphalt", recursively: false)
-
-let frustum = menuScene.rootNode.childNode(withName: "frustum", recursively: false)
-
-class Menu: NSMenuItem {
-
-}
 
 class GameView: SCNView {
 	
+	//MARK: - Mouse Tracking
 	var trackingarea: NSTrackingArea?
 	override func updateTrackingAreas() {
-		 if trackingarea != nil {
-				   self.removeTrackingArea(trackingarea!)
-			   }
-		let options : NSTrackingArea.Options =
-				   [.mouseEnteredAndExited, .mouseMoved, .activeInKeyWindow]
-			   trackingarea = NSTrackingArea(rect: self.bounds, options: options,
-											 owner: self, userInfo: nil)
-			   self.addTrackingArea(trackingarea!)
+		if trackingarea != nil {
+			self.removeTrackingArea(trackingarea!)
+		}
+		let options : NSTrackingArea.Options = [
+			.mouseEnteredAndExited,
+			.mouseMoved,
+			.activeInKeyWindow
+		]
+	   	trackingarea = NSTrackingArea(
+			rect: self.bounds,
+			options: options,
+			owner: self,
+			userInfo: nil
+		)
+		self.addTrackingArea(trackingarea!)
+	}
+	
+	var mouseTimer = Timer()
+	override func mouseMoved(with event: NSEvent) {
+		mainView.window?.titlebarAppearsTransparent =  false
+		mouseTimer.invalidate()
+		mouseTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { _ in
+		   NSCursor.setHiddenUntilMouseMoves(true)
+		   mainView.window?.titlebarAppearsTransparent =  true
+	   }
 	}
 	
 	override func mouseEntered(with event: NSEvent) {
@@ -44,10 +52,7 @@ class GameView: SCNView {
 		mainView.window?.titlebarAppearsTransparent =  true
 	}
 	
-//	override func mouseMoved(with event: NSEvent) {
-//		print("mouse moved")
-//		mainView.window?.titlebarAppearsTransparent =  false
-//	}
+	// MARK: - Key Handles
 	override func keyDown (with event: NSEvent) {
 
 		if event.isARepeat {return}
@@ -56,9 +61,12 @@ class GameView: SCNView {
 			stagemc.currentact.handleevent(key)
 		}
 	}
-
+	
+	override func addCursorRect(_ rect: NSRect, cursor object: NSCursor) {
+		object.set()
+	}
+	
 	override func keyUp(with event: NSEvent) {
-		
 		if let key = keycode[event.keyCode] {
 			if key == .strum {return }
 			switch stagemc.onstage {
@@ -71,13 +79,8 @@ class GameView: SCNView {
 	}
 }
 
-//let format = DateComponentsFormatter()
 var format:DateComponentsFormatter{
 	let form = DateComponentsFormatter()
 	form.allowedUnits = [.minute, .second]
 	return form
-}
-
-extension GameViewController: SCNSceneRendererDelegate {
-
 }

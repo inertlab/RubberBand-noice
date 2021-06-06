@@ -7,8 +7,6 @@
 //
 import AVFoundation
 
-
-
 /// creates audi players, finds audio files (m4v, aac, mp3) in Song folder and plays all files found
 class Jukebox: NSObject, AVAudioPlayerDelegate {
 	
@@ -20,6 +18,9 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 	var folder 	= URL(fileURLWithPath: "upnext")
 	var timer 	= Timer()
 	var time	= 0.0
+	var volume		:Float = 0.0
+	var vol_prev	:Float = 0.0
+	var vol_crowd	:Float = 0.0
 	
 	/// creates multiple audio players to play all audio files found by OggNo.aacPaths()
 	///
@@ -30,16 +31,19 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 		for p in players {
 			if p.key == .preview { continue }
 			if p.key == .crowd { p.value.volume = 0 }
-//			p.value.currentTime = 0
+			p.value.volume = volume
 			p.value.prepareToPlay()
 			p.value.play(atTime: devicetime! + 0.5)
 		}
 	}
 	
 	func preview(from: Double) {
+		if vol_prev == 0 {return}
 		if let player = players[.preview] {
+			player.volume = 0
 			player.prepareToPlay()
 			player.play()
+			player.setVolume(vol_prev * volume, fadeDuration: 1.5)
 			return
 		}
 
@@ -51,10 +55,22 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 			p.value.currentTime = from
 			p.value.prepareToPlay()
 			p.value.play(atTime: devicetime! + 0.5) 	// sets playtime with delay - according to apple this ensures syncing
-			p.value.setVolume(1, fadeDuration: 1.5)
+			p.value.setVolume(vol_prev * volume, fadeDuration: 1.5)
 		}
-//		print(from)
-//		self.timeit()
+	}
+	
+	func singalong() {
+		if let crowd = players[.crowd] {
+			crowd.setVolume(vol_crowd * volume, fadeDuration: 1)
+			print("singing")
+		}
+	}
+	
+	func stopsinging() {
+		if let crowd = players[.crowd] {
+			crowd.setVolume(0, fadeDuration: 1)
+			print("shutup")
+		}
 	}
 	
 	func stop() {
@@ -69,7 +85,37 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 	
 	func fadeout() {
 		for p in players {
-			p.value.setVolume(0.1, fadeDuration: 2)
+			p.value.setVolume(0, fadeDuration: 2)
+		}
+	}
+	
+	func setvolume(vol: Float) {
+		volume = vol
+		for p in players {
+			if p.key == .crowd {
+				continue
+			}
+			p.value.volume = volume
+		}
+	}
+	
+	func setpreviewvol(vol: Float) {
+		vol_prev = vol
+		for p in players {
+			if p.key == .crowd {
+				continue
+			}
+			p.value.volume = vol_prev * volume
+		}
+	}
+	
+	func setcrowdnoise(vol: Float) {
+		vol_crowd = vol
+		for p in players {
+			if p.key == .crowd {
+				p.value.volume = vol_crowd * volume
+				return
+			}
 		}
 	}
 	
@@ -88,12 +134,13 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 	func timeit() {
 		self.time = 0
 		self.timer.invalidate()
-		self.timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true){tim in
+		self.timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true){
+			tim in
 			self.time += tim.timeInterval
-			if self.time == 25 {
+			if self.time == 20 {
 				Jukebox.shared.fadeout()
 			}
-			if self.time > 25 {
+			if self.time > 20 {
 				Jukebox.shared.stop()
 				tim.invalidate()
 			}
@@ -158,7 +205,6 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 
 
 private extension Jukebox {
-	
 	/// finds the urls to all sound files in a folder
 	///
 	/// - Parameter folder: URL path to the song folder

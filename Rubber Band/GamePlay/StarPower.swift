@@ -10,14 +10,40 @@ import Foundation
 import SceneKit
 import SpriteKit
 
+struct StarCut{
+	static let s1  	= 0.06
+	static let s2 	= 0.12
+	static let s3  	= 0.20
+	static let s4 	= 0.45
+	static let s5 	= 0.75
+	static let sG 	= 1.09
+}
+
 struct Starvalues {
 	let label = scoreDisplay?.childNode(withName: "stars") as! SKLabelNode
-	var gold:Double
-	var stars:Int16 	= 0
-	var goal:Int32 		= 0
-	init (notecount: Double ) {
-		self.gold = (notecount - 30) * 140
-		self.goal = Int32(self.gold * 0.055)
+	var stars		:Int16 	= 0
+	var goal		:Int32
+	var basescore	:Double
+	var goldcutoff	:Double
+	var pts			:Double = 100
+	
+	init (count: Int, sets: Int, beats: Int) {
+		var firstnotes 	= 14.25
+		var xr			= 8.0
+		
+		if User.current.instrument == .prodrums {
+			self.pts = 120
+		}
+		
+		if User.current.instrument == .bass {
+			firstnotes 	= 24.5
+			xr 			= 12.0
+		}
+		
+		self.basescore 	= (Double(count) - firstnotes) * pts
+		let bonus 		= Double(sets) * xr / Double(beats) * basescore * 0.32
+		self.goldcutoff = bonus + basescore
+		self.goal 		= Int32(basescore * StarCut.s1)
 		self.label.text = "0*"
 	}
 	
@@ -26,22 +52,26 @@ struct Starvalues {
 			stars += 1
 			switch stars {
 			case 1:
-				goal = Int32(gold * 0.11)
+				goal = Int32(basescore * StarCut.s2)
 				label.text = "1*"
 			case 2:
-				goal = Int32(gold * 0.185)
+				goal = Int32(basescore * StarCut.s3)
 				label.text = "2*"
 			case 3:
-				goal = Int32(gold * 0.41)
+				goal = Int32(basescore * StarCut.s4)
 				label.text = "3*"
 			case 4:
-				goal = Int32(gold * 0.68)
+				goal = Int32(basescore * StarCut.s5)
 				label.text = "4*"
 			case 5:
-				goal = Int32(gold * 0.185)
+				goal = Int32(goldcutoff)
+				// gold stars should only be achieved on expert
+				if User.current.diff != .expert {
+					goal *= 2
+				}
 				label.text = "5*"
 			case 6:
-				goal = Int32(gold)
+				goal = Int32(100000000)
 				label.text = "5 gold *"
 			default:
 				goal = 100000000
@@ -52,27 +82,27 @@ struct Starvalues {
 
 /// Keeps track of StarPower notes and streaks
 class StarPower {
-	
 	enum State {
 		case activated
 		case low
 		case ready
 	}
 	
-	let hwy: HWY
+	let hwy			:HWY
 	/// gems that activate star power - Crash Cymbals
-	let activators: SCNNode
-//	let powerx: Int
+	let activators	:SCNNode
+	let portal 		:SCNNode
+	let party 		:SCNParticleSystem
 	
 	init(_ hwy: HWY) {
-		self.hwy = hwy
+		self.hwy 		= hwy
 		self.activators	= hwy.pista.childNode(withName: "starpower", recursively: false)!
-//		if bass { self.powerx = 3 } else {self.powerx = 2}
+		self.portal 	= hwy.base.parent!.childNode(withName: "portal", recursively: true)!
+		self.party 		= portal.particleSystems![0]
+		self.portal.removeAllParticleSystems()
 	}
 	
 	var state 		= State.low
-	/// an list of gems to hide when star power is active so they aren't double hit
-//	var tohide 		= [SCNNode]()
 
 	var starnotes 	= MusicSheet.ChordList()
 
@@ -100,6 +130,7 @@ class StarPower {
 		
 		if state == .activated {
 			if meter == 0 {
+				portal.removeAllParticleSystems()
 				self.state 		= .low
 				self.power 		= 1
 				hwy.starpower 	= false
@@ -110,6 +141,7 @@ class StarPower {
 				if beat.position.z < time {
 					print(meter)
 					meter -= 1
+					portal.geometry?.firstMaterial?.diffuse.contentsTransform.m41 = meter * 0.025
 					beat.removeFromParentNode()
 					break
 				}
@@ -128,7 +160,6 @@ class StarPower {
 		self.power 		= 1
 		self.meter 		= 0
 		self.segment 	= false
-//		self.tohide 	= []
 		self.activators.opacity = 0
 		self.state 		= .low
 		for node in activators.childNodes {
@@ -139,17 +170,15 @@ class StarPower {
 	/// Activate Star Power - Begins countdown
 	/// - Parameter power: the power multiple. 3x for Bass, 2x for other instruments
 	func activateSP (_ power: Int) {
-
 		self.power = power
-		self.state = .activated
-		
+		state = .activated
+		portal.addParticleSystem(party)
 		hwy.starpower = true
 		
 		// clean out all the beats in front of activator to start count
 		for beat in hwy.beatlines.childNodes {
 			if beat.position.z < self.activetime {
 				beat.removeFromParentNode()
-//				print(beat)
 			}
 		}
 		print ("star power active")
@@ -157,23 +186,20 @@ class StarPower {
 	
 	/// called when star notes section is completed succesfully, implement animation here
 	func starruncompleted() {
-//		var ready = false
 		segment = false
 		// add to star meter
 		if meter < 32 || state == .activated {
 			meter 	+= 8
 			index 	+= 1
 			
+			portal.geometry?.firstMaterial?.diffuse.contentsTransform.m41 = meter * 0.025
 			print("starpower acquired")
-			
+			portal.addAnimation(shinedown, forKey: "shine")
 			flash(node: hwy.base)
 		}
 		// add to star meter
 		if meter >= 16 && state != .activated {
 			state = .ready
-			// todo
-			// show activators
-			// hide notes that line up with activators
 		}
 	}
 }
@@ -193,9 +219,19 @@ private extension StarPower {
 		let track 	= hwy.base.childNode(withName: "track", recursively: false)
 		let mat 	= track?.geometry?.firstMaterial
 		mat?.diffuse.contents = NSColor.white
-		node.runAction(waitflash){
+		node.runAction(SCNAction.wait(duration: 0.10)){
 			mat?.diffuse.contents =  NSColor.gray
 		}
+	}
+	
+	/// turns light on asphalt off
+	var shinedown:CABasicAnimation {
+		let animation = CABasicAnimation(keyPath: "geometry.firstMaterial.transparent.contentsTransform.m11")
+			animation.fromValue 	= 1
+			animation.toValue 		= 1.5
+			animation.duration 		= 0.5
+			animation.repeatCount 	= 0
+		return animation
 	}
 }
 

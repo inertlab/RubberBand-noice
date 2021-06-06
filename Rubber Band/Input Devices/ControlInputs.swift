@@ -43,15 +43,15 @@ struct ButtonMetric {
 func buttonMetric(_ btn: Button) -> ButtonMetric {
 	switch btn {
 	case .green, .green_c, .plus:
-		return ButtonMetric(posD: -1.26	, posS: 1.6	, color: .rbGreen)
+		return ButtonMetric(posD: -1.26	, posS:  1.6, color: .rbGreen)
 	case .red:
-		return ButtonMetric(posD: 1.26		, posS: 0.8	, color: .rbRed)
+		return ButtonMetric(posD:  1.26	, posS:  0.8, color: .rbRed)
 	case .yellow, .yellow_c:
-		return ButtonMetric(posD: 0.42		, posS: 0	, color: .rbYellow)
+		return ButtonMetric(posD:  0.42	, posS:  0	, color: .rbYellow)
 	case .blue, .blue_c:
-		return ButtonMetric(posD: -0.42 	, posS: -0.8, color: .rbYellow)
+		return ButtonMetric(posD: -0.42 , posS: -0.8, color: .rbYellow)
 	default:
-		return ButtonMetric(posD: 0		, posS: -1.6, color: .rbOrange)
+		return ButtonMetric(posD:  0	, posS: -1.6, color: .rbOrange)
 	}
 }
 
@@ -59,14 +59,24 @@ func buttonMetric(_ btn: Button) -> ButtonMetric {
 typealias MidiCode = [UInt8:Button]
 /// note config for Roland ekit TD3
 let roland:MidiCode = [
-	38:	.red,
-	48:	.yellow,
-	45:	.blue,
-	41:	.green,
-	36:	.orange,
-	46:	.yellow_c,
-	51:	.blue_c,
-	49:	.green_c
+	38:	.red,		// Snare (head) *
+	40:	.red,		// Snare (rim)
+	48:	.yellow,	// Tom 1
+	45:	.blue,		// Tom 2
+	41:	.green,		// Tom 3
+	36:	.orange,	// Kick
+	
+	46:	.yellow_c, 	// Open Hi-hat (bow) *
+	26:	.yellow_c, 	// Open Hi-hat (edge)
+	42:	.yellow_c, 	// closed Hi-hat (bow)
+	22:	.yellow_c, 	// closed Hi-hat (edge)
+	
+	51:	.green_c,	// Ride (bow) *
+	53:	.green_c,	// Ride (edge) TD-3
+	59:	.green_c,	// Ride (edge) V
+	
+	49:	.blue_c, 	// Crash 1 (bow) *
+	55:	.blue_c 	// Crash 1 (edge)
 ]
 
 typealias KeyCode = [UInt16:Button]

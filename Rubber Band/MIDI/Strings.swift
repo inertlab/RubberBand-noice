@@ -15,13 +15,13 @@ import SceneKit
 extension MusicSheet {
 	
 	/// creates gems out of midi track and places them on highway
-	func layStringTrack() -> Int{
+	func layStringTrack() {
 
 		let gemmaker 	= GemMaker() // turn this into a singleton
 
 		stagemc.track.sp.resetvars() // reset vars from previous track
 		
-		layBeat()
+		let beats = layBeat()
 		
 		/// Sorted drum notes from midi sequence
 		let guitarnotes = MusicSheet.shared.get5lanenotes()
@@ -93,6 +93,6 @@ extension MusicSheet {
 		print("star power sets = ", starset)
 		print("this is my notes" ,stagemc.track.notesystem.components.count)
 		
-		return guitarnotes.count
+		stagemc.track.scorekeeper.starvalues = Starvalues(count: guitarnotes.count, sets: starnotes.count, beats: beats)
 	} // end of laytrack
 }

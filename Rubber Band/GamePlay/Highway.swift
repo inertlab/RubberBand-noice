@@ -13,6 +13,8 @@ import SceneKit
 //	case empty, flow, starpower, starflow
 //}
 
+
+
 /// reference to highway 3D model and model parts
 class HWY {
 	/// parent geometry of highway, not to be confused with rootnode or scene
@@ -30,7 +32,7 @@ class HWY {
 		didSet {
 			if self.flow {
 				asphalt.addAnimation(lightup, forKey: "selfIllumination")
-				asphalt.geometry?.firstMaterial?.multiply.intensity = 0.99
+				asphalt.geometry?.firstMaterial?.multiply.intensity = 0.98
 				backdrop.runAction(SCNAction.fadeIn(duration: 0.65))
 				
 			} else {
@@ -41,29 +43,28 @@ class HWY {
 			setflow()
 		}
 	}
+	
 	var starpower:Bool 	= false {
 		didSet {
 			// updating scorekeeper is the only place that updates spherex
-			scorekeeper.multiplier = scorekeeper.multiplier * 1
+			stagemc.track.scorekeeper.updatexlabel()
 			setflow()
 		}
 	}
-//	private var flow:Flow = .empty
-	
+
 	init(_ scn: SCNScene){
-		self.backdrop 	= scn.rootNode.childNode(withName: "bg", recursively: false)!
+		self.backdrop 	= scn.rootNode.childNode(withName: "bg"		, recursively: false)!
 		self.base 		= scn.rootNode.childNode(withName: "highway", recursively: false)!
-		self.pista 		= base.childNode(withName	: "pista"	, recursively: false)!
-		self.notes 		= pista.childNode(withName	: "gems"	, recursively: false)!
-		self.beatlines 	= pista.childNode(withName	: "beats"	, recursively: false)!
-		self.asphalt 	= base.childNode(withName: "asphalt", recursively: false)!
+		self.pista 		= base.childNode		(withName: "pista"	, recursively: false)!
+		self.notes 		= pista.childNode		(withName: "gems"	, recursively: false)!
+		self.beatlines 	= pista.childNode		(withName: "beats"	, recursively: false)!
+		self.asphalt 	= base.childNode		(withName: "asphalt", recursively: false)!
 		self.spherex 	= Spherex(scn)
 	}
 	
 	/// resets highway and sphere to it's initial state, off screen with no notes or beats
 	func reset() {
 		asphalt_initialstate()
-//		sphere_initialstate()
 		base_initialstate()
 		remove_notes_beats()
 	}
@@ -73,6 +74,7 @@ private extension HWY {
 	
 	/// sets the texture for the hwy by checking status of SP and Multiplier
 	func setflow()  {
+		
 		if flow {
 			if starpower {
 				asphalt.geometry?.firstMaterial?.diffuse.contentsTransform.m41 = 0.75
@@ -135,3 +137,6 @@ private extension HWY {
 		return animation
 	}
 }
+
+
+

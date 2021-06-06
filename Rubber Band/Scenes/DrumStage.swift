@@ -12,19 +12,27 @@ import GameplayKit
 
 
 final class DrumStage: Performing, Track {
+	
+	let backdrop:Backdrop = Pentapuss()
+	
+	let scorekeeper = ScoreKeeper()
+
+	// MARK: - ECS
 	var notes   		= Set<GKEntity>()
 	var notesystem		: GKComponentSystem<NoteComp>
 	var tailsystem 		= GKComponentSystemCGF(componentClass: Tailanimate.self)
 	var starsystem		: GKComponentSystem<StarNoteComp> // not used here
 	var activesystem 	= GKComponentSystem<ActivatorComp>(componentClass: ActivatorComp.self)
+	var hidewithsp 		= Set<GKEntity>()
 	var hiddensystem 	= GKComponentSystem<HiddenComp>(componentClass: HiddenComp.self)
+	
+	// MARK: - Vars
+	var state:Songstate = .playing
 	let scn 			= SCNScene(named: "art.scnassets/scns/highway.scn")!
 	let hwy				:HWY
 	let sp				:StarPower
-	
-	var triggers 		: [Button: DrumTrigger]
 
-	var hidewithsp 		= Set<GKEntity>()
+	var triggers 		: [Button: DrumTrigger]
 
 	init() {
 		self.notesystem = GKComponentSystem(componentClass: NoteComp.self)
@@ -42,14 +50,8 @@ final class DrumStage: Performing, Track {
 		startparticle()
 	}
 	
-	var state:Songstate = .playing
-	
-	func laytrack() -> Int {
-		return MusicSheet.shared.layDrumTrack(self)
-	}
-	
+	//MARK: - Event Handler
 	func handleevent(_ event: Button) {
-
 		switch state  {
 		case .playing:
 			switch event {
@@ -57,7 +59,6 @@ final class DrumStage: Performing, Track {
 				notecheck(event)
 			case .start:
 				showstats()
-//				cleanup()
 			case .plus:
 				Jukebox.shared.pauseMusic()
 				state = .paused
@@ -68,7 +69,20 @@ final class DrumStage: Performing, Track {
 			state = .playing
 			resumegame(event)
 		case .stats:
-			state = .playing
+			if event == .green_c {
+				// play random song
+				stagemc.onstage = .songmenu
+				smanager.selectrandom()
+				stagemc.loadstage()
+				print("playing random")
+				break
+			}
+			if event == .blue_c {
+				// play song again
+				stagemc.onstage = .songmenu
+				stagemc.loadstage()
+				break
+			}
 			stagemc.loadstage()
 		}
 	}
@@ -82,6 +96,11 @@ final class DrumStage: Performing, Track {
 		trackdeadnotes(hwytime: hwytime)
 	}
 	
+	//MARK: - Functions, public
+	func laytrack() {
+		MusicSheet.shared.layDrumTrack(self)
+	}
+	
 	func showsp () {
 		activatorsOn(true)
 		for hide in hiddensystem.components{
@@ -90,7 +109,7 @@ final class DrumStage: Performing, Track {
 	}
 	
 	func hidesp () {
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5 ){
+		DispatchQueue.main.asyncAfter(deadline: .now() + 1 ){
 			self.activatorsOn(false)
 			
 			for hide in self.hiddensystem.components {
@@ -100,23 +119,13 @@ final class DrumStage: Performing, Track {
 	}	
 }
 
+//MARK: - Private
 private extension DrumStage {
-	
-	func cleanup () {
-//		hidewithsp.removeAll()
-//		notes.removeAll()
-	}
-	
-	func activatorsOn (_ on: Bool) {
-		for activator in activesystem.components {
-			activator.on = on
-		}
-	}
-	
+
 	/// Checks and removes the first note in notesystem per frame
 	/// - Parameter hwytime: The song time in HWY units
 	///
-	/// This only remvoes one nore per frame which might affect accuracy, might need to change it to 3 notes per frame
+	/// This only removes one note per frame which might affect accuracy, might need to change it to 3 notes per frame
 	///
 	/// Also, when an entity is removed, the scnnode is not removed. cycle though scnnodes to remove dead notes
 	func trackdeadnotes(hwytime: CGFloat) {
@@ -127,7 +136,6 @@ private extension DrumStage {
 			if note.status == .live {
 				if sp.state == .ready {
 					if note.chord == [.green_c, .green] {
-//						print(note.chord, note.node.position.z)
 						notes.remove(note.entity!)
 						return
 					}
@@ -139,7 +147,7 @@ private extension DrumStage {
 			notes.remove(note.entity!)
 		}
 	}
-	
+
 	/// Checks to see if triggered note matches the entities
 	/// - Parameter btn: button press on keyboard or game controller or instrument
 	///
@@ -173,9 +181,6 @@ private extension DrumStage {
 						
 						note.node.removeFromParentNode()
 						note.status = .remove
-//						print(notesystem.components.count)
-//						notes.remove(note.entity!)
-//						checking = false
 						break
 					}
 					if checkcount > 6 { break }
@@ -183,7 +188,6 @@ private extension DrumStage {
 				} else {
 					starmissed(note.entity!)
 					miss(btn)
-//					checking = false
 					break
 				}
 			}
@@ -191,6 +195,7 @@ private extension DrumStage {
 	}
 	
 	func oneup(_ btn: Button) {
+		scorekeeper.scoreOneUp()
 		switch btn {
 		case .blue_c:
 			triggers[.blue]?.hit()
@@ -204,6 +209,7 @@ private extension DrumStage {
 	}
 	
 	func miss(_ btn: Button) {
+		scorekeeper.scoreMiss()
 		switch btn {
 		case .blue_c:
 			triggers[.blue]?.miss()
@@ -213,6 +219,12 @@ private extension DrumStage {
 			triggers[.yellow]?.miss()
 		default:
 			triggers[btn]?.miss()
+		}
+	}
+	
+	func activatorsOn (_ on: Bool) {
+		for activator in activesystem.components {
+			activator.on = on
 		}
 	}
 	
