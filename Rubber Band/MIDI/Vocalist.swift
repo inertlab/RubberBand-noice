@@ -11,13 +11,13 @@ import MIKMIDI
 import SpriteKit
 
 class Vocalist {
-	private let track: MIKMIDITrack
-	private var lyrics = [(Double, String)]()
+	private let track	: MIKMIDITrack
+	private var lyrics 	= [(Double, String)]()
 	
 	var count 	= 0
 	
 	init() {
-		self.track 		= MusicSheet.shared.getvocals()
+		self.track 	= MusicSheet.shared.getvocals()
 		lyricist()
 	}
 	
@@ -37,7 +37,7 @@ private extension Vocalist {
 		var text 	 	= ""
 		var time 		= 0.0
 		_ = track.events(of: MIKMIDIMetaLyricEvent.self, fromTimeStamp: 0, toTimeStamp: (track.events.last?.timeStamp)!)
-		
+	
 		
 		for e in track.events{
 			if e.eventType == .metaLyricText {
@@ -79,11 +79,12 @@ private extension Vocalist {
 		lyrics.append((time, text))
 		lyrics.append((time + 2, ""))
 		lyrics.append((time + 1000, ""))
-//		lyrics.append((tc.beattosec(beat: (track.events.last?.timeStamp)!), ""))
 	} // end of lyricist
 	
 	func rephrase(text: String) -> String {
-		let newtext = text.replacingOccurrences(of: "= ", with: "-")
+		var newtext = text.replacingOccurrences(of: "= ", with: "-")
+		newtext = text.replacingOccurrences(of: "#|(ß)|(§)|(_)", with: " ", options: .regularExpression, range: nil)
+		
 		return newtext.replacingOccurrences(of: "#|(- )|(-# )|(-\\^ )|(\\^)", with: "", options: .regularExpression, range: nil)
 	}
 }
