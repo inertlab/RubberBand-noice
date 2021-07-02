@@ -42,9 +42,9 @@ private extension Vocalist {
 		for e in track.events{
 			if e.eventType == .metaLyricText {
 				let t = e as! MIKMIDIMetaLyricEvent
-				if t.string != nil {
-					if	t.string!.last == "+" { continue }
-					text +=  (t.string! + " ")
+				if let str = t.string {
+					if	str.last == "+" { continue }
+					text +=  (str + " ")
 				}
 				continue
 			}
@@ -80,6 +80,7 @@ private extension Vocalist {
 		lyrics.append((time + 2, ""))
 		lyrics.append((time + 1000, ""))
 	} // end of lyricist
+	
 	
 	func rephrase(text: String) -> String {
 		var newtext = text.replacingOccurrences(of: "= ", with: "-")
