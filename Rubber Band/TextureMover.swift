@@ -8,14 +8,17 @@
 
 import Foundation
 import SceneKit
-
+import SpriteKit
 
 class TextureMover {
 	static let shared 	= TextureMover()
 	
-	let difInitial 		= menutext.detailnode?.childNode(withName: "easy", recursively: false)
-	let disklabel 		= smanager.record.node.childNode(withName: "label", recursively: false)
-	let starmat 		= menutext.detailnode?.geometry?.firstMaterial
+	let difInitial 	= menutext.detailnode?.childNode(withName: "easy", recursively: false)
+	let disklabel 	= smanager.record.node.childNode(withName: "label", recursively: false)
+	let labelicon 	= menuOverlay?.childNode(withName: "icon") as! SKSpriteNode
+
+	let starmat 	= menutext.detailnode?.geometry?.firstMaterial
+	
 	private init(){
 		smanager.delegate = self
 		User.current.delegate = self
@@ -26,6 +29,7 @@ class TextureMover {
 		if let stat = ScoreManager.selectStat(smanager.selected.song) {
 			updateStars(stat)
 		} else {
+			nofc()
 			noscore()
 		}
 	}
@@ -40,6 +44,7 @@ class TextureMover {
 	/// - Parameter score: Score
 	func updateStars(score: Score?) {
 		let starmat = menutext.detailnode?.geometry?.firstMaterial
+		
 		if score == nil {
 			difInitial?.opacity = 0
 			starmat?.transparent.contentsTransform.m41 = getm41(0)
@@ -50,12 +55,26 @@ class TextureMover {
 			
 			difInitial?.opacity = 1
 			starmat?.transparent.contentsTransform.m41 = getm41(score!.stars)
+			//		this should include a scenario for a perfect score aka 7 Stars
 			if score!.stars > 5 {
 				starmat?.diffuse.contents = NSColor.rbYellow
 			} else {
 				starmat?.diffuse.contents = NSColor.rblitegray
 			}
+			
+			// make this into a sep func in future
+			// need to remove ref to smanager.
+			switch score!.fc {
+			case 3:
+				// gold record
+				fced()
+			case -1:
+				nofc()
+			default:
+				fcedsilver()
+			}
 		}
+	
 	}
 	
 	/// resets star texture to zero if no score was found
@@ -96,6 +115,21 @@ class TextureMover {
 }
 
 private extension TextureMover {
+	
+	func nofc () {
+		smanager.record.node.geometry?.firstMaterial?.diffuse.intensity = 0.25
+		smanager.record.node.geometry?.firstMaterial?.multiply.intensity = 0
+	}
+	
+	func fced () {
+		smanager.record.node.geometry?.firstMaterial?.diffuse.intensity = 1
+		smanager.record.node.geometry?.firstMaterial?.multiply.intensity = 1
+	}
+	
+	func fcedsilver () {
+		smanager.record.node.geometry?.firstMaterial?.diffuse.intensity = 1.4
+		smanager.record.node.geometry?.firstMaterial?.multiply.intensity = 0
+	}
 	
 	func getm41(_ stars:Int16) -> CGFloat {
 		switch stars {
@@ -149,6 +183,7 @@ private extension TextureMover {
 			return (0.333, 0.666) // case = nil and -1
 		}
 	}
+
 }
 
 

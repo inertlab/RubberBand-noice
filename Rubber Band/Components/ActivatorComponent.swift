@@ -11,53 +11,44 @@ import SceneKit
 import GameplayKit
 
 
-class ActivatorComp: GKComponent {
-	
-	var on 	= false {
-		didSet {
-			if on {
-				updatestatus(.live)
-				changeopacity(1)
-			} else {
-				updatestatus(.skip)
-				changeopacity(0)
+protocol hidable: GKComponent {
+	func hide(_ limit: CGFloat)
+	func show(_ limit: CGFloat)
+}
+
+extension hidable {
+	func hide(_ limit: CGFloat) {
+		if let note = self.entity?.component(ofType: NoteComp.self) {
+			if note.node.position.z < limit {
+				return
 			}
-		}
-	}
-
-	override func didAddToEntity() {
-		changeopacity(0)
-		updatestatus(.skip)
-	}
-}
-
-private extension ActivatorComp {
-	func updatestatus(_ status: Status) {
-		if let note = self.entity?.component(ofType: NoteComp.self) {
-			note.status = status
-		}
-	}
-	
-	func changeopacity(_ opacity: CGFloat) {
-		if let notecomp = entity?.component(ofType: NoteComp.self) {
-			notecomp.node.opacity = opacity
-		}
-	}
-}
-
-
-class HiddenComp: GKComponent {
-	func hide() {
-		if let note = self.entity?.component(ofType: NoteComp.self) {
+			if let starcomp = self.entity?.component(ofType: StarNoteComp.self) {
+				starcomp.node.opacity = 0
+			}
 			note.status = .skip
 			note.node.opacity = 0
 		}
 	}
 	
-	func show() {
+	func show(_ limit: CGFloat) {
 		if let note = self.entity?.component(ofType: NoteComp.self) {
+			if note.node.position.z < limit {return}
 			note.status = .live
 			note.node.opacity = 1
+			if let starcomp = self.entity?.component(ofType: StarNoteComp.self) {
+				starcomp.node.opacity = 1
+				note.node.opacity = 0
+			}
 		}
 	}
+}
+
+class ActivatorComp: GKComponent, hidable {
+	override func didAddToEntity() {
+		hide(0)
+	}
+}
+
+class HiddenComp: GKComponent, hidable {
+
 }

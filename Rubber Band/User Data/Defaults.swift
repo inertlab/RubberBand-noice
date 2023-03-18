@@ -14,7 +14,6 @@ class Defaults {
 	
 	/// checks if library folder has been modified
 	static func modifiedlib () -> Bool {
-		
 		return false
 	}
 	

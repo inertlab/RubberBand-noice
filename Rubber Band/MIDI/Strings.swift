@@ -17,11 +17,13 @@ extension MusicSheet {
 	/// creates gems out of midi track and places them on highway
 	func layStringTrack() {
 
-		let gemmaker 	= GemMaker() // turn this into a singleton
+//		let gemmaker 	= GemMaker() // turn this into a singleton
+		gemmaker.loadgems(type: .strings)
 
 		stagemc.track.sp.resetvars() // reset vars from previous track
 		
-		let beats = layBeat()
+		/// beat lines
+		let beatlines = layBeat()
 		
 		/// Sorted drum notes from midi sequence
 		let guitarnotes = MusicSheet.shared.get5lanenotes()
@@ -31,8 +33,31 @@ extension MusicSheet {
 		let setcount	= starnotes.count - 1
 		var starnote 	= starnotes[starset]
 		var lastStar  	= StarNoteComp(0)
+		
+		var score 		= 0.0
+		var multiplier 	= 1.0
+		var chordcount 	= 1
 
 		for chord in guitarnotes {
+//			print(chord)
+			chordcount += 1
+			
+			switch chordcount {
+			case 10:
+				multiplier = 2
+			case 20:
+				multiplier = 3
+			case 40:
+				multiplier = 4
+			case 50:
+				if User.current.instrument == .guitar {break}
+				multiplier = 5
+			case 60:
+				if User.current.instrument == .guitar {break}
+				multiplier = 6
+			default:
+				break;
+			}
 			
 			let entity 		= NoteEntity()
 			
@@ -45,21 +70,24 @@ extension MusicSheet {
 			stagemc.track.notesystem.addComponent(notecomp)
 			
 			for btn in chord.btns {
-				let gem = gemmaker.makegem(btn: btn)
+				score += 25 * multiplier
+				let gem = gemmaker.makegem(button: btn)
 				notecomp.node.addChildNode(gem)
 			}
 			
 			//	add tail component
-			if chord.end > 0 {
+			if let beats = chord.beats {
+//				12 is the pts per beat awarded to sustains
+				score += (Double(chord.btns.count) * 12 * multiplier * beats).rounded()
+//				score += CGFloat(chord.btns.count * 12 * multiplier) * beats).rounded()
+				
 				let end 	= CGFloat(chord.end * pace.fps_d)
-				let len 	= end - start
-				let tail 	= TailComp(len)
+				let length 	= end - start
+				let tail 	= TailComp(length, beats: beats)
 				tail.node.position.z = start
-				let diffusescale = len * 0.05
-//				print(len, diffusescale)
+				let diffusescale = length * 0.05
 				for btn in chord.btns {
 					let tailnode = gemmaker.givemetail(btn: btn)
-//					tailnode.scale.y = len
 					tailnode.geometry?.firstMaterial?.diffuse.contentsTransform.m22 = diffusescale
 					tailnode.geometry?.firstMaterial?.diffuse.contentsTransform.m42 = -0.9 * diffusescale
 					tail.node.addChildNode(tailnode)
@@ -67,13 +95,12 @@ extension MusicSheet {
 				
 				stagemc.track.hwy.notes.addChildNode(tail.node)
 				entity.addComponent(tail)
-				
+//				print(end, start)
 			}
+		
 			// check to see if note is within star range, if it's beyond then start new range if possible
 			if chord.start < starnote.end {
-//				print("what")
 				if chord.start >= starnote.start {
-//					print(chord.start, "added ", chord.btns, "in set ", starset)
 					lastStar = StarNoteComp(starset)
 					entity.addComponent(lastStar)
 					stagemc.track.starsystem.addComponent(foundIn: entity)
@@ -89,10 +116,13 @@ extension MusicSheet {
 			stagemc.track.notes.insert(entity)
 			stagemc.track.hwy.notes.addChildNode(notecomp.node)
 		}
-
-		print("star power sets = ", starset)
+		
+		print("base score is", score)
+		print("star power sets = ", starnotes.count)
+		print("my beats = ", beatlines)
 		print("this is my notes" ,stagemc.track.notesystem.components.count)
 		
-		stagemc.track.scorekeeper.starvalues = Starvalues(count: guitarnotes.count, sets: starnotes.count, beats: beats)
+//		i need a real note cound + tail count to calculate how many stars
+		stagemc.track.scorekeeper.starvalues = Starvalues(sets: starnotes.count, beats: beatlines, basescore: score)
 	} // end of laytrack
 }

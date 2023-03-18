@@ -17,17 +17,21 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 	var ogg 		= false
 	var players 	= [Track:AVAudioPlayer]()
 	var fplayers 	= [Track:FPlayer]()
-//	var oggcontext 	= [Track:AudioFileContext]()
 	var folder 		= URL(fileURLWithPath: "upnext")
 	var timer 		= Timer()
 	var time		= 0.0
 	var volume		: Float = 0.0
 	var vol_prev	: Float = 0.0
 	var vol_crowd	: Float = 0.0
+	var silenced 	= false
 	let rewindplayer = try! AVAudioPlayer(
 		contentsOf: URL(
 			string: Bundle.main.path(forResource: "sounds/rewind_01", ofType: "m4a")!)!)
 	let pla = AVAudioPlayer()
+	
+	func prevol() -> Float {
+		return vol_prev * volume
+	}
 	
 	func timeremaining () -> Double  {
 		if ogg {
@@ -52,17 +56,22 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 	}
 	
 	
+	func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+		NotificationCenter.default.post(name: .player_playbackCompleted, object: self)
+		print("i'm dond youall")
+	}
+	
 	/// creates multiple audio players to play all audio files found by OggNo.aacPaths()
 	///
 	/// - Parameter aacURL: an Array of audio file URLs
 	func play() {
 		timer.invalidate()
 		
+//		MARK: Oggs, working
 		if ogg {
-			let now = fplayers[.guitar]!.audioEngine.playerNode.lastRenderTime?.sampleTime ?? AVAudioFramePosition(0)
-			let startTime = AVAudioTime(sampleTime: now, atRate: 44100)
+			fplayers.removeValue(forKey: .preview)
+			let startTime = getavaudiotime()
 			for fp in fplayers {
-				if fp.key == .preview {continue}
 				if fp.key == .crowd { fp.value.volume = 0 }
 				fp.value.volume = volume
 				fp.value.beginplayback(attime: startTime)
@@ -70,9 +79,11 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 			return
 		}
 		
+//		MARK: native files
+		
+		players.removeValue(forKey: .preview)
 		let devicetime = players[.guitar]?.deviceCurrentTime
 		for p in players {
-			if p.key == .preview { continue }
 			if p.key == .crowd { p.value.volume = 0 }
 			p.value.volume = volume
 			p.value.prepareToPlay()
@@ -80,43 +91,45 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 		}
 	}
 	
+
 	
 	func preview(from: Double) {
 		
 		if vol_prev == 0 {return}
 		
+//		MARK: Ogg, working kinda
 		if ogg {
 			if let fp = fplayers[.preview] {
-				fp.volume = vol_prev * volume
+				fp.volume = prevol()
 				fp.beginPlayback()
 				return
 			}
-			
+//			this block no longer needed?
 			if fplayers.count == 1 {
+				fplayers[.guitar]?.volume = 0
 				fplayers[.guitar]?.seek(to: from)
-				fplayers[.guitar]?.beginPlayback()
+				fplayers[.guitar]?.togglePlayPause()
+				fplayers[.guitar]?.audioEngine.fade(from: 0, to: prevol(), duration: 1.5)
 				return
 			}
-			
-//			fplayers[.guitar]!.seek(to: from)
-//			let seek 	= fplayers[.guitar]!.seekPosition
-			let now 	= fplayers[.guitar]!.audioEngine.playerNode.lastRenderTime?.sampleTime ?? AVAudioFramePosition(0)
-//			let rate 	= fplayers[.guitar]!.audioFormat.sampleRate
-//			let av 		= AVAudioTime(sampleTime: now! + Int64(( rate + 0.5)), atRate: rate)
-//			let now = audioPlayers.first!.lastRenderTime?.sampleTime ?? AVAudioFramePosition(0)
-			let startTime = AVAudioTime(sampleTime: now, atRate: 44100)
-			
+//			crowd is not needed in preview
+			fplayers.removeValue(forKey: .crowd)
 			for fp in fplayers {
-				if fp.key == .crowd {continue}
-				fp.value.volume = vol_prev * volume
-//				try! fp.value.decoder.seek(to: from)
-				fp.value.beginplayback(attime: startTime)
+				fp.value.seek(to: from)
+			}
+			
+			let startTime = getavaudiotime()
+			
+			for fp in fplayers.values {
+				fp.volume = 0
+				fp.beginplayback(attime: startTime)
+				fp.audioEngine.fade(from: 0, to: prevol(), duration: 1.5)
 			}
 			
 			return
 		}
 		
-		
+//		MARK: Native files
 		if let player = players[.preview] {
 			player.volume = 0
 			player.prepareToPlay()
@@ -124,46 +137,66 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 			player.setVolume(vol_prev * volume, fadeDuration: 1.5)
 			return
 		}
-
+//		crowd is not needed for previews
+		players.removeValue(forKey: .crowd)
 		let devicetime = players[.guitar]?.deviceCurrentTime
 		for p in players {
-			if p.key == .crowd { continue }
 			p.value.volume = 0
 			p.value.currentTime = from
 			p.value.prepareToPlay()
-			p.value.play(atTime: devicetime! + 0.5) 	// sets playtime with delay - according to apple this ensures syncing
+			// sets playtime with delay - according to apple this ensures syncing
+			p.value.play(atTime: devicetime! + 0.25)
 			p.value.setVolume(vol_prev * volume, fadeDuration: 1.5)
 		}
+	}
+	
+	func muteinstrument(track: Track) {
+		if players.count + fplayers.count == 1 {return}
+		players[track]?.volume = 0
+		fplayers[track]?.volume = 0
+	}
+	
+	func unmuteinstrument(track: Track) {
+		if players.count + fplayers.count == 1 {return}
+		players[track]?.volume = volume
+		fplayers[track]?.volume = volume
 	}
 	
 	func singalong() {
 		if let crowd = players[.crowd] {
 			crowd.setVolume(vol_crowd * volume, fadeDuration: 1)
-			print("singing")
+		}
+		
+		if let crowd = fplayers[.crowd] {
+			crowd.audioEngine.fade(from: 0, to: vol_crowd * volume, duration: 1)
 		}
 	}
 	
 	func stopsinging() {
 		if let crowd = players[.crowd] {
 			crowd.setVolume(0, fadeDuration: 1)
-			print("shutup")
+		}
+		if let crowd = fplayers[.crowd] {
+			crowd.audioEngine.fade(from: vol_crowd * volume, to: 0, duration: 1)
 		}
 	}
 	
 	func stop() {
-		// when timer is invalid, previews won't start. avoid a race condition
+		// when timer is invalid, previews won't start to avoid a race condition
 		timer.invalidate()
 		for fp in fplayers {
 			fp.value.stop()
 		}
+		
 		for p in players {
 			p.value.stop()
 		}
+		NotificationCenter.default.post(name: .player_playbackCompleted, object: nil)
 	}
 	
 	func fadeout() {
 		for fp in fplayers {
-			fp.value.stop()
+			fp.value.audioEngine.fadeOutpreview()
 		}
 		for p in players {
 			p.value.setVolume(0, fadeDuration: 2)
@@ -188,6 +221,8 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 		}
 	}
 	
+	/// used only while setting volume with sliders
+	/// - Parameter vol: volume number from menu slider
 	func setpreviewvol(vol: Float) {
 		vol_prev = vol
 		for p in players {
@@ -205,6 +240,8 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 		}
 	}
 	
+	/// used only while setting volume with sliders
+	/// - Parameter vol: volume number from menu slider
 	func setcrowdnoise(vol: Float) {
 		vol_crowd = vol
 		for p in players {
@@ -237,20 +274,32 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 		
 		if ogg {
 			for fp in fplayers {
-				fp.value.togglePlayPause()
+				fp.value.seek(to: time)
+			}
+			
+			let startTime = getavaudiotime()
+			
+			for fp in fplayers {
+				if fp.key == .crowd {continue}
+				fp.value.volume = 0
+				fp.value.beginplayback(attime: startTime)
+				fp.value.audioEngine.fade(from: 0, to: volume, duration: 2)
 			}
 			return
 		}
 		
 		let devicetime = players[.guitar]!.deviceCurrentTime
 		for p in players {
+			if p.key == .crowd { p.value.volume = 0 }
+			p.value.volume = 0
 			p.value.currentTime = time
 			p.value.play(atTime: devicetime)
+			p.value.setVolume(volume, fadeDuration: 2)
 		}
 	}
 	
 	func rewind() {
-		rewindplayer.volume = volume * 0.4
+		rewindplayer.volume = volume * 0.25
 		rewindplayer.play()
 	}
 	
@@ -264,6 +313,7 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 				Jukebox.shared.fadeout()
 			}
 			if self.time > 20 {
+//				stops the player completely 5 seconds after fadeout
 				Jukebox.shared.stop()
 				tim.invalidate()
 			}
@@ -308,10 +358,6 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 		if !fplayers.isEmpty {
 			ogg = true
 		}
-//		oggcontext = oggnodes(files: allfiles)
-//		if !oggcontext.isEmpty {
-//			ogg = true
-//		}
 	}
 	
 	/// The valid soundfiles to play
@@ -351,6 +397,7 @@ private extension Jukebox {
 			}
 		}
 		
+		// change .guitar to .song - when there are multitracks we silence guitar, if there is only one track we don't want to silence the whole song
 		if !dic.isEmpty {
 			if dic[.guitar] == nil {
 				dic[.guitar] = dic[.song]
@@ -378,8 +425,19 @@ private extension Jukebox {
 				dic[.guitar] = dic[.song]
 				dic.removeValue(forKey: .song)
 			}
+			// root is the players that notifies song is over
+			dic[.guitar]?.root = true
 		}
 		return dic
+	}
+	
+	
+	/// gets the AVAudiotime position from the .guitar file
+	/// - Returns: AVAudioTime
+	func getavaudiotime() -> AVAudioTime {
+//		when i swap .guiar with .song, things get wonky
+		let now = fplayers[.guitar]!.audioEngine.playerNode.lastRenderTime?.sampleTime ?? AVAudioFramePosition(0)
+		return AVAudioTime(sampleTime: now, atRate: 44100)
 	}
 
 }

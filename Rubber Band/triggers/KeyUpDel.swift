@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol KeyUp: class {
+protocol KeyUp: AnyObject {
 	func handlekeyup (_ event: Button)
 }
 

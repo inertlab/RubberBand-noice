@@ -59,6 +59,9 @@ class TimeCode {
 		return newnotes
 	}
 	
+	/// convert MIDI musicTimeStamps into seconds
+	/// - Parameter beat: the
+	/// - Returns: returns the position of the beat in seconds
 	func beattosec(beat: Double) -> Double {
 		var sec = 0.0
 		for event in events {
@@ -83,7 +86,7 @@ class TimeCode {
 	/// - Parameter seq: musicSequence - aka midi file track
 	func initTimeCode(seq: MIKMIDISequence) {
 		self.events 	= []
-		let totalbeats 	= seq.length
+		let totalbeats	= seq.length
 		let tempos 		= seq.tempoEvents()
 		var bpm 		= 100.0
 		
@@ -144,23 +147,23 @@ private extension TimeCode {
 	}
 }
 
-/// fztempoevents holds the previous tempo event to find offest
+/// fztempoevents holds the previous tempo event to find
 struct fzTempoEvent {
 	/// current musictimestamp
-	let mts:		Double
+	let mts:	Double
 	/// previous bpm
-	let bpm:		Double
+	let bpm:	Double
 	/// time in seconds
-	let time:		Double
+	let time:	Double
 	/// previous musictimestamp
 	let prev_mts:	Double
 }
 
 struct FZNoteEvent {
-	let button: 	Button
-	let start: 		Double
-	let end:		Double
+	let button: Button
+	let start: 	Double
+	let end:	Double
 }
 
 typealias fzNote 		= (button:Button, time:Double, length:Double)
-typealias fzNoteList 	= [fzNote]
+typealias fzNoteList = [fzNote]

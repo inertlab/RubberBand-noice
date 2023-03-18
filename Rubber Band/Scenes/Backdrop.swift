@@ -15,7 +15,7 @@ enum BGState {
 
 protocol Backdrop {
 	var active	:Bool {get set}
-	var node	:SCNNode {get set}
+	var node		:SCNNode {get set}
 	var state	:BGState {get set}
 	func state(_ state: BGState)
 	func setnode(node: SCNNode)
@@ -103,11 +103,22 @@ enum NCAnimation {
 	
 	static func lightup(property: String ) -> CABasicAnimation {
 		let animation = CABasicAnimation(keyPath: "\(property).intensity")
-			animation.fromValue 	= 0
+			animation.fromValue 		= 0
 			animation.toValue 		= 1
 			animation.duration 		= 3
 			animation.autoreverses 	= false
 			animation.fillMode 		= CAMediaTimingFillMode.forwards
+			animation.isRemovedOnCompletion = false
+		return animation
+	}
+	
+	static func grow(property: String ) -> CABasicAnimation {
+		let animation = CABasicAnimation(keyPath: property)
+			animation.fromValue 		= 1
+			animation.toValue 		= 0.5
+			animation.duration 		= 600
+			animation.autoreverses 	= false
+//			animation.fillMode 		= CAMediaTimingFillMode.forwards
 			animation.isRemovedOnCompletion = false
 		return animation
 	}

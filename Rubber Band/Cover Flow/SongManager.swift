@@ -38,7 +38,7 @@ let menuScene 		= SCNScene(named: "art.scnassets/scns/menu_song.scn")!
 var covernode 		= menuScene.rootNode.childNode(withName: "coverflow", recursively: true)!
 
 struct MenuText {
-	let detailnode 		= menuScene.rootNode.childNode(withName: "details", recursively: true)
+	let detailnode 	= menuScene.rootNode.childNode(withName: "details", recursively: true)
 	init(){
 	}
 }
@@ -83,6 +83,7 @@ class SongManager {
 	/// - kept and reused trhoughout life of game
 	/// - updated every time user sorts music
 	var sorted = [Song]()
+	var shuffled = [SongComp]()
 	
 	/// array of the CoverArt (scnnodes with UUID)
 	/// - Loaded once at start, can take a while to build
@@ -95,11 +96,11 @@ class SongManager {
 	/// Called at loading time once and only once
 	private func createcovers (songs: [Song]) {
 		covers 		= []
-		var count 	= sorted.count
+		var count 	= songs.count
 		let total 	= CGFloat(count)
 		var countup = 1
 		for song in songs {
-			count 	-= 1
+			count -= 1
 			countup += 1
 			noice.alpha 	= CGFloat(countup) / total
 			loadcount.text 	= String(format: "%04d", count)
@@ -111,6 +112,7 @@ class SongManager {
 			songsystem.addComponent(foundIn: entity)
 			songenties.insert(entity)
 		}
+		shuffled = songsystem.components.shuffled()
 	}
 	
 	func addcoverarttonode(cover:SCNNode) {
@@ -134,12 +136,13 @@ class SongManager {
 		
 		sfinder.librarymodified()
 		
-		sorted 	= fetchSongs(sortBy: sortkeypath.value(), nil, nil)
+		sorted = fetchSongs(sortBy: sortkeypath.value(), nil, nil)
 	
 		createcovers(songs: sorted)
-
 		if !sorted.isEmpty{
-			flowcoverart()
+			iconAtlas.preload {
+				self.flowcoverart()
+			}
 		}
 	}
 	
@@ -152,7 +155,7 @@ class SongManager {
 		
 		if sortkeypath ==  keypath { return }
 		if keypath == .artist { sorting = .artist} else {sorting = .song}
-		sortkeypath 		= keypath
+		sortkeypath = keypath
 //		let tempcontainer 	= movecoverstotempcol()
 		
 		// if sorting requires stat switch fetch method
@@ -179,10 +182,9 @@ class SongManager {
 				songsystem.addComponent(foundIn: entity)
 			}
 		}
-		print("about to reflow")
+
 		flowcoverart()
 		smanager.updatesongselection(newsong: smanager.selected, state: .selected)
-//		tempcontainer.removeFromParentNode()
 	}
 	
 	//MARK: - Fetching
@@ -201,9 +203,9 @@ class SongManager {
 			ascending: true,
 			selector: #selector(NSString.localizedCaseInsensitiveCompare)
 		)
-		fet.predicate 		= NSPredicate(format: "song != %@", "nil")
+		fet.predicate = NSPredicate(format: "song != %@", "nil")
 		fet.sortDescriptors = [sorter, second]
-		let array 			= try? pc.viewContext.fetch(fet)
+		let array = try? pc.viewContext.fetch(fet)
 		return array!
 	}
 	
@@ -211,8 +213,6 @@ class SongManager {
 	/// - parameter sortBy: sorting key: Artist or Album
 	/// - Returns: An array of Songs sorted by Artist or Album
 	func fetchSongs (sortBy: String, _ limit: Int?, _ ascending: Bool?) -> [Song] {
-		// what happends when sorting = .stars?
-		
 		let fet:NSFetchRequest<Song> = Song.fetchRequest()
 		let sorter = NSSortDescriptor(
 			key: sortBy,
@@ -237,12 +237,12 @@ class SongManager {
 	func fetchSongs (sortByStat: String) -> [Song] {
 		
 		let fet:NSFetchRequest<Stats> = Stats.fetchRequest()
-		let sorter 		= NSSortDescriptor(
+		let sorter = NSSortDescriptor(
 			key: sortByStat,
 			ascending: true,
 			selector: #selector(NSString.localizedCaseInsensitiveCompare)
 		)
-		let second 		= NSSortDescriptor(
+		let second = NSSortDescriptor(
 			key: "song.title",
 			ascending: true,
 			selector: #selector(NSString.localizedCaseInsensitiveCompare)
@@ -335,8 +335,8 @@ class SongManager {
 	
 	func allsongsfromartist(song: Song) -> [Song] {
 		let fetch:NSFetchRequest<Song> = Song.fetchRequest()
-		fetch.predicate = NSPredicate(format: "artist == %@", song.artist!)
-		let sorter 		= NSSortDescriptor(
+		fetch.predicate 	= NSPredicate(format: "artist == %@", song.artist!)
+		let sorter 			= NSSortDescriptor(
 			key: "title",
 			ascending: true,
 			selector: #selector(NSString.localizedCaseInsensitiveCompare)
@@ -361,21 +361,10 @@ class SongManager {
 		
 		delegate?.newsongselected(song: selected.song)
 		
-//		TextureMover.shared.updatechartericon(icon: newsong.song.icon!)
-		
-		if newsong.song.length > 0 {
-			var secs 	= DateComponents()
-			secs.second = Int(newsong.song.length)
-			labelt.text = format.string(for: secs)
-		}else{
-			labelt.text = ""
-		}
-		
 		let column 		= selected.entity?.component(ofType: ColumnComp.self)
 		rowcall.posx 	= -column!.posx + 1
 		
 		if column != oldcolumn {
-			oldcolumn?.node.position.z = 0
 			loc.col = Int(column!.posx - 1)
 			column!.highlight()
 			oldcolumn?.unhilight()
@@ -389,12 +378,41 @@ class SongManager {
 	}
 	
 	func selectrandom() {
-		updatesongselection(newsong: songsystem.components.randomElement()!, state: .detailview)
-//		selected = songsystem.components.randomElement()!
+		if let comp = shuffled.last {
+//			if song has no tier in the current isntrument, remove from list and select new random song
+			if User.current.instrument.gettier(comp.song) == -1 {
+				shuffled.removeLast()
+				selectrandom()
+				return
+			}
+			updatesongselection(newsong: comp, state: .detailview)
+		} else {
+//			if shuffled is empty reassign all components again
+			shuffled = songsystem.components.shuffled()
+			selectrandom()
+		}
+	}
+	
+	func selectrandom(_ artist: String) {
+		if let song = shuffled.first(where: {$0.song.artist == artist}) {
+			updatesongselection(newsong: song, state: .detailview)
+			return
+		}
+//		should i re-add the artist songs back to shuffled?
+		let songsby = songsystem.components.filter {$0.song.artist == artist && $0 != selected}
+		if songsby.isEmpty { return }
+		updatesongselection(newsong: songsby.randomElement()!, state: .detailview)
+	}
+	
+	func removefromshuffle() {
+		if let index = shuffled.firstIndex(where: {$0 == selected}) {
+			shuffled.remove(at: index)
+		}
 	}
 	
 	func moveselector(direction: Direction)  {
 		var i = selected.index
+		Jukebox.shared.stop()
 		switch direction {
 		case .left:
 			if loc.col == 0 {
@@ -444,7 +462,7 @@ class SongManager {
 		// texturemover needs to be called so it instantiates or else delegate doesn't work
 		TextureMover.shared.updatechartericon(icon: selected.song.icon ?? "blank")
 		updatesongselection(newsong: selected, state: .selected)
-		let column 		= selected.entity?.component(ofType: ColumnComp.self)
+		let column 	= selected.entity?.component(ofType: ColumnComp.self)
 		column!.highlight()
 		return true
 	}
@@ -488,13 +506,13 @@ private extension SongManager {
 	/// lays out cover art into a grid of columns
 	func flowcoverart () {
 		
-		var index 			= 0
+		var index 		= 0
 		var char		 	= ""
 		var row 			= CGFloat(1)
-		var column 			= CGFloat(1)
+		var column 		= CGFloat(1)
 		/// this is the first column used always
-		var colnode 		= makeColumn(name: "col-" + column.description)
-		var columncomp 		= ColumnComp(column: column, node: colnode)
+		var colnode 	= makeColumn(name: "col-" + column.description)
+		var columncomp = ColumnComp(column: column, node: colnode)
 		colsystem.addComponent(columncomp)
 		colnode.position.x 	= column
 		
@@ -525,21 +543,21 @@ private extension SongManager {
 				row -= 1
 			// else we make a new comlum + new component
 			}else{
-				char 				= tchar
-				row 				= 0
-				column 				+= 1
+				char 	= tchar
+				row 	= 0
+				column 	+= 1
 				// creat a new column and comp
 				colnode 			= makeColumn(name: "col-" + column.description)
 				columncomp 			= ColumnComp(column: column, node: colnode)
 				columncomp.index 	= index
 				colsystem.addComponent(columncomp)
-				colnode.position.x 	= column
+				colnode.position.x = column
 				columncomp.addletter(char: char)
 			}
-			comp.index = index
-			index += 1
-			comp.cover.position.y = row
-			comp.row = row
+			comp.index 					= index
+			index 						+= 1
+			comp.cover.position.y 	= row
+			comp.row 					= row
 			colnode.addChildNode(comp.cover)
 			comp.entity?.addComponent(columncomp)
 			// check to see if cover is on screen at start

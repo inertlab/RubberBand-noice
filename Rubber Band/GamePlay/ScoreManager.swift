@@ -18,7 +18,6 @@ class ScoreManager {
 	static func deleteallstats() {
 		let stat:NSFetchRequest<Stats> = Stats.fetchRequest()
 		let arr = try? pc.viewContext.fetch(stat)
-		print("this is happening too")
 		for s in arr! {
 			pc.viewContext.delete(s)
 			print("deleted", s)
@@ -34,8 +33,15 @@ class ScoreManager {
 		}
 	}
 	
+	static func getscore(_ song: Song) -> Score? {
+		if let stat = selectStat(song) {
+			return User.current.instrument.getscore(stat)
+		}
+		return nil
+	}
+	
 	static func selectStat (_ song: Song) -> Stats? {
-		for stat in smanager.selected.song.stats as! Set<Stats> {
+		for stat in song.stats as! Set<Stats> {
 			if stat.pindex == User.current.player.index {
 				return stat
 			}

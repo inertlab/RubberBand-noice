@@ -34,6 +34,29 @@ enum Button: UInt8 {
 			return Metric(posD: 0		, posS: -1.6, color: .rbOrange)
 		}
 	}
+	
+	var string: String {
+		switch self {
+		case .green:
+			return "green"
+		case .red:
+			return "red"
+		case .yellow:
+			return "yellow"
+		case .blue:
+			return "blue"
+		case .orange:
+			return "orange"
+		case .yellow_c:
+			return "yellow-c"
+		case .blue_c:
+			return "blue-c"
+		case .green_c:
+			return "green-c"
+		default:
+			return "strum"
+		}
+	}
 }
 
 struct ButtonMetric {
@@ -151,4 +174,20 @@ func updatekeycode(_ inst: Instrument) {
 		default:
 		keycode = combinekeycode(keycode_guitar)
 	}
+}
+
+
+/// gem position by color
+///
+/// - r: red position
+/// - y: yellow position
+/// - b: blue position
+/// - g: green position
+/// - k: kick position
+enum GemPos: Double {
+	case r = 1.26
+	case y = 0.42
+	case b = -0.42
+	case g = -1.26
+	case o = 0
 }

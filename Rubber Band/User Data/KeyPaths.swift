@@ -13,7 +13,7 @@ import Foundation
 ///
 /// - song: Title of Song
 /// - Currently only for ProDrums, in the future it needs to adapt to different instruments
-enum SortKeypath {
+enum SortKeypath: String {
 	case song, artist, tier, score, genre, stars
 	func value() -> String {
 		switch self {

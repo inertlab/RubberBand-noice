@@ -11,16 +11,17 @@ import Foundation
 /// extend to different handle different diffs later
 enum DrumEvent: String {
 	typealias RawValue = String
-	case 	mix3d0		= "[mix 3 drums0]" ,
-			mix3d1 		= "[mix 3 drums1]" ,
-			mix3d2 		= "[mix 3 drums2]" ,
-			mix3d3 		= "[mix 3 drums3]" ,
-			mix3d4 		= "[mix 3 drums4]" ,
-			mix3d0d 	= "[mix 3 drums0d]",
-			mix3d1d		= "[mix 3 drums1d]",
-			mix3d2d 	= "[mix 3 drums2d]",
-			mix3d3d 	= "[mix 3 drums3d]",
-			mix3d4d 	= "[mix 3 drums4d]"
+	case 	mix3d0	= "[mix 3 drums0]" ,
+			mix3d1 	= "[mix 3 drums1]" ,
+			mix3d2 	= "[mix 3 drums2]" ,
+			mix3d3 	= "[mix 3 drums3]" ,
+			mix3d4 	= "[mix 3 drums4]" ,
+			mix3d0d = "[mix 3 drums0d]",
+			mix3d1d	= "[mix 3 drums1d]",
+			mix3d2d = "[mix 3 drums2d]",
+			mix3d3d = "[mix 3 drums3d]",
+			mix3d4d = "[mix 3 drums4d]"
+	
 	func flip() -> Bool {
 		switch self {
 		case .mix3d0d, .mix3d1d, .mix3d2d, .mix3d3d, .mix3d4d:
@@ -44,12 +45,10 @@ enum Difficulty:Int16 {
 	case easy, medium, hard, expert
 	mutating func next () {
 		self =  Difficulty(rawValue: rawValue + 1) ?? .easy
-		labelDiff.text = self.text()
 	}
 	
 	mutating func previous () {
 		self =  Difficulty(rawValue: rawValue - 1) ?? .expert
-		labelDiff.text = self.text()
 	}
 	
 	func text() -> String {
@@ -120,15 +119,20 @@ enum Instrument: Int16 {
 	}
 	
 	func gettier() -> Int16 {
+//		if no song is passed as parameter, used currently selected song
+		gettier(smanager.selected.song)
+	}
+	
+	func gettier(_ song: Song) -> Int16 {
 		switch self {
 		case .drums, .prodrums:
-			return smanager.selected.song.tier!.drums
+			return song.tier!.drums
 		case .bass:
-			return smanager.selected.song.tier!.bass
+			return song.tier!.bass
 		case .guitar:
-			return smanager.selected.song.tier!.guitar
+			return song.tier!.guitar
 		case .keys:
-			return smanager.selected.song.tier!.keys
+			return song.tier!.keys
 		}
 	}
 	

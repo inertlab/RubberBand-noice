@@ -12,7 +12,6 @@ import SpriteKit
 
 let iconAtlas = SKTextureAtlas(named: "icon")
 
-
 /// remaps song icon to preferred icon on file
 let IconFile = [
 //	"blank"		: "blank"		,

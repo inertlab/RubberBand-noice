@@ -28,19 +28,21 @@ final class SongLister {
 	
 	static let shared = SongLister()
 	
-	let listnode 	= othersongsg?.childNode(withName: "list")!
-	let artist 		= othersongsg?.childNode(withName: "artist") 		as! SKLabelNode
-	let moreup 		= othersongsg?.childNode(withName: "moreup") 		as! SKLabelNode
-	let moredown 	= othersongsg?.childNode(withName: "moredown") 		as! SKLabelNode
-	let timemore 	= othersongsg?.childNode(withName: "time_other") 	as! SKLabelNode
-	let stars 		= othersongsg?.childNode(withName: "stars") 		as! SKLabelNode
-	let diff 		= othersongsg?.childNode(withName: "difficulty") 	as! SKLabelNode
-	
-	let description = othersongsg?.childNode(withName: "description") 	as! SKLabelNode
+	var ready 		= false
+	let node		= menuOverlay?.childNode(withName: "relatedsongs")
+	let listnode 	= menuOverlay?.childNode(withName: "relatedsongs/list")!
+	let artist 		= menuOverlay?.childNode(withName: "relatedsongs/artist") 		as! SKLabelNode
+	let moreup 		= menuOverlay?.childNode(withName: "relatedsongs/moreup") 		as! SKLabelNode
+	let moredown 	= menuOverlay?.childNode(withName: "relatedsongs/moredown") 	as! SKLabelNode
+	let timemore 	= menuOverlay?.childNode(withName: "relatedsongs/time_other") 	as! SKLabelNode
+	let stars 		= menuOverlay?.childNode(withName: "relatedsongs/stars") 		as! SKLabelNode
+	let diff 		= menuOverlay?.childNode(withName: "relatedsongs/difficulty")	as! SKLabelNode
+	let description = menuOverlay?.childNode(withName: "relatedsongs/description") 	as! SKLabelNode
+	let countlabel  = menuOverlay?.childNode(withName: "details/morelabel") 		as! SKLabelNode
 	
 	private var stats 	= [Stats]()
-	var songs   = [Song]()
 	private var nodes 	= [SKLabelNode]()
+	var songs  = [Song]()
 	
 	/// currently selected song
 	var song:Song? = nil
@@ -75,7 +77,7 @@ final class SongLister {
 		
 		songs = smanager.fetchSongs(sortBy: "modfied", 100, false)
 		limit = songs.count
-		if songs.count == 0 {return}
+		if songs.isEmpty {return}
 
 		var y:CGFloat = 0
 		for song in songs {
@@ -86,7 +88,6 @@ final class SongLister {
 			label.text 		= song.title!
 			y -= leading
 		}
-		labelselected()
 		listnode?.position.y = CGFloat(index) * leading
 		selectlabel()
 	}
@@ -101,24 +102,28 @@ final class SongLister {
 			listrelatedsongs()
 		}
 			listnode?.position.y = CGFloat(index) * leading
-			changechartericon(song: songs[index])
+//			TextureMover.shared.updatechartericon(icon: song?.icon ?? "")
 			moreorless()
 			updatetime()
+			selectlabel()
 	}
 	
 	/// Clears the previous list and listnode and loads a new list
 	/// - Parameter artistsong: Song - CoreData entity
-	func loadreleatedsongs(artistsong: Song) -> Int {
+	func loadreleatedsongs(artistsong: Song) {
+		ready = true
 		listnode?.removeAllChildren()
 		songs.removeAll()
 		nodes.removeAll()
 		
 		songs = smanager.allsongsfromartist(song: artistsong)
 		if songs.count < 2 {
-			return 0
+			ready = false
+			countlabel.text = ""
+			return
 		}
+		countlabel.text = "…\(songs.count)+"
 		index = songs.firstIndex(of: artistsong) ?? 0
-		return songs.count
 	}
 	
 	func scrollup() {
@@ -199,20 +204,25 @@ private extension SongLister {
 			song = songs[index]
 			artist.text = song!.artist
 			updatestars(song: song!)
-			
 		default:
 			// this one doesn't change the artists label
 			song = songs[index]
 			updatestars(song: song!)
 		}
-		changechartericon(song: song!)
+		
+		TextureMover.shared.updatechartericon(icon: song?.icon ?? "")
 		moreorless()
 		updatetime()
 		labelselected()
 	}
 	
 	func updatetime() {
-		timemore.text = format.string(from: song?.length ?? 0)
+		switch song?.length {
+		case nil, 0:
+			timemore.text = ""
+		default:
+			timemore.text = format.string(from: song!.length)
+		}
 	}
 
 	func updatestars(song: Song)  {
@@ -269,7 +279,6 @@ private extension SongLister {
 			}
 		}
 		self.limit = nodes.count
-		labelselected()
 	}
 	
 	/// list of songs is loaded prior to running this
@@ -284,24 +293,17 @@ private extension SongLister {
 			label.text 		= song.title
 			y -= leading
 		}
-		labelselected()
 	}
 	
 	func makelabel() -> SKLabelNode{
 		let label 		= SKLabelNode()
 		label.fontSize 	= ptSmall
 		label.fontName 	= "SFProText-Medium"
-		label.verticalAlignmentMode = .center
-		label.numberOfLines = 1
-		label.preferredMaxLayoutWidth = 360
-		label.lineBreakMode = .byTruncatingMiddle
+		label.verticalAlignmentMode 	= .center
+		label.numberOfLines 			= 1
+		label.preferredMaxLayoutWidth 	= 360
+		label.lineBreakMode 			= .byTruncatingMiddle
 		return label
-	}
-	
-	func changechartericon (song: Song) {
-		let texturename = IconFile[song.icon!] ?? song.icon!
-		let texture 	= iconAtlas.textureNamed(texturename)
-		labelicon.texture = texture
 	}
 	
 	func moreorless() {

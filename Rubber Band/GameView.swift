@@ -53,6 +53,8 @@ class GameView: SCNView {
 	}
 	
 	// MARK: - Key Handles
+	
+	
 	override func keyDown (with event: NSEvent) {
 
 		if event.isARepeat {return}
@@ -68,15 +70,17 @@ class GameView: SCNView {
 	
 	override func keyUp(with event: NSEvent) {
 		if let key = keycode[event.keyCode] {
-			if key == .strum {return }
+			if key == .strum { return }
 			switch stagemc.onstage {
 			case .guitar, .piano:
+				// what was i doing here?
 				(stagemc.currentact as! KeyUp).handlekeyup(key)
 			default:
 				return
 			}
 		}
 	}
+	
 }
 
 var format:DateComponentsFormatter{

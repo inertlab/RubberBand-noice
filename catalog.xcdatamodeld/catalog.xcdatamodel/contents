@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17709" systemVersion="19H2" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21E258" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Album" representedClassName="Album" syncable="YES" codeGenerationType="class">
         <attribute name="albumArt" optional="YES" attributeType="URI"/>
         <attribute name="artist" optional="YES" attributeType="String"/>
@@ -7,7 +7,8 @@
         <relationship name="contains" optional="YES" toMany="YES" deletionRule="Deny" destinationEntity="Song" inverseName="trackOf" inverseEntity="Song"/>
     </entity>
     <entity name="Config" representedClassName="Config" syncable="YES" codeGenerationType="class">
-        <attribute name="kraken" optional="YES" attributeType="Boolean" minValueString="0" maxValueString="1" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="fullscreen" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="kraken" attributeType="Boolean" minValueString="0" maxValueString="1" defaultValueString="YES" usesScalarValueType="YES"/>
         <attribute name="libupdate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="vol_crowd" optional="YES" attributeType="Float" minValueString="0" maxValueString="1" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="vol_master" optional="YES" attributeType="Float" minValueString="0" maxValueString="1" usesScalarValueType="YES"/>
@@ -34,6 +35,8 @@
     </entity>
     <entity name="Score" representedClassName="Score" syncable="YES" codeGenerationType="class">
         <attribute name="difficulty" optional="YES" attributeType="Integer 16" defaultValueString="-1" usesScalarValueType="YES"/>
+        <attribute name="fc" attributeType="Integer 16" defaultValueString="-1" usesScalarValueType="YES"/>
+        <attribute name="fccount" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="instrument" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="playcount" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="score" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
@@ -76,19 +79,19 @@
         </uniquenessConstraints>
     </entity>
     <entity name="Tiers" representedClassName="Tiers" syncable="YES" codeGenerationType="class">
-        <attribute name="bass" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="drums" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="guitar" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="keys" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="bass" attributeType="Integer 16" defaultValueString="-1" usesScalarValueType="YES"/>
+        <attribute name="drums" attributeType="Integer 16" defaultValueString="-1" usesScalarValueType="YES"/>
+        <attribute name="guitar" attributeType="Integer 16" defaultValueString="-1" usesScalarValueType="YES"/>
+        <attribute name="keys" attributeType="Integer 16" defaultValueString="-1" usesScalarValueType="YES"/>
         <relationship name="song" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Song" inverseName="tier" inverseEntity="Song"/>
     </entity>
     <elements>
-        <element name="Album" positionX="36" positionY="81" width="128" height="105"/>
-        <element name="Config" positionX="-63" positionY="-18" width="128" height="133"/>
-        <element name="Player" positionX="-54" positionY="-9" width="128" height="163"/>
-        <element name="Score" positionX="-36" positionY="9" width="128" height="148"/>
-        <element name="Song" positionX="-18" positionY="27" width="128" height="283"/>
-        <element name="Stats" positionX="0" positionY="45" width="128" height="165"/>
-        <element name="Tiers" positionX="18" positionY="63" width="128" height="120"/>
+        <element name="Album" positionX="-9.045166015625" positionY="120.4954833984375" width="128" height="105"/>
+        <element name="Config" positionX="-179.2208862304688" positionY="-112.6907653808594" width="128" height="134"/>
+        <element name="Player" positionX="62.35699462890625" positionY="-91.40069580078125" width="128" height="163"/>
+        <element name="Score" positionX="153.088623046875" positionY="-311.1379089355469" width="128" height="164"/>
+        <element name="Song" positionX="-217.2142944335938" positionY="95.37567138671875" width="128" height="269"/>
+        <element name="Stats" positionX="315.07861328125" positionY="111.5203552246094" width="128" height="165"/>
+        <element name="Tiers" positionX="115.0670776367188" positionY="325.4884338378906" width="128" height="104"/>
     </elements>
 </model>

@@ -27,16 +27,17 @@ final class DrumStage: Performing, Track {
 	var hiddensystem 	= GKComponentSystem<HiddenComp>(componentClass: HiddenComp.self)
 	
 	// MARK: - Vars
+	// deprecated - use statemachine instead
 	var state:Songstate = .playing
-	let scn 			= SCNScene(named: "art.scnassets/scns/highway.scn")!
-	let hwy				:HWY
-	let sp				:StarPower
-
-	var triggers 		: [Button: DrumTrigger]
+	let scn 		= SCNScene(named: "art.scnassets/scns/highway.scn")!
+	let hwy			: HWY
+	let sp			: StarPower
+	var triggers 	: [Button: DrumTrigger]
+	var songtrack: Jukebox.Track = .drums
 
 	init() {
 		self.notesystem = GKComponentSystem(componentClass: NoteComp.self)
-		self.starsystem	= GKComponentSystem(componentClass: StarNoteComp.self)
+		self.starsystem = GKComponentSystem(componentClass: StarNoteComp.self)
 		self.hwy = HWY(self.scn)
 		self.triggers = [
 			.blue 	: DrumTrigger(btn: .blue, 	hwy: hwy),
@@ -45,45 +46,48 @@ final class DrumStage: Performing, Track {
 			.yellow : DrumTrigger(btn: .yellow, hwy: hwy),
 			.orange	: DrumTrigger(btn: .orange, hwy: hwy)
 		]
-	
 		self.sp = StarPower(self.hwy)
 		startparticle()
 	}
 	
 	//MARK: - Event Handler
 	func handleevent(_ event: Button) {
-		switch state  {
-		case .playing:
+		switch stagemc.machine.currentState {
+		case is PlayState:
 			switch event {
 			case  .blue_c, .blue, .green, .green_c, .orange, .red, .yellow, .yellow_c:
 				notecheck(event)
 			case .start:
-				showstats()
+				stagemc.machine.enter(ScoreState.self)
 			case .plus:
-				Jukebox.shared.pauseMusic()
-				state = .paused
+				stagemc.machine.enter(PausedState.self)
 			default:
 				break
 			}
-		case .paused:
-			state = .playing
-			resumegame(event)
-		case .stats:
-			if event == .green_c {
+		case is PausedState:
+			stagemc.machine.enter(RewindState.self)
+		case is ScoreState:
+			switch event {
+			case .blue:
+				smanager.selected.getcolumn().unhilight()
+				smanager.selectrandom(smanager.selected.song.artist!)
+				stagemc.machine.enter(PlayState.self)
+				stagemc.loadsong()
+			case .green_c:
 				// play random song
-				stagemc.onstage = .songmenu
+				smanager.selected.getcolumn().unhilight()
 				smanager.selectrandom()
-				stagemc.loadstage()
 				print("playing random")
-				break
+				fallthrough
+			case .blue_c:
+				stagemc.machine.enter(PlayState.self)
+				stagemc.loadsong()
+			default:
+				stagemc.machine.enter(DetailState.self)
+				stagemc.loadmenu()
 			}
-			if event == .blue_c {
-				// play song again
-				stagemc.onstage = .songmenu
-				stagemc.loadstage()
-				break
-			}
-			stagemc.loadstage()
+		default:
+			return
 		}
 	}
 	
@@ -101,20 +105,25 @@ final class DrumStage: Performing, Track {
 		MusicSheet.shared.layDrumTrack(self)
 	}
 	
+	/// hides notes that overlap activator notes and shows activators
 	func showsp () {
-		activatorsOn(true)
+		let limit = hwy.pista.position.z + pace.fps
+		for activator in activesystem.components {
+			activator.show(limit)
+		}
 		for hide in hiddensystem.components{
-			hide.hide()
+			hide.hide(limit)
 		}
 	}
 	
+	/// shows notes that overlap activator notes and shows activators
 	func hidesp () {
-		DispatchQueue.main.asyncAfter(deadline: .now() + 1 ){
-			self.activatorsOn(false)
-			
-			for hide in self.hiddensystem.components {
-				hide.show()
-			}
+		let limit = hwy.pista.position.z + pace.fps
+		for activator in activesystem.components {
+			activator.hide(limit)
+		}
+		for hide in self.hiddensystem.components {
+			hide.show(limit)
 		}
 	}	
 }
@@ -140,8 +149,9 @@ private extension DrumStage {
 						return
 					}
 				}
-				starmissed(note.entity!)
-				scorekeeper.scoreMiss()
+				starmissed(note)
+				scorekeeper.deadnote()
+				Jukebox.shared.muteinstrument(track: .drums)
 			}
 			// removing entity from one set will not remove the entity completely - DUH!
 			notes.remove(note.entity!)
@@ -153,9 +163,8 @@ private extension DrumStage {
 	///
 	/// This is different from Strings in that we have to check the first four NoteEntities not just the first
 	func notecheck(_ btn : Button) {
-//		checking = true
+
 		let max = hwy.pista.position.z + pace.hitwindow
-		
 		var checkcount = 0
 		
 		for note in notesystem.components {
@@ -163,30 +172,33 @@ private extension DrumStage {
 				checkcount += 1
 				if note.node.position.z < max {
 					if note.chord.contains(btn) {
-						
+//						[.green, .green_c] is the starpower trigger
 						if note.chord == [.green, .green_c] {
-							sp.activetime = note.node.position.z
-							sp.activateSP(2)
+							sp.activateSP(note.node.position.z)
 							hidesp()
 						}
 						
 						oneup(btn)
 						
-						if let ent = note.entity {
-							
-							if starhit(ent) {
+//						checks if a starrun has been completed
+						if checkpowerchain2(note) {
+							sp.starruncompleted()
+							if sp.state == .ready {
 								showsp()
 							}
 						}
-						
+
 						note.node.removeFromParentNode()
 						note.status = .remove
 						break
 					}
-					if checkcount > 6 { break }
+					if checkcount > 5 { break }
 					continue
 				} else {
-					starmissed(note.entity!)
+					if sp.segment {
+						sp.segment = false
+						starmissed(note)
+					}
 					miss(btn)
 					break
 				}
@@ -195,7 +207,9 @@ private extension DrumStage {
 	}
 	
 	func oneup(_ btn: Button) {
+		scorekeeper.comboup()
 		scorekeeper.scoreOneUp()
+		Jukebox.shared.unmuteinstrument(track: .drums)
 		switch btn {
 		case .blue_c:
 			triggers[.blue]?.hit()
@@ -210,6 +224,7 @@ private extension DrumStage {
 	
 	func miss(_ btn: Button) {
 		scorekeeper.scoreMiss()
+		Jukebox.shared.muteinstrument(track: .drums)
 		switch btn {
 		case .blue_c:
 			triggers[.blue]?.miss()
@@ -222,17 +237,10 @@ private extension DrumStage {
 		}
 	}
 	
-	func activatorsOn (_ on: Bool) {
-		for activator in activesystem.components {
-			activator.on = on
-		}
-	}
-	
 	func resumegame (_ input: Button){
 		switch input {
 		case .green:
-			OggNo.sharedInstance.resumePlay()
-			state = .playing
+			stagemc.machine.enter(RewindState.self)
 		default:
 			break;
 		}

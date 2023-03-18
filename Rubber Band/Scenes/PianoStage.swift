@@ -7,6 +7,8 @@
 //
 
 
+// this is not used yet?
+
 import Foundation
 import GameplayKit
 
@@ -31,20 +33,22 @@ final class PianoStage: Performing, Track, KeyUp {
 	var state:Songstate = .playing
 	
 	init() {
-		self.notesystem 	= GKComponentSystem(componentClass: NoteComp.self)
-		self.starsystem		= GKComponentSystem(componentClass: StarNoteComp.self)
+		print("piano and shit")
+		self.notesystem = GKComponentSystem(componentClass: NoteComp.self)
+		self.starsystem	= GKComponentSystem(componentClass: StarNoteComp.self)
 		self.scn = SCNScene(named: "art.scnassets/scns/strings.scn")!
 		self.hwy = HWY(self.scn)
 		self.triggers = [
 			Button.red: 	StringTrigger(note: .red, 	hwy: self.hwy)	,
 			Button.blue: 	StringTrigger(note: .blue, 	hwy: self.hwy)	,
 			Button.green: 	StringTrigger(note: .green,	hwy: self.hwy)	,
-			Button.orange: 	StringTrigger(note: .orange, hwy: self.hwy)	,
-			Button.yellow: 	StringTrigger(note: .yellow, hwy: self.hwy)	,
+			Button.orange: StringTrigger(note: .orange, hwy: self.hwy)	,
+			Button.yellow: StringTrigger(note: .yellow, hwy: self.hwy)	,
 		]
 		self.sp = StarPower(self.hwy)
 		startparticle()
 	}
+	
 	
 	func handleevent(_ event: Button) {
 		
@@ -119,13 +123,17 @@ private extension PianoStage {
 	}
 	
 	func oneup(chord: Chord) {
+		scorekeeper.comboup()
 		for c in chord {
 			triggers[c]?.hit()
 			scorekeeper.scoreOneUp()
 		}
+		Jukebox.shared.unmuteinstrument(track: .keys)
 	}
 	
 	func miss(_ set: Chord) {
+		Jukebox.shared.muteinstrument(track: .keys)
+		print("silencing keys")
 		print("nothing pressed", set)
 	}
 }

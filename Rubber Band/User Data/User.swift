@@ -8,20 +8,31 @@
 
 import Foundation
 import CoreData
+import SpriteKit
 
 protocol UserDelegate {
 	func changedinstrument(tier: Int16)
 }
 
 class User {
-	static let current 		= User()
+	static let current 	= User()
 	var delegate: UserDelegate?
 	let player:	Player
-	var diff: Difficulty 	= .expert
+	
+//	this labels are here because they relate to user options and not song details
+	let difficultylabel = menuOverlay?.childNode(withName: "details/difficulty") as! SKLabelNode
+	let instrumentlabel = menuOverlay?.childNode(withName: "details/instrument") as! SKLabelNode
+	
+	var diff: Difficulty = .expert {
+		didSet {
+			difficultylabel.text = diff.text()
+		}
+	}
+	
 	var instrument: Instrument  {
 		didSet {
 			updatekeycode(self.instrument)
-			lebelInst.text = instrument.name()
+			instrumentlabel.text = instrument.name()
 			delegate?.changedinstrument(tier: instrument.gettier())
 		}
 	}
@@ -30,8 +41,8 @@ class User {
 		self.player 	= Defaults.config().currentplayer!
 		self.diff 		= Difficulty(rawValue: self.player.difficulty)!
 		self.instrument = Instrument(rawValue: self.player.instrument)!
-		labelDiff.text 	= self.diff.text()
-		lebelInst.text 	= self.instrument.name()
+		difficultylabel.text 	= self.diff.text()
+		instrumentlabel.text 	= self.instrument.name()
 	}
 	
 	func updateUser() {

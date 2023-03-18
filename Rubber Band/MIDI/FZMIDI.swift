@@ -10,7 +10,6 @@ struct FZevents {
     var eventType:		MusicEventType
     var eventTimeStamp:	MusicTimeStamp
     var event:			Any
-    //    var line:String = "\n"
 }
 
 /**
@@ -293,7 +292,7 @@ class FZMIDI {
 				print("bad status \(status)")
 			}
 			var eventType:		MusicEventType 		= 0
-			var eventTimeStamp:	MusicTimeStamp 		= -1
+			var eventTimeStamp:	MusicTimeStamp 	= -1
 			var eventDataSize:	UInt32 				= 0
 			var eventData: 		UnsafeRawPointer?
 			

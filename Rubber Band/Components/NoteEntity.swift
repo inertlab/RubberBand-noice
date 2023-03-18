@@ -18,7 +18,8 @@ enum Status: Int {
 	case live, skip, remove
 }
 
-/// Note entity can contain a NoteComponent (drums) or a ChordComponent (Strings)
+/// Note entity can contain a NoteComp which contains a 'chord' used for both strings and drums
+/// drums uses just the first note of the chord
 class NoteEntity: GKEntity {
 //	var status = Status.live
 	override init() {

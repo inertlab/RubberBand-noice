@@ -25,26 +25,20 @@ struct Starvalues {
 	var goal		:Int32
 	var basescore	:Double
 	var goldcutoff	:Double
-	var pts			:Double = 100
 	
-	init (count: Int, sets: Int, beats: Int) {
-		var firstnotes 	= 14.25
-		var xr			= 8.0
-		
-		if User.current.instrument == .prodrums {
-			self.pts = 120
-		}
-		
-		if User.current.instrument == .bass {
-			firstnotes 	= 24.5
-			xr 			= 12.0
-		}
-		
-		self.basescore 	= (Double(count) - firstnotes) * pts
-		let bonus 		= Double(sets) * xr / Double(beats) * basescore * 0.32
+	init (sets: Int, beats: Int, basescore: Double) {
+
+		self.basescore = basescore
+
+//		base/beats = possible pts per beat
+		let ptsperbeat 	= basescore / Double(beats)
+		let bonus 		= Double(sets) * 4 * ptsperbeat
 		self.goldcutoff = bonus + basescore
 		self.goal 		= Int32(basescore * StarCut.s1)
 		self.label.text = "0*"
+		
+		
+		print("gold cutoff, ", goldcutoff)
 	}
 	
 	mutating func updatestars (score: Int32) {
@@ -101,11 +95,9 @@ class StarPower {
 		self.party 		= portal.particleSystems![0]
 		self.portal.removeAllParticleSystems()
 	}
-	
+	 
 	var state 		= State.low
-
 	var starnotes 	= MusicSheet.ChordList()
-
 	/// time frame for the segments of starpower notes
 	var timelist 	= [(CGFloat,CGFloat)]()
 	/// all the nodes with star power
@@ -120,7 +112,7 @@ class StarPower {
 	var power		= 1
 	/// start power acquired max value is 4. player needs at least 2 to activate sp
 	var meter:CGFloat 		= 0
-	var activetime:CGFloat 	= 0
+//	var activetime:CGFloat 	= 0
 	private var activated 	= false
 	
 	/// Keeps track of streak during SP segment used in timefunction
@@ -139,7 +131,6 @@ class StarPower {
 			
 			for beat in hwy.beatlines.childNodes {
 				if beat.position.z < time {
-					print(meter)
 					meter -= 1
 					portal.geometry?.firstMaterial?.diffuse.contentsTransform.m41 = meter * 0.025
 					beat.removeFromParentNode()
@@ -169,15 +160,18 @@ class StarPower {
 	
 	/// Activate Star Power - Begins countdown
 	/// - Parameter power: the power multiple. 3x for Bass, 2x for other instruments
-	func activateSP (_ power: Int) {
-		self.power = power
+	func activateSP (_ noteZPos: CGFloat) {
+		
+		if state != .ready { return }
+		power = 2
+		
 		state = .activated
 		portal.addParticleSystem(party)
 		hwy.starpower = true
 		
 		// clean out all the beats in front of activator to start count
 		for beat in hwy.beatlines.childNodes {
-			if beat.position.z < self.activetime {
+			if beat.position.z < noteZPos {
 				beat.removeFromParentNode()
 			}
 		}

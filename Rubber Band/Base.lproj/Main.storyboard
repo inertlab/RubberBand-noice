@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
-        <plugIn identifier="com.apple.SceneKitIBPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <plugIn identifier="com.apple.SceneKitIBPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -336,7 +336,7 @@
         <scene sceneID="hIz-AP-VOD">
             <objects>
                 <viewController title="noice" storyboardIdentifier="two" showSeguePresentationStyle="single" id="XfG-lQ-9wD" customClass="GameViewController" customModule="noice" customModuleProvider="target" sceneMemberID="viewController">
-                    <sceneView key="view" wantsLayer="YES" loops="NO" preferredRenderingAPI="1" id="RvT-eo-GD2" customClass="GameView" customModule="noice" customModuleProvider="target">
+                    <sceneView key="view" wantsLayer="YES" loops="NO" preferredRenderingAPI="1" translatesAutoresizingMaskIntoConstraints="NO" id="RvT-eo-GD2" customClass="GameView" customModule="noice" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="720" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     </sceneView>

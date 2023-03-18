@@ -17,7 +17,7 @@ import SceneKit
 class RowCall {
 	/// The state of CoverFlow - position
 	enum CFState {
-		case off, neutral, detail
+		case off, menu, detail
 		func z () -> CGFloat {
 			switch self {
 			case .off:
@@ -31,7 +31,12 @@ class RowCall {
 	}
 	
 	let node 	= menuScene.rootNode.childNode(withName: "coverflow", recursively: true)!
-	var state 	= CFState.off
+	var state:CFState = .off {
+		didSet {
+			updatezposition()
+		}
+	}
+	
 	var posx:CGFloat = 0 {
 		didSet {
 			let offset:CGFloat = posx - oldValue
@@ -49,6 +54,10 @@ class RowCall {
 		}
 	}
 	
+}
+
+private extension RowCall {
+	
 	/// only triggers if pos z is the only change
 	func updatezposition() {
 		if node.position.z != state.z() {
@@ -59,9 +68,7 @@ class RowCall {
 			}
 		}
 	}
-}
-
-private extension RowCall {
+	
 	func wraparoundleft() {
 		//needs to travel to the end (move left)
 		// first go off scren to the rigt
@@ -93,8 +100,8 @@ private extension RowCall {
 	
 	func movetox (_ speed: TimeInterval) {
 		node.runAction(
-			SCNAction.move(to: SCNVector3(x: posx , y: 0, z: state.z()), duration: speed)
-		)
+			SCNAction.move(to: SCNVector3(x: posx , y: 0, z: state.z()), duration: speed),
+		forKey: "movetox")
 	}
 }
 

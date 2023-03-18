@@ -11,24 +11,21 @@ import MIKMIDI
 import SpriteKit
 
 
+/// visual represenation of lyrics
+/// includes animations
 class Vocalcoach {
 	var lyrics 		= [(0.0, "")]
 	var abc  		= [0,1,2]
 	var count 		= 0
-	let lyricnode 	= scoreDisplay?.childNode(withName: "lyrics")!
 	var phrases 	= [SKLabelNode]()
-	let phrase_a	: SKLabelNode
-	let phrase_b	: SKLabelNode
-	let phrase_c	: SKLabelNode
+	let phrase_a	= scoreDisplay?.childNode(withName: "lyrics/phrase_a") as! SKLabelNode
+	let phrase_b	= scoreDisplay?.childNode(withName: "lyrics/phrase_b") as! SKLabelNode
+	let phrase_c	= scoreDisplay?.childNode(withName: "lyrics/phrase_c") as! SKLabelNode
 	let a_exit 		= SKAction(named: "exit")
 	let a_enter 	= SKAction(named: "enter")
 	let a_appear 	= SKAction(named: "appear")
-//	let slidetoview = SKAction(named: "slidetoview", from: "actions.sks")
 	
 	init() {
-		self.phrase_a 	= lyricnode!.childNode(withName: "phrase_a") as! SKLabelNode
-		self.phrase_b 	= lyricnode!.childNode(withName: "phrase_b") as! SKLabelNode
-		self.phrase_c 	= lyricnode!.childNode(withName: "phrase_c") as! SKLabelNode
 		phrases.append(self.phrase_a)
 		phrases.append(self.phrase_b)
 		phrases.append(self.phrase_c)
@@ -39,10 +36,8 @@ class Vocalcoach {
 	/// Keeps track of Song play position and updates lyrics accordingy
 	/// - Parameter songtime: The current time of the song playback in seconds - Unaltered
 	func tracklyrics(songtime: Double)  {
-	
+//		if lyrics.count < 3 {return}
 		if songtime > lyrics[count].0  {
-//			resetanim()
-//			resetloc()
 			switch count % 3 {
 			case 0:
 				abc = [0,1,2]
@@ -55,9 +50,9 @@ class Vocalcoach {
 			if count + 1 < lyrics.count {
 				phrases[abc[1]].text = lyrics[count + 1].1
 				
-				phrases[abc[0]].run(a_enter!)
-				phrases[abc[1]].run(a_appear!)
-				phrases[abc[2]].run(a_exit!)
+				phrases[abc[0]].run(a_enter!, withKey: "entering")
+				phrases[abc[1]].run(a_appear!, withKey: "appearing")
+				phrases[abc[2]].run(a_exit!, withKey: "exiting")
 				count += 1
 			}
 		}
@@ -78,7 +73,6 @@ private extension Vocalcoach {
 	}
 	
 	func emptylyrics() {
-		print("emptying lyrics")
 		for p in phrases {
 			p.removeAllActions()
 			p.text = ""

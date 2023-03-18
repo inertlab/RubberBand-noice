@@ -10,29 +10,6 @@ import Foundation
 import SceneKit
 import SpriteKit
 
-//let songfinder = SongFinder(path: home+"/rubberband/")
-//let songlist = songfinder.songList()
-
-let labeln 			= menuOverlay?.childNode(withName: "name") 		as! SKLabelNode
-let labela 			= menuOverlay?.childNode(withName: "artist") 	as! SKLabelNode
-let labelt 			= menuOverlay?.childNode(withName: "time") 		as! SKLabelNode
-let labeldetails 	= menuOverlay?.childNode(withName: "details")!
-let othersongsg 	= menuOverlay?.childNode(withName: "relatedsongs")!
-let othersongname 	= othersongsg?.childNode(withName: "othersong")	as! SKLabelNode
-let labelphrase 	= labeldetails?.childNode(withName: "phrase") 	as! SKLabelNode
-let labelcharter 	= labeldetails?.childNode(withName: "charter") 	as! SKLabelNode
-let labelalbum	 	= labeldetails?.childNode(withName: "album") 	as! SKLabelNode
-let labelyear	 	= labeldetails?.childNode(withName: "year") 	as! SKLabelNode
-let labelgenre	 	= labeldetails?.childNode(withName: "genre") 	as! SKLabelNode
-let labelDiff 		= labeldetails?.childNode(withName: "difficulty") as! SKLabelNode
-let lebelInst 		= labeldetails?.childNode(withName: "instrument") as! SKLabelNode
-let labelicon 		= menuOverlay?.childNode(withName: "icon") 		as! SKSpriteNode
-
-
-/// placeholder stat for songs without stats
-//var selectedStat = Stats(context: pc.viewContext)
-//let player1 = setplayer(name: "guest")
-
 
 /// Reads and parses ini files from song folders and adds them to coredata catalog
 /// - attention: does not manage songs once inside core data
@@ -51,7 +28,7 @@ class SongFinder {
 	init() {
 		self.library = self.homeDirectory.description + "/Music/noice/"
 		fileManager.changeCurrentDirectoryPath(self.library)
-		print(self.library)
+//		print(self.library)
 	}
 	
 	/// init with a specified path for music folder

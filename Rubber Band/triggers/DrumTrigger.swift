@@ -45,9 +45,7 @@ class DrumTrigger: Burstable {
 			self.kick 		= true
 			self.trigger 	= hwy.base.childNode(withName: "peg"		, recursively: false)!
 			self.burst 		= hwy.base.childNode(withName: "oburst"		, recursively: false)!
-//			self.burst.geometry?.firstMaterial?.shaderModifiers = [.geometry: wiggle]
 			self.reactor 	= hwy.base.childNode(withName: "reactor"	, recursively: false)!
-//			self.reactor 	=
 		default:
 			self.trigger 	= hwy.base.childNode(withName: "green"		, recursively: false)!
 			self.burst 		= hwy.base.childNode(withName: "gburst"		, recursively: false)!
@@ -69,7 +67,6 @@ class DrumTrigger: Burstable {
 		}
 	
 		self.trigger.addAnimation(thumpmiss, forKey: "selfllumination")
-//		scorekeeper.scoreMiss()
 	}
 }
 

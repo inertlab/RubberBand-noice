@@ -5,7 +5,10 @@
 //  Created by Fernando Zamora on 3/10/18.
 //  Copyright © 2018 Artecolote. All rights reserved.
 //
+
 import AVFoundation
+
+
 
 var playa = URL(string: "")
 

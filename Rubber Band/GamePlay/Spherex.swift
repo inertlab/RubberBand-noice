@@ -21,7 +21,7 @@ class Spherex {
 	var glow 	:SCNNode
 	let orb 	:SCNNode
 	
-	init(_ scn: SCNScene){
+	init (_ scn: SCNScene){
 		self.orbx 	= scn.rootNode.childNode(withName: "spherex", recursively: false)!
 		self.orb 	= orbx.childNode(withName: "sphere", recursively: false)!
 		self.glow 	= orbx.childNode(withName: "glow", recursively: true)!
@@ -39,6 +39,8 @@ class Spherex {
 		case 2, 3:
 			pulsenode(node: glow)
 		case 4:
+//			make sure the orb is in the right place
+			orb.geometry?.firstMaterial?.diffuse.contentsTransform.m41 = 0.75
 			spin()
 		default:
 			break
@@ -59,7 +61,7 @@ private extension Spherex {
 	}
 	
 	func spin()  {
-		glow.runAction(SCNAction.repeatForever(spinpulse))
+		glow.runAction(SCNAction.repeatForever(spinpulse), forKey: "spin")
 	}
 	
 	func pulsenode(node: SCNNode) {
@@ -98,10 +100,7 @@ private extension Spherex {
 			animation.fromValue 	= 0
 			animation.toValue 		= 0.2
 			animation.duration 		= 0.5
-//			animation.autoreverses 	= false
-//			animation.fillMode 		= CAMediaTimingFillMode.forwards
 			animation.repeatCount 	= 0
-//			animation.isRemovedOnCompletion = false
 		return animation
 	}
 }

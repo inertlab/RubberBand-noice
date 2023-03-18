@@ -15,14 +15,14 @@ var inPort		: MIDIPortRef	 	= 0
 var src			: MIDIEndpointRef 	= MIDIGetSource(0)
 
 let drumgothit	= NSNotification.Name("drumhit")
-let drumCenter 	= NotificationCenter()
+let drumCenter = NotificationCenter()
 let midiobject	= MIDIObjectRef()
 
 func getDisplayName(_ obj: MIDIObjectRef) -> String
 {
-	var param	: Unmanaged<CFString>?
+	var param: Unmanaged<CFString>?
 	var name	: String 	= "Error"
-	let err		: OSStatus 	= MIDIObjectGetStringProperty(obj, kMIDIPropertyDisplayName, &param)
+	let err	: OSStatus 	= MIDIObjectGetStringProperty(obj, kMIDIPropertyDisplayName, &param)
 	if err == OSStatus(noErr)
 	{
 		name =  param!.takeRetainedValue() as String
@@ -36,11 +36,11 @@ func MyMIDIReadProc(pktList: UnsafePointer<MIDIPacketList>,
 {
 	let packetList:MIDIPacketList = pktList.pointee
 
-		if packetList.packet.data.0 == 153 && packetList.packet.data.2 != 0 {
-			if let note = roland[packetList.packet.data.1] {
-				drumCenter.post(name: drumgothit, object: note, userInfo: nil)
-			}
+	if packetList.packet.data.0 == 153 && packetList.packet.data.2 != 0 {
+		if let note = roland[packetList.packet.data.1] {
+			drumCenter.post(name: drumgothit, object: note, userInfo: nil)
 		}
+	}
 }
 
 /// sets up a midi device listenter to register hits into the main thread. currently only works for game, needs to be setup for song selection

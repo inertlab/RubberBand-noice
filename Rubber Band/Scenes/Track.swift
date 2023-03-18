@@ -15,7 +15,7 @@ enum Songstate {
 }
 
 /// confroms to hwy track animation
-protocol Track: class {
+protocol Track: AnyObject {
 //	var particle: SCNNode {get}
 	var backdrop 	:Backdrop {get}
 	var scorekeeper :ScoreKeeper {get}
@@ -26,6 +26,7 @@ protocol Track: class {
 	var notesystem	:GKComponentSystem<NoteComp> {get}
 	var tailsystem	:GKComponentSystemCGF {get}
 	var notes 		:Set<GKEntity> {get set}
+
 	func tracker(_ cgsongtime: CGFloat, _ hwytime: CGFloat)
 	func showstats()
 	/// convenience method for laying track
@@ -34,9 +35,7 @@ protocol Track: class {
 
 extension Track {
 	
-	func handleBasicEvents(_ btn: Button) {
-		
-	}
+	func handleBasicEvents(_ btn: Button) { }
 
 	/// moves the hwy track animation
 	/// - Parameter cgsongtime: Song current play time cast as CGFloat
@@ -64,27 +63,25 @@ extension Track {
 		}
 	}
 	
-	func startparticle () {
+	func startparticle() {
 		let box 			= SCNNode()
 		box.name 			= "box"
 		box.position.z 		= -22
 		box.position.y 		= 2
 		box.renderingOrder 	= -2
 		box.addParticleSystem(spartiscle!)
-//		spartiscle?.blendMode = .alpha
 		self.hwy.base.parent?.addChildNode(box)
 	}
 	
-	func crankup () {
+	func crankup() {
 		self.hwy.base.position.y = -11
 		self.hwy.base.position.z = 1.5
 		self.hwy.base.runAction(SCNAction.move(to: SCNVector3(0, 0, 0), duration: 1))
 	}
 	
 	//MARK: - Star Hit Test
-	func starmissed (_ entity: GKEntity) {
-		if let star = entity.component(ofType: StarNoteComp.self) {
-			
+	func starmissed(_ note: NoteComp) {
+		if let star = note.entity?.component(ofType: StarNoteComp.self) {
 			for comp in starsystem.components {
 				if comp.set == star.set {
 					comp.starmissed()
@@ -95,26 +92,61 @@ extension Track {
 	}
 	
 	/// checks if note was a starnote
-	/// - Parameter entity: the entity of the current component
+	/// - Parameter star: starnotecomp
 	/// - Return: If starpower is ready to activate it returns true
 	///
 	/// The return is handled differently by each instrument
-	func starhit (_ entity: GKEntity) -> Bool {
+	func starhit(_ star: StarNoteComp) -> Bool {
 		var success = false
-		if let star = entity.component(ofType: StarNoteComp.self) {
+		sp.segment = true
+		print("checking star")
+		if star.meta {
+			sp.starruncompleted()
+			if sp.state == .ready {
+				success = true
+			}
+		}
+		star.node.opacity = 0
+		star.entity?.removeComponent(ofType: StarNoteComp.self)
+		return success
+	}
+	
+	func checkpowerchain(_ note: NoteComp) -> Bool {
+		var success = false
+		if let starcomp = note.entity?.component(ofType: StarNoteComp.self) {
+			sp.segment = true
 			print("checking star")
-			if star.meta {
+//			this checks if starcomp is the last in the batch but it doesnt always work
+			if starcomp.meta {
 				sp.starruncompleted()
 				if sp.state == .ready {
 					success = true
 				}
 			}
-			star.node.opacity = 0
-			entity.removeComponent(ofType: StarNoteComp.self)
+			starcomp.node.opacity = 0
+			starcomp.entity?.removeComponent(ofType: StarNoteComp.self)
 		}
 		return success
 	}
 	
+	func checkpowerchain2(_ note: NoteComp) -> Bool {
+		if let starcomp = note.entity?.component(ofType: StarNoteComp.self) {
+			sp.segment = true
+			print("checking star")
+			starcomp.node.opacity = 0
+			starcomp.entity?.removeComponent(ofType: StarNoteComp.self)
+//			check to see if this is the last starnote in the set, completes the chain
+			if let nextnote = starsystem.components.first {
+				if starcomp.set != nextnote.set {
+					return true
+				}
+			} else {
+				return true
+			}
+		}
+		return false
+	}
 }
+
 
 fileprivate let spartiscle = SCNParticleSystem(named: "sparticle.scnp", inDirectory: particleDir)

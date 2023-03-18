@@ -15,10 +15,13 @@ let stagemc = StageManager()
 
 final class StageManager:NSObject,  SCNSceneRendererDelegate {
 	
+	let machine		:GKStateMachine
+	
 	var bg 			= true
 	var sub 		: SCNView?
 	let songmenu 	= SongMenu()
 	var vocalcoach 	= Vocalcoach()
+	let tc 			= TitleCredit()
 	
 	enum Mode {
 		case choose, random
@@ -35,56 +38,60 @@ final class StageManager:NSObject,  SCNSceneRendererDelegate {
 	override init() {
 		self.currentact = songmenu
 		self.track 		= DrumStage()
+		machine		 	= GKStateMachine(states: [MenuState(),
+												  HistoryState(),
+												  RelatedState(),
+												  AddedState(),
+												  HelpState(),
+												  DetailState(octo: songmenu.octopus),
+												  PlayState(),
+												  RewindState(),
+												  ScoreState(),
+												  PausedState(),
+												 ])
 	}
 	
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	func loadstage()  {
-		if onstage == .preshow {
-			onstage = .songmenu
-			presentmenu()
-			(currentact as! SongMenu).state = .options
-			return
-		}
+	func loadmenu() {
+		currentact = songmenu
+		presentmenu()
+	}
+	func loadstage() {
 		
-		if onstage == .songmenu {
-			// always check user instrument before loading gameplay
-			switch User.current.instrument {
-			case .drums, .prodrums:
-				onstage 	= .drums
-				currentact 	= DrumStage()
-			case .keys:
-				onstage 	= .piano
-				currentact 	= GuitarStage()
-			default:
-				onstage 	= .guitar
-				currentact 	= GuitarStage()
-			}
-			track 				= currentact as! Track
-			mainView.delegate 	= self
-			loadGamePlay()
-		} else {
-			onstage 			= .songmenu
-			currentact 			= songmenu
-			mainView.delegate 	= nil
-//			(currentact as! SongMenu).state = .details
-			(currentact as! SongMenu).updatestate()
-			presentmenu()
+	}
+	
+	func loadsong()  {
+		switch User.current.instrument {
+		case .guitar, .bass:
+			onstage 	= .guitar
+			currentact 	= GuitarStage()
+		case .keys:
+			onstage 	= .piano
+			currentact 	= GuitarStage()
+		default:
+			onstage 	= .drums
+			currentact 	= DrumStage()
 		}
+		track = currentact as! Track
+		mainView.delegate = self
+		
+		loadGamePlay()
 	}
 
 	func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-		if track.state == .playing {
-			if let songtime = Jukebox.shared.players[.guitar]?.currentTime {
+		if machine.currentState is PlayState {
+//		if track.state == .playing {
+			if let songtime = Jukebox.shared.currenttime() {
 				/// songtime cast as CGFloat - not altered
-				let cgsongtime 	= CGFloat(songtime)
+				let cgsongtime = CGFloat(songtime)
 				/// CGFloat representing seconds as distance on HWY
-				let hwytime 	= cgsongtime * pace.fps
+				let hwytime = cgsongtime * pace.fps
 				
 				vocalcoach.tracklyrics(songtime: songtime)
-				
+
 				track.tracker(cgsongtime, hwytime)
 			} else {
 				print(Error.Type.self)
@@ -110,12 +117,19 @@ private extension StageManager {
 	func reset() {
 		self.track.hwy.reset()
 		// this stops the preview song from playing
+		// when playing oggs, stop removes the file from the player. do not use after getting song files
 		Jukebox.shared.stop()
 		Jukebox.shared.getsongfiles(folder: smanager.selected.song.folder!)
 	}
 	
 	func loadGamePlay(){
 		reset()
+		
+//		remove songs from shuffled
+		smanager.removefromshuffle()
+		
+		track.scorekeeper.loadoldscore(smanager.selected.song)
+		
 		mainView.prepare(currentact.scn, shouldAbortBlock: {return true})
 	
 		let midiUrl = smanager.selected.song.folder!.appendingPathComponent("notes.mid")
@@ -124,7 +138,7 @@ private extension StageManager {
 		let _ = MusicSheet.shared.averagetempo()
 		
 		self.track.laytrack()
-	
+		
 		// initiate new vocal coach
 		vocalcoach 		= Vocalcoach()
 		let vocalist 	= Vocalist()
@@ -133,14 +147,14 @@ private extension StageManager {
 		Anal.shared.event()
 
 		if bg {
-			if let octo =  currentact.scn.rootNode.childNode(withName: "octo", recursively: false) {
+			if let octo = currentact.scn.rootNode.childNode(withName: "octo", recursively: false) {
 				(octo as! SCNReferenceNode).load()
 				mainView.autoenablesDefaultLighting = true
 				track.backdrop.setnode(node: octo)
 			}
 		}
 
-		Jukebox.shared.stop()
+//		Jukebox.shared.stop()
 		mainView.present(currentact.scn, with: .crossFade(withDuration: 1), incomingPointOfView: nil) {
 			mainView.overlaySKScene?.removeAllActions()
 			mainView.overlaySKScene = scoreDisplay
@@ -151,16 +165,27 @@ private extension StageManager {
 				self.track.backdrop.state(.start)
 				
 				Jukebox.shared.play()
+				
+				if self.tc.show {
+					self.tc.display(smanager.selected.song)
+				}
+				
+				NotificationCenter.default.addObserver(forName: .player_playbackCompleted, object: nil, queue: OperationQueue.main) {
+					(player) in
+					print(player)
 
+					NotificationCenter.default.removeObserver(self)
+					return
+				}
 				Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
-					let timeup = Jukebox.shared.players[.guitar]!.duration - Jukebox.shared.players[.guitar]!.currentTime
+					if self.track.state != .playing {timer.invalidate()}
+					let timeup = Jukebox.shared.timeremaining()
 					
 					self.track.scorekeeper.time.text = format.string(from: timeup)
 					if timeup < 1 {
-//						DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-							timer.invalidate()
-							self.track.showstats()
-//						}
+						timer.invalidate()
+						print("song ended presenting stuff")
+						self.machine.enter(ScoreState.self)
 					}
 				}
 			}

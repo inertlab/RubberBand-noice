@@ -1,26 +1,25 @@
-//
-//  AppDelegate.swift
-//  Rubber Band
-//
-//  Created by Fernando on 2/8/18.
-//  Copyright © 2018 Artecolote. All rights reserved.
-//
+	//
+	//  AppDelegate.swift
+	//  Rubber Band
+	//
+	//  Created by Fernando on 2/8/18.
+	//  Copyright © 2018 Artecolote. All rights reserved.
+	//
 
 import Cocoa
 
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
-
 	
-	@IBOutlet weak var mastervolume: NSSlider!
+	@IBOutlet weak var mastervolume	: NSSlider!
 	@IBOutlet weak var previewvolume: NSSlider!
-	@IBOutlet weak var crowdslider: NSSlider!
-	@IBOutlet weak var kraken: NSMenuItem!
+	@IBOutlet weak var crowdslider	: NSSlider!
+	@IBOutlet weak var kraken		: NSMenuItem!
 	
-    func applicationDidFinishLaunching(_ aNotification: Notification) {
-        // Insert code here to initialize your application
-		// set the slider
+	func applicationDidFinishLaunching(_ aNotification: Notification) {
+			// Insert code here to initialize your application
+			// set the slider
 		mastervolume.floatValue 	= User.current.player.config?.vol_master ?? 0
 		previewvolume.floatValue 	= User.current.player.config?.vol_preview ?? 0
 		crowdslider.floatValue 		= User.current.player.config?.vol_crowd ?? 0
@@ -28,17 +27,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		Jukebox.shared.vol_prev 	= previewvolume.floatValue
 		Jukebox.shared.vol_crowd 	= crowdslider.floatValue
 		if User.current.player.config!.kraken {
-			stagemc.bg = true
-			kraken.state = .on
+			stagemc.bg 		= true
+			kraken.state 	= .on
 		}
-    }
+	}
+	
+	
 	
 	func applicationWillTerminate(_ notification: Notification) {
 		Jukebox.shared.stop()
 		User.current.updateUser()
 	}
 	
-	//MARK: - Stats
+		//MARK: - Stats
 	@IBAction func deletestats(_ sender: NSMenuItem) {
 		ScoreManager.deleteallstats()
 	}
@@ -48,10 +49,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func deleteStat (_ sender: NSMenuItem) {
+
 	}
 	
-	/// writes a list of songs to json file
-	/// - Parameter sender: i have no idea
+		/// writes a list of songs to json file
+		/// - Parameter sender: i have no idea
 	@IBAction func printStat (_ sender: NSMenuItem) {
 		var songs = [StatPrintable]()
 		for s in User.current.player.stats! {
@@ -61,14 +63,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		}
 		
 		if !songs.isEmpty {
-			let json = JSONEncoder()
-			json.outputFormatting = .prettyPrinted
+			let json 				= JSONEncoder()
+			json.outputFormatting 	= .prettyPrinted
 			if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-				let data = try! json.encode(SongList(songs: songs))
-				
+				let data 	= try! json.encode(SongList(songs: songs))
 				let fileURL = dir.appendingPathComponent("songs.json")
-				
-				//writing
+					//writing
 				do {
 					try data.write(to: fileURL)
 				}
@@ -76,8 +76,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			}
 		}
 	}
-
-	//MARK: - Sorting
+	
+		//MARK: - Sorting
 	@IBAction func sortbyartist(_ sender: NSMenuItem) {
 		smanager.reflow(sortedBy: .artist)
 	}
@@ -91,11 +91,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		smanager.reflow(sortedBy: .song)
 	}
 	
-	// MARK: - catalog
-	//	catalog
+		// MARK: - catalog
+		//	catalog
 	@IBAction func recatalog(_ sender: NSMenuItem) {
-		// this crashes because the column letter no longer exists after running this
-		// make a new one that only scans for new songs
+			// this crashes because the column letter no longer exists after running this
+			// make a new one that only scans for new songs
 		smanager.recatalog()
 	}
 	
@@ -105,10 +105,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func printhistory(_ sender: NSMenuItem) {
-//		for h in User.current.player.history! {
-//			let his = h as! History
-//			print(his.song!.title!, his.date!)
-//		}
+			//		for h in User.current.player.history! {
+			//			let his = h as! History
+			//			print(his.song!.title!, his.date!)
+			//		}
 	}
 	
 	@IBAction func mastervolume(_ sender: NSSlider) {
@@ -122,7 +122,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBAction func crowdnoise(_ sender: NSSlider) {
 		Jukebox.shared.setcrowdnoise(vol: sender.floatValue)
 	}
-
+	
 	
 	@IBAction func releasekraken(_ sender: NSMenuItem) {
 		if sender.state == .off {

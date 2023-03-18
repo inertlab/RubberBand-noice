@@ -1,0 +1,43 @@
+
+
+// transformation notes.
+offset x and y
+x contentsTransform.m41 = ms.m41
+y contentsTransform.m42 = ms.m42
+
+// symbols
+SF ▶⃝●▲⃝●▼⃝●◀⃝●
+SF 􀂏
+
+// model formats
+
+// multi
+
+dae/collada - best format so far
+// pros
+	can be edited in xcode without changing format
+	can be used as is in runtime - good for theme format
+// issues
+// instructions for extra UVS
+	// pay attention to the id tag
+	requires pairs of these
+	<source id="ID12"> to closing tag
+		 <float_array id="ID4-array" count="244">
+		 
+	<input semantic="TEXCOORD" offset="0" source="#ID12" set="1"/>
+	<p> numbers here </p>
+
+OBJ
+// issues
+ same issues as USD
+ objects get merged unless given different materials
+ 
+USD
+// issues
+ tesselation is on which sucks.
+ can't edit in original format, must convert to scn file
+// pros
+ easy to add texcoord
+ 
+DXF
+// supports multi uv channels but no native support in xcode

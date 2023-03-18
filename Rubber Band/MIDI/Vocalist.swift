@@ -11,14 +11,20 @@ import MIKMIDI
 import SpriteKit
 
 class Vocalist {
-	private let track	: MIKMIDITrack
+	private let track	: MIKMIDITrack?
 	private var lyrics 	= [(Double, String)]()
 	
 	var count 	= 0
 	
 	init() {
-		self.track 	= MusicSheet.shared.getvocals()
-		lyricist()
+		if let trak = MusicSheet.shared.getTrackByName(partname: .vocals) {
+			self.track = trak
+			lyricist()
+		} else {
+//			lyrics is guaranteed to have 3 phrases
+			lyrics = [(0, ""), (0, ""), (0, "")]
+			track = nil
+		}
 	}
 	
 	func updatecoach(coach: Vocalcoach)  {
@@ -32,49 +38,49 @@ private extension Vocalist {
 	///
 	/// - Parameter tc: timecode instance
 	func lyricist(){
-		let tc = TimeCode.tc
-		var phrase 		= (0.0, "")
-		var text 	 	= ""
-		var time 		= 0.0
-		_ = track.events(of: MIKMIDIMetaLyricEvent.self, fromTimeStamp: 0, toTimeStamp: (track.events.last?.timeStamp)!)
-	
+		let tc 		= TimeCode.tc
+		var phrase 	= (0.0, "")
+		var text 	= ""
+		var time 	= 0.0
+		_ = track!.events(of: MIKMIDIMetaLyricEvent.self, fromTimeStamp: 0, toTimeStamp: (track!.events.last?.timeStamp)!)
 		
-		for e in track.events{
-			if e.eventType == .metaLyricText {
-				let t = e as! MIKMIDIMetaLyricEvent
-				if let str = t.string {
-					if	str.last == "+" { continue }
-					text +=  (str + " ")
-				}
-				continue
-			}
-			if e.eventType == .metaText {
-				let event = e as! MIKMIDIMetaTextEvent
-				
-				if event.string == "[idle]" {
-					phrase = (time, rephrase(text: text))
-					lyrics.append(phrase)
-					time = tc.beattosec(beat: event.timeStamp)
-					text = "***"
-				}
-				continue
-			}
-			
-			if e.eventType ==  .midiNoteMessage {
-				let note = e as! MIKMIDINoteEvent
+		for event in track!.events {
+			if event.eventType == .midiNoteMessage {
+				let note = event as! MIKMIDINoteEvent
 				if note.note == 105 || note.note == 106 {
 					if text == "" {
 						time = tc.beattosec(beat: note.timeStamp)
 						continue
 					}
-					
-					phrase = (time, rephrase(text: text))
+					// minus .5 seconds too have phrase appear ahead of time
+					phrase = (time - 0.5, rephrase(text: text))
 					lyrics.append(phrase)
 					time = tc.beattosec(beat: note.timeStamp)
 					text = ""
 				}
+				continue
 			}
-		} // end for loop
+			
+			var eventstring : String?
+			if event.eventType == .metaLyricText {
+				if let e = event as? MIKMIDIMetaLyricEvent {
+					eventstring = e.string
+				}
+			}
+			
+			if event.eventType == .metaText {
+				if let e = event as? MIKMIDIMetaTextEvent {
+					eventstring = e.string
+				}
+			}
+			
+			if let str = eventstring {
+				if str.first == "[" {continue}
+				if	str.last == "+" {continue}
+				text +=  (str + " ")
+				continue
+			}
+		}
 		
 		lyrics.append((time, text))
 		lyrics.append((time + 2, ""))
@@ -83,9 +89,9 @@ private extension Vocalist {
 	
 	
 	func rephrase(text: String) -> String {
-		var newtext = text.replacingOccurrences(of: "= ", with: "-")
-		newtext = text.replacingOccurrences(of: "#|(ß)|(§)|(_)", with: " ", options: .regularExpression, range: nil)
-		
-		return newtext.replacingOccurrences(of: "#|(- )|(-# )|(-\\^ )|(\\^)", with: "", options: .regularExpression, range: nil)
+		var newtext = text.replacingOccurrences(of: "= ", with: "")
+		newtext = newtext.replacingOccurrences(of: "# |ß|§|_", with: " ", options: .regularExpression, range: nil)
+		newtext = newtext.replacingOccurrences(of: "#|-# |-\\^ |%|\\^|=|\\|-", with: "", options: .regularExpression, range: nil)
+		return newtext.replacingOccurrences(of: "- ", with: "")
 	}
 }

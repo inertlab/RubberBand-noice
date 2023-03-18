@@ -11,29 +11,20 @@ import SpriteKit
 
 
 class Help {
-	var state:SongMenu.State = .help
+	var state	:SongMenu.State = .help
 	let helpm 	= menuOverlay!.childNode(withName: "help")!
 	let detail	:SKNode
 	let select	:SKNode
 	let list	:SKNode
-//	var helpline = [StageManager.Act:[SongMenu.State: SKNode]]()
-//	let allthenodes = [SKNode]()
 	
 	init() {
 		self.detail = helpm.childNode(withName: "detail")!
 		self.select = helpm.childNode(withName: "select")!
 		self.list 	= helpm.childNode(withName: "list")!
-//		var dic 	= [SongMenu.State: SKNode]()
-//		dic[.details] 	= self.detail
-//		dic[.select] 	= self.select
-//		dic[.history] 	= self.list
-//		helpline[.songmenu] = dic
 	}
 	
 	func showhelp(state: SongMenu.State) {
 		showhelp(state: state, act: .songmenu)
-//		hideall()
-//		helpline[.songmenu]![state]!.alpha = 0
 	}
 	
 	func showhelp(state: SongMenu.State, act: StageManager.Act) {
@@ -57,10 +48,9 @@ class Help {
 		}
 	}
 	
-	func hidehelp() -> SongMenu.State{
+	func hidehelp() {
 		helpm.removeAllActions()
 		helpm.run(SKAction.fadeOut(withDuration: 0.2))
-		return self.state
 	}
 }
 

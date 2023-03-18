@@ -30,5 +30,5 @@ class CoverArt: SCNNode, IDable  {
 	}
 }
 
-fileprivate let albumscn = SCNScene(named: "art.scnassets/scns/album.scn")!
+//fileprivate let albumscn = SCNScene(named: "art.scnassets/scns/album.scn")!
 fileprivate let cover 	= albumscn.rootNode.childNode(withName: "cover", recursively: false)!
