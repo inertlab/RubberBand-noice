@@ -138,6 +138,7 @@ fileprivate func makecoverart() -> SCNNode {
 }
 
 fileprivate func previewsong(song: SongComp) {
+
 	Jukebox.shared.timeit()
 	song.cover.runAction(wad, forKey: "looper") {
 		song.cover.runAction(wadtwice, forKey: "looper")
@@ -145,14 +146,14 @@ fileprivate func previewsong(song: SongComp) {
 		if Jukebox.shared.players.isEmpty && Jukebox.shared.fplayers.isEmpty {
 			print("no players found, you should exit here")
 		} else {
-			// if song duration is not marked gethe the song duration
+			// if song duration is not marked get the song duration
 			if song.song.length < 1 {
 				song.song.length = Jukebox.shared.duration()!
 				labelt.text = format.string(from: song.song.length)
 				try? pc.viewContext.save()
 			}
+			
 			if Jukebox.shared.timer.isValid {
-				
 				if song.song.preview == 0 {
 					Jukebox.shared.preview(from: 30)
 				}else {

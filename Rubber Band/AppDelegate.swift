@@ -113,14 +113,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	@IBAction func mastervolume(_ sender: NSSlider) {
 		Jukebox.shared.setvolume(vol: sender.floatValue)
+		User.current.updateUser()
 	}
 	
 	@IBAction func previewvolume(_ sender: NSSlider) {
 		Jukebox.shared.setpreviewvol(vol: sender.floatValue)
+		User.current.updateUser()
 	}
 	
 	@IBAction func crowdnoise(_ sender: NSSlider) {
 		Jukebox.shared.setcrowdnoise(vol: sender.floatValue)
+		User.current.updateUser()
 	}
 	
 	
@@ -132,6 +135,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			sender.state 	= .off
 			stagemc.bg 		= false
 		}
+		User.current.updateUser()
 	}
 }
 

@@ -27,7 +27,7 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 	let rewindplayer = try! AVAudioPlayer(
 		contentsOf: URL(
 			string: Bundle.main.path(forResource: "sounds/rewind_01", ofType: "m4a")!)!)
-	let pla = AVAudioPlayer()
+//	let pla = AVAudioPlayer()
 	
 	func prevol() -> Float {
 		return vol_prev * volume
@@ -67,6 +67,7 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 	func play() {
 		timer.invalidate()
 		
+		
 //		MARK: Oggs, working
 		if ogg {
 			fplayers.removeValue(forKey: .preview)
@@ -80,7 +81,6 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 		}
 		
 //		MARK: native files
-		
 		players.removeValue(forKey: .preview)
 		let devicetime = players[.guitar]?.deviceCurrentTime
 		for p in players {
@@ -94,6 +94,9 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 
 	
 	func preview(from: Double) {
+
+		
+		timer.invalidate()
 		
 		if vol_prev == 0 {return}
 		
@@ -128,7 +131,7 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 			
 			return
 		}
-		
+	
 //		MARK: Native files
 		if let player = players[.preview] {
 			player.volume = 0
@@ -185,6 +188,7 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 		// when timer is invalid, previews won't start to avoid a race condition
 		timer.invalidate()
 		for fp in fplayers {
+			
 			fp.value.stop()
 		}
 		
@@ -192,6 +196,12 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 			p.value.stop()
 		}
 		NotificationCenter.default.post(name: .player_playbackCompleted, object: nil)
+	}
+	
+	func stoptheoggs() {
+		for fp in fplayers {
+			fp.value.stop()
+		}
 	}
 	
 	func fadeout() {
@@ -203,40 +213,52 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 		}
 	}
 	
+	
+	
+//	only used with slider
 	func setvolume(vol: Float) {
 		volume = vol
 		// the oggs
+		var times:Float = 1.0
+		
+		if stagemc.machine.currentState is MenuState {
+			times = vol_prev
+		}
+		
 		for fp in fplayers {
 			if fp.key == .crowd {
 				continue
 			}
-			fp.value.volume = volume
+			fp.value.volume = volume * times
 		}
 		
 		for p in players {
 			if p.key == .crowd {
 				continue
 			}
-			p.value.volume = volume
+			p.value.volume = volume * times
 		}
 	}
 	
-	/// used only while setting volume with sliders
+	/// used only while setting volume with menu sliders
 	/// - Parameter vol: volume number from menu slider
 	func setpreviewvol(vol: Float) {
 		vol_prev = vol
-		for p in players {
-			if p.key == .crowd {
-				continue
+//		only change the player volume if in preview mode
+		if stagemc.machine.currentState is MenuState {
+			for p in players {
+				if p.key == .crowd {
+					continue
+				}
+				p.value.volume = vol_prev * volume
 			}
-			p.value.volume = vol_prev * volume
-		}
-		
-		for fp in fplayers {
-			if fp.key == .crowd {
-				continue
+			
+			for fp in fplayers {
+				if fp.key == .crowd {
+					continue
+				}
+				fp.value.volume = vol_prev * volume
 			}
-			fp.value.volume = vol_prev * volume
 		}
 	}
 	
@@ -263,7 +285,6 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 	}
 
 	func resumePlay() {
-		
 		var time = currenttime()!
 		
 		if time > 2 {
@@ -303,9 +324,11 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 		rewindplayer.play()
 	}
 	
+	/// times the preview for 25 seconds and then stops it.
 	func timeit() {
-		time = 0
 		timer.invalidate()
+		time = 0
+//		stop()
 		timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true){
 			tim in
 			self.time += tim.timeInterval
@@ -325,12 +348,16 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 	/// - Parameter folder: URL to song folder
 	/// - Returns: array of song file paths
 	func getsongfiles (folder: URL) {
+		
+		stoptheoggs()
+		
 		ogg 		= false
 		self.folder = folder
+
 		players 	= [Track:AVAudioPlayer]()
 		fplayers 	= [Track: FPlayer]()
 		var allfiles 	= [String]()
-		//		var dic 	= [Track:URL]()
+
 		do {
 			allfiles =  try FileManager.default.contentsOfDirectory(atPath: folder.path)
 		}catch {
@@ -382,12 +409,14 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 
 
 private extension Jukebox {
+	
 	/// finds the urls to all sound files in a folder
 	///
 	/// - Parameter folder: URL path to the song folder
 	/// - format: The extension of the sound file to retreat
 	/// - Returns: Array of URLs for every sound file
 	func urls (format: String, files: [String]) -> [Track:AVAudioPlayer] {
+		
 		var dic 		= [Track:AVAudioPlayer]()
 		let musicfiles 	= files.filter{$0.contains(format)}
 		for a in musicfiles {
@@ -408,7 +437,7 @@ private extension Jukebox {
 	}
 	
 	func urloggs (files: [String]) -> [Track:FPlayer] {
-		print("looking for the logs")
+//		print("looking for the logs")
 		var dic 		= [Track:FPlayer]()
 		let musicfiles 	= files.filter{$0.contains("ogg")}
 		for a in musicfiles {

@@ -413,6 +413,7 @@ class SongManager {
 	func moveselector(direction: Direction)  {
 		var i = selected.index
 		Jukebox.shared.stop()
+
 		switch direction {
 		case .left:
 			if loc.col == 0 {
