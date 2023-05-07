@@ -1,0 +1,172 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Congratz!" : {
+      "comment" : "high score achieved",
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Felicidades"
+          }
+        }
+      }
+    },
+    "Just Okay" : {
+      "comment" : "score tied",
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"No Tan Mal\""
+          }
+        }
+      }
+    },
+    "Loaded Songs…" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Canciones Cargadas…"
+          }
+        }
+      }
+    },
+    "New Score!" : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Nueva Puntuación!"
+          }
+        }
+      }
+    },
+    "No Score" : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Hay Puntos"
+          }
+        }
+      }
+    },
+    "Rock On!" : {
+      "comment" : "encouragment",
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "!A Rockear!"
+          }
+        }
+      }
+    },
+    "SAD!!! :(" : {
+      "comment" : "when the score is too low",
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QUE TRISTE :("
+          }
+        }
+      }
+    },
+    "There is no score set for this song" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "There is no score set for this song"
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay puntaje para esta canción"
+          }
+        }
+      }
+    },
+    "This is the first High Score" : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta es la primera puntuación"
+          }
+        }
+      }
+    },
+    "This is your first streak" : {
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta es tu primera racha"
+          }
+        }
+      }
+    },
+    "version " : {
+      "comment" : "app version",
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "versión "
+          }
+        }
+      }
+    },
+    "You beat your old Score" : {
+      "comment" : "beat score message",
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Has superado tu antigua puntuación"
+          }
+        }
+      }
+    },
+    "you tied the High Score" : {
+      "comment" : "score tied message",
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empataste la puntuación más alta"
+          }
+        }
+      }
+    },
+    "Your current High Score" : {
+      "comment" : "current score message",
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu puntuación más alta actual"
+          }
+        }
+      }
+    },
+    "Your old streak" : {
+      "comment" : "old streeak message",
+      "localizations" : {
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu racha anterior"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

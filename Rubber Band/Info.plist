@@ -39,5 +39,7 @@
 	<false/>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>UILaunchStoryboardName</key>
+	<string>Main.storyboard</string>
 </dict>
 </plist>

@@ -35,25 +35,29 @@ class GameView: SCNView {
 	}
 	
 	var mouseTimer = Timer()
+	
 	override func mouseMoved(with event: NSEvent) {
+		mainView.window?.titleVisibility = .visible
 		mainView.window?.titlebarAppearsTransparent =  false
 		mouseTimer.invalidate()
 		mouseTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { _ in
 		   NSCursor.setHiddenUntilMouseMoves(true)
+			mainView.window?.titleVisibility = .hidden
 		   mainView.window?.titlebarAppearsTransparent =  true
 	   }
 	}
 	
 	override func mouseEntered(with event: NSEvent) {
+		mainView.window?.titleVisibility = .visible
 		mainView.window?.titlebarAppearsTransparent =  false
 	}
 	
 	override func mouseExited(with event: NSEvent) {
+		mainView.window?.titleVisibility = .hidden
 		mainView.window?.titlebarAppearsTransparent =  true
 	}
 	
 	// MARK: - Key Handles
-	
 	
 	override func keyDown (with event: NSEvent) {
 
@@ -83,8 +87,3 @@ class GameView: SCNView {
 	
 }
 
-var format:DateComponentsFormatter{
-	let form = DateComponentsFormatter()
-	form.allowedUnits = [.minute, .second]
-	return form
-}
