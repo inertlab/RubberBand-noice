@@ -7,7 +7,7 @@
 //
 
 import GameplayKit
-import SwordRPC
+import SwiftRPC
 
 
 class DetailState: GKState {
@@ -30,6 +30,7 @@ class DetailState: GKState {
 //			if this stays in string menu, it gets forced cast to keyup and crashes
 			stagemc.onstage = .songmenu
 			details.update(smanager.selected)
+			stagemc.loadmenu()
 		case is ListState:
 				TextureMover.shared.updatechartericon(icon: smanager.selected.song.icon ?? "")
 			fallthrough

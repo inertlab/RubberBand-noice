@@ -28,13 +28,13 @@ class ColumnComp: GKComponent {
 	
 	func highlight() {
 		letter.runAction(SCNAction.fadeIn(duration: 0.5), forKey: "letterfade")
-		letter.position.z = 0.5
+		letter.position.z = 0.25
 	}
 	
 	func unhilight() {
 		node.position.z = 0
 		letter.runAction(SCNAction.fadeOpacity(to: 0.15, duration: 0.35), forKey: "letterfade")
-		letter.position.z = 0.25
+		letter.position.z = 0.01
 	}
 	
 	func addletter(char: String) {
@@ -42,7 +42,11 @@ class ColumnComp: GKComponent {
 			letter = textnode.clone()
 			letter.geometry = textnode.geometry?.copy() as! SCNText
 			(letter.geometry as! SCNText).string = char
-			letter.position.x = posx
+//			scenekit text has no justification. use this to center align text
+			let center = (letter.geometry!.boundingBox.max.x - letter.geometry!.boundingBox.min.x) * 0.007
+			letter.position.x = posx - center
+			letter.position.y = -1.58
+			letter.position.z = 0.01
 			covernode.addChildNode(self.letter)
 			unhilight()
 		}

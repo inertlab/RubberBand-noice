@@ -8,7 +8,7 @@
 
 import Foundation
 import GameplayKit
-import SwordRPC
+import SwiftRPC
 
 
 class PausedState: GKState {

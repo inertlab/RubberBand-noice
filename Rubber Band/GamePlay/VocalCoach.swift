@@ -7,23 +7,25 @@
 //
 
 import Foundation
-import MIKMIDI
+//import MIKMIDI
 import SpriteKit
 
 
 /// visual represenation of lyrics
+///
 /// includes animations
 class Vocalcoach {
-	var lyrics 		= [(0.0, "")]
-	var abc  		= [0,1,2]
-	var count 		= 0
-	var phrases 	= [SKLabelNode]()
-	let phrase_a	= scoreDisplay?.childNode(withName: "lyrics/phrase_a") as! SKLabelNode
-	let phrase_b	= scoreDisplay?.childNode(withName: "lyrics/phrase_b") as! SKLabelNode
-	let phrase_c	= scoreDisplay?.childNode(withName: "lyrics/phrase_c") as! SKLabelNode
-	let a_exit 		= SKAction(named: "exit")
-	let a_enter 	= SKAction(named: "enter")
-	let a_appear 	= SKAction(named: "appear")
+	var lyrics = [(0.0, "")]
+	var abc = [0,1,2]
+	var count = 0
+	var phrases = [SKLabelNode]()
+	let phrase_a = scoreDisplay?.childNode(withName: "lyrics/phrase_a") as! SKLabelNode
+	let phrase_b = scoreDisplay?.childNode(withName: "lyrics/phrase_b") as! SKLabelNode
+	let phrase_c = scoreDisplay?.childNode(withName: "lyrics/phrase_c") as! SKLabelNode
+	let a_exit = SKAction(named: "exit")
+	let a_enter = SKAction(named: "enter")
+	let a_appear = SKAction(named: "appear")
+	let posy:CGFloat = -50
 	
 	init() {
 		phrases.append(self.phrase_a)
@@ -36,7 +38,6 @@ class Vocalcoach {
 	/// Keeps track of Song play position and updates lyrics accordingy
 	/// - Parameter songtime: The current time of the song playback in seconds - Unaltered
 	func tracklyrics(songtime: Double)  {
-//		if lyrics.count < 3 {return}
 		if songtime > lyrics[count].0  {
 			switch count % 3 {
 			case 0:
@@ -79,13 +80,14 @@ private extension Vocalcoach {
 		}
 	}
 	
+//TODO: Lyric positioning
 	func startposition() {
 		abc = [0,1,2]
-		phrases[abc[0]].position.y 	= -25
-		phrases[abc[0]].alpha 		= 0.25
-		phrases[abc[1]].position.y 	= -25
+		phrases[abc[0]].position.y 	= posy
+		phrases[abc[0]].alpha = 0.25
+		phrases[abc[1]].position.y 	= posy
 		phrases[abc[1]].alpha 		= 0
-		phrases[abc[2]].position.y 	= -25
+		phrases[abc[2]].position.y 	= posy
 		phrases[abc[2]].alpha 		= 0
 		resetyrlics()
 	}
@@ -97,11 +99,11 @@ private extension Vocalcoach {
 	}
 	
 	func resetloc(){
-		phrases[abc[0]].position.y 	= -20
+		phrases[abc[0]].position.y 	= posy
 		phrases[abc[0]].alpha 		= 0
 		phrases[abc[1]].position.y 	= 0
 		phrases[abc[1]].alpha 		= 1
-		phrases[abc[2]].position.y 	= -20
+		phrases[abc[2]].position.y 	= posy
 		phrases[abc[2]].alpha 		= 0.25
 	}
 	
@@ -112,13 +114,3 @@ private extension Vocalcoach {
 		resetloc()
 	}
 }
-
-
-let skfadin25 	= SKAction.fadeAlpha(to: 0.25, duration: 1)
-let skfadein1 	= SKAction.fadeAlpha(to: 1, duration: 0.25)
-let skfadeout 	= SKAction.fadeOut(withDuration: 0.1)
-let skmoveup 	= SKAction.moveTo(y: CGFloat(0), duration: 1)
-
-let skslideup 	= SKAction.group([skmoveup, skfadein1])
-
-//let vocalcoach  	= Vocalcoach()

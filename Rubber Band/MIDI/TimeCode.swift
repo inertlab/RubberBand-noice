@@ -7,9 +7,9 @@
 //
 
 import Foundation
-import MIKMIDI
+//import MIKMIDI
 
-
+/// - Deprecated -
 /// Timecode changes MidiTimeStamps into Seconds
 ///
 /// There is no need to do anything with this class directly. When a new MusicSequence gets added to MusicSheet. TimeCode gets updated
@@ -84,36 +84,36 @@ class TimeCode {
 	/// converts tempo events into fzTempoEvents and stores them in self.events
 	///
 	/// - Parameter seq: musicSequence - aka midi file track
-	func initTimeCode(seq: MIKMIDISequence) {
-		self.events 	= []
-		let totalbeats	= seq.length
-		let tempos 		= seq.tempoEvents()
-		var bpm 		= 100.0
+	func initTimeCode() {
+		self.events = []
+//		let totalbeats = seq.length
+//		let tempos = seq.tempoEvents()
+//		var bpm = 100.0
 		
-		var prev_tstamp = 0.0
-		
-		for t in tempos {
-			// first time stamp is added to the array and then skips the rest of the procedure
-			// timeline[0] = initial bpm
-			if t.timeStamp == 0 {
-				bpm = t.bpm
-				prev_tstamp = t.timeStamp
-				continue
-			}
-			
-			let tevent = fzTempoEvent(mts: t.timeStamp, bpm: bpm, time: clock, prev_mts: prev_tstamp)
-			
-			updateclock(fzte: tevent)
-			
-			bpm = t.bpm
-			prev_tstamp = t.timeStamp
-			self.events.append(tevent)
-		}
-		
-		/// the last timestamp in midi file, contains the last bpm and time offset
-		let lastevent = fzTempoEvent(mts: totalbeats, bpm: bpm, time: clock, prev_mts: prev_tstamp)
-		self.events.append(lastevent)
-		clock = 0
+//		var prev_tstamp = 0.0
+//		
+//		for t in tempos {
+//			// first time stamp is added to the array and then skips the rest of the procedure
+//			// timeline[0] = initial bpm
+//			if t.timeStamp == 0 {
+//				bpm = t.bpm
+//				prev_tstamp = t.timeStamp
+//				continue
+//			}
+//			
+//			let tevent = fzTempoEvent(mts: t.timeStamp, bpm: bpm, time: clock, prev_mts: prev_tstamp)
+//			
+//			updateclock(fzte: tevent)
+//			
+//			bpm = t.bpm
+//			prev_tstamp = t.timeStamp
+//			self.events.append(tevent)
+//		}
+//		
+//		/// the last timestamp in midi file, contains the last bpm and time offset
+//		let lastevent = fzTempoEvent(mts: totalbeats, bpm: bpm, time: clock, prev_mts: prev_tstamp)
+//		self.events.append(lastevent)
+//		clock = 0
 	}
 }
 
@@ -150,20 +150,20 @@ private extension TimeCode {
 /// fztempoevents holds the previous tempo event to find
 struct fzTempoEvent {
 	/// current musictimestamp
-	let mts:	Double
+	let mts: Double
 	/// previous bpm
-	let bpm:	Double
+	let bpm: Double
 	/// time in seconds
-	let time:	Double
+	let time: Double
 	/// previous musictimestamp
-	let prev_mts:	Double
+	let prev_mts: Double
 }
 
 struct FZNoteEvent {
 	let button: Button
-	let start: 	Double
-	let end:	Double
+	let start: Double
+	let end: Double
 }
 
-typealias fzNote 		= (button:Button, time:Double, length:Double)
+typealias fzNote = (button:Button, time:Double, length:Double)
 typealias fzNoteList = [fzNote]

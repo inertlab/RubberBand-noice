@@ -8,7 +8,7 @@
 
 import Cocoa
 import GameplayKit
-import SwordRPC
+import SwiftRPC
 
 let rpassets = [Instrument: [Difficulty: [String]]]()
 
@@ -33,14 +33,16 @@ class PlayState: GKState {
 				rp.timestamps.end = Date() + Jukebox.shared.timeremaining()
 				DiscordRP.rpc?.setPresence(rp)
 			}
-			
 			return
 		}
+		print("entered")
+		Jukebox.shared.stop()
 		stagemc.loadsong()
+		
 		if DiscordRP.rpc != nil {
 			let song = smanager.selected.song
-			rp.details = song.artist
-			rp.state = song.title
+			rp.details = song.artist ?? "no artist?"
+			rp.state = song.title ?? "unititled"
 			rp.timestamps.start = Date()
 			rp.timestamps.end = Date() + song.length
 			rp.assets.largeImage = images.randomElement()

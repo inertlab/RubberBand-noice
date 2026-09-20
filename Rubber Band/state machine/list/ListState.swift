@@ -7,12 +7,13 @@
 //
 
 import GameKit
-import SwordRPC
+import SwiftRPC
 
 class ListState: GKState {
 	enum Screen {
 		case menu, detail
 	}
+	
 	static var screen = Screen.menu
 	
 	var rp = RichPresence()
@@ -27,7 +28,10 @@ class ListState: GKState {
 		smanager.selected.state = .othersongs
 		rowcall.state = .off
 		
-		SongLister.shared.node?.run(Actions.shared.fadein, withKey: "listfade")
+		let fadein = SKAction.fadeAlpha(to: 1, duration: 1)
+		fadein.timingMode = .easeIn
+		
+		SongLister.shared.node?.run(fadein, withKey: "listfade")
 		
 		if DiscordRP.rpc != nil {
 			rp.details = details
@@ -40,8 +44,9 @@ class ListState: GKState {
 		if state is HelpState {
 			return
 		}
-		SongLister.shared.node?.run(Actions.shared.fadeout, withKey: "listfade")
+		let fadeout = SKAction.fadeAlpha(to: 0, duration: 0.75)
+		fadeout.timingMode = .easeOut
+		SongLister.shared.node?.run(fadeout, withKey: "listfade")
 		smanager.selected.cover.runAction(SCNAction.fadeOpacity(to: 1, duration: 0.25), forKey: "coveropacity")
 	}
-	
 }

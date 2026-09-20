@@ -18,17 +18,18 @@ import SpriteKit
 class SongFinder {
 	//MARK: - Vars
 	/// Players home directory on the computer
-	let homeDirectory 	= NSHomeDirectory()
+	let homeDirectory = NSHomeDirectory()
 	/// location of music folder/folders
 	let library:String
 	/// instance of FileManager
-	let fileManager 	= FileManager()
+	let fileManager = FileManager()
+	let libraryurl: URL
 	//MARK: - Inits
 	/// init with default song path "user/rubberband/"
 	init() {
 		self.library = self.homeDirectory.description + "/Music/noice/"
 		fileManager.changeCurrentDirectoryPath(self.library)
-//		print(self.library)
+		self.libraryurl = URL(fileURLWithPath: self.library)
 	}
 	
 	/// init with a specified path for music folder
@@ -36,6 +37,7 @@ class SongFinder {
 	/// - Parameter path: url path to the music folder
 	init(path: String){
 		self.library = path
+		self.libraryurl = URL(fileURLWithPath: self.library)
 		fileManager.changeCurrentDirectoryPath(self.library)
 	}
 	
@@ -54,15 +56,15 @@ class SongFinder {
 	/// - Parameter inis: A list of paths to ini files
 	func catalogSongs (inis: [String]) {
 		/// array of songs to be added to catalog
-		var songs 	= [String:Song]()
+		var songs = [String:Song]()
 		/// array of albums to be added to catalog
-		var albums 	= [String:Album]()
+		var albums = [String:Album]()
 
 		for ini in inis {
 			/// managed object Album to be inserted into pc context
-			var album:Album
-			let songmeta 	= iniToMeta(iniPath: ini)
-			let song		= newsongfrominipath(songmeta: songmeta)
+			var album: Album
+			let songmeta = iniToMeta(iniPath: ini)
+			let song = newsongfrominipath(songmeta: songmeta)
 			
 			addstattosong(song: song)
 
@@ -71,16 +73,16 @@ class SongFinder {
 			
 			// look for album in current album dictionary else make a new album
 			if let al = albums[albumID] {
-				album 			= al
+				album = al
 			}else{
-				album 			= Album(context: pc.viewContext)
-				album.name 		= songmeta[SongData.album]
+				album = Album(context: pc.viewContext)
+				album.name = songmeta[SongData.album]
 				album.albumArt 	= song.folder?.appendingPathComponent("album.png")
 			}
 			
-			song.trackOf 		= album
-			songs[song.title!] 	= song
-			albums[albumID] 	= album
+			song.trackOf = album
+			songs[song.title!] = song
+			albums[albumID] = album
 		}
 		
 		do{
@@ -199,7 +201,8 @@ class SongFinder {
 				let modate 	= try fileManager.attributesOfItem(atPath:inipath)[.modificationDate]
 				if modate as! Date > date {
 					let pathstring 	= inipath.components(separatedBy: "song.ini")[0]
-					let url	 		= URL(fileURLWithPath: pathstring)
+					let url = URL(fileURLWithPath: pathstring)
+//					print("url", url)
 					if let song = fetchsongbyfolder(folder: url.absoluteString) {
 						let meta = iniToMeta(iniPath: inipath)
 						mapSongMetatoSong(song: song, meta: meta)
@@ -405,9 +408,9 @@ private extension SongFinder {
 	///
 	/// - Returns: an Array of paths to the song folders containing ini files
 	func songIniPaths () -> [String]? {
-		if let enumPaths 	= fileManager.enumerator(atPath: self.library){
-			let	allPaths 	= enumPaths.allObjects as! [String]
-			let songInis 	= allPaths.filter{$0.contains("song.ini")}
+		if let enumPaths = fileManager.enumerator(atPath: self.library){
+			let	allPaths = enumPaths.allObjects as! [String]
+			let songInis = allPaths.filter{$0.contains("song.ini")}
 			if songInis.count != 0 {
 				return songInis
 			}
@@ -421,12 +424,14 @@ private extension SongFinder {
 	/// - Returns: array of parameters as string ("artist = so and so")
 	func songIniLines (path: String) -> [String] {
 		var lines = [String]()
-		do{
-			let filestring = try String(contentsOfFile: path, encoding: String.Encoding.isoLatin1)
+		print("path: ", path)
+		
+		let url = libraryurl.appending(component: path)
+
+		if let filestring = String.loadcleanini(at: url) {
 			filestring.enumerateLines{l, _ in lines.append(l)}
-		}catch let err as NSError {
-			print(err)
 		}
+		
 		return lines.filter{$0.contains(" = ")}
 	}
 	
@@ -435,6 +440,7 @@ private extension SongFinder {
 	/// - Parameter iniPath: path to ini file
 	/// - Returns: array of SongData
 	func iniToMeta (iniPath: String) -> SongMeta {
+	
 		let inilines = songIniLines(path: iniPath)
 		var songdata = SongMeta()
 		songdata[SongData.directory] = iniPath.components(separatedBy: "song.ini")[0]

@@ -7,32 +7,31 @@
 //
 
 import Foundation
-import MIKMIDI
 import CoreMIDI
 
-var midiClient	: MIDIClientRef 	= 0
-var inPort		: MIDIPortRef	 	= 0
-var src			: MIDIEndpointRef 	= MIDIGetSource(0)
+var midiClient: MIDIClientRef = 0
+var inPort: MIDIPortRef = 0
+var src: MIDIEndpointRef = MIDIGetSource(0)
 
-let drumgothit	= NSNotification.Name("drumhit")
+let drumgothit = NSNotification.Name("drumhit")
 let drumCenter = NotificationCenter()
-let midiobject	= MIDIObjectRef()
+let midiobject = MIDIObjectRef()
 
 func getDisplayName(_ obj: MIDIObjectRef) -> String
 {
 	var param: Unmanaged<CFString>?
-	var name	: String 	= "Error"
-	let err	: OSStatus 	= MIDIObjectGetStringProperty(obj, kMIDIPropertyDisplayName, &param)
+	var name: String = "Error"
+	let err	: OSStatus = MIDIObjectGetStringProperty(obj, kMIDIPropertyDisplayName, &param)
 	if err == OSStatus(noErr)
 	{
-		name =  param!.takeRetainedValue() as String
+		name = param!.takeRetainedValue() as String
 	}
 	print("thisi s it ", name)
 	return name
 }
 
 func MyMIDIReadProc(pktList: UnsafePointer<MIDIPacketList>,
-					readProcRefCon: UnsafeMutableRawPointer?, srcConnRefCon: UnsafeMutableRawPointer?) -> Void
+	readProcRefCon: UnsafeMutableRawPointer?, srcConnRefCon: UnsafeMutableRawPointer?) -> Void
 {
 	let packetList:MIDIPacketList = pktList.pointee
 
@@ -43,7 +42,7 @@ func MyMIDIReadProc(pktList: UnsafePointer<MIDIPacketList>,
 	}
 }
 
-/// sets up a midi device listenter to register hits into the main thread. currently only works for game, needs to be setup for song selection
+/// sets up a midi device listenter to register hits into the main thread.
 func setupMidiDevice () {
 	MIDIClientCreate("MidiTestClient" as CFString, nil, nil, &midiClient)
 	MIDIInputPortCreate(midiClient, "MidiTest_InPort" as CFString, MyMIDIReadProc, nil, &inPort)

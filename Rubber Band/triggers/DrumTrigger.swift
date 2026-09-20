@@ -15,8 +15,6 @@ import GameplayKit
 let particleDir = "art.scnassets/particles/"
 let burst = SCNParticleSystem(named: "burst.scnp", inDirectory: particleDir)
 
-//let gemsatlas = SKTextureAtlas(named: "gems")
-
 /// note tracker is attached to triggers on the highway. depending on the trigger, it tracks notes hit
 class DrumTrigger: Burstable {
 	let posy 		= 0.5
@@ -28,8 +26,6 @@ class DrumTrigger: Burstable {
 	var reactor 	= SCNNode()
 
 	init(btn: Button, hwy: HWY){
-//		self.note 	= note
-//		print(self.particle?.particleColor)
 		self.particle?.particleColor = btn.metric.color
 		switch btn {
 		case .red:
@@ -53,7 +49,6 @@ class DrumTrigger: Burstable {
 	}
 	
 	func hit() {
-//		scorekeeper.scoreOneUp()
 		nscore += 1
 		burstit()
 	}
@@ -72,7 +67,7 @@ class DrumTrigger: Burstable {
 
 
 private extension DrumTrigger {
-	/// a collection of the trigger animations for when player scores or misses
+	// a collection of the trigger animations for when player scores or misses
 	
 	/// handles the succesful hit animations
 	func burstit () {
@@ -81,20 +76,15 @@ private extension DrumTrigger {
 			self.trigger.geometry?.firstMaterial?.diffuse.intensity = 0
 			// this changes the range of animation for the orange blob
 			self.burst.geometry?.firstMaterial?.diffuse.contentsTransform.m42 += 0.25
-//			self.reactor.geometry?.firstMaterial?.emission.intensity = 1
 			self.reactor.addAnimation(thump, forKey: "thump")
-//			self.reactor.addAnimation(thump, forKey: "thump")
 			self.burst.addAnimation(kickframe, forKey: "self")
 			self.trigger.addAnimation(shrinkx, forKey: "shrink")
 			self.reactor.addAnimation(kickback, forKey: "kickback")
-			
-//			self.reactor.geometry?.firstMaterial?.diffuse.contents = gemsatlas.textureNamed("kick-lit")
 		}else{
 			splat(node: trigger)
 			self.trigger.addParticleSystem(self.particle!)
 			self.burst.addAnimation		(animup		, forKey: "emission")
 			self.burst.addAnimation		(animdown	, forKey: "multiply")
-//			self.burst.runAction		(self.rotate)
 			self.burst.geometry?.firstMaterial?.multiply.contentsTransform.m41 += 0.1
 		}
 	}
@@ -133,7 +123,6 @@ private extension DrumTrigger {
 		animation.fromValue 	= 1.25
 		animation.toValue 		= 1
 		animation.duration 		= 0.25
-//		animation.autoreverses 	= true
 		return animation
 	}
 	
@@ -160,7 +149,6 @@ private extension DrumTrigger {
 		animation.fromValue 	= 1.25
 		animation.toValue 		= 1
 		animation.duration 		= 0.25
-//		animation.autoreverses 	= true
 		return animation
 	}
 	

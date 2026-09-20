@@ -65,7 +65,6 @@ private extension StarNoteComp {
 	
 	func setmaterial() {
 		if let chord = entity?.component(ofType: NoteComp.self) {
-//			let n = SCNNode()
 //			make new nodes for the chord
 			for note in chord.chord {
 				let notenode = gemmaker.makegem(button: note)

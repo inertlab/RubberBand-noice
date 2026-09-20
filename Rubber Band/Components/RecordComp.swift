@@ -9,7 +9,10 @@
 import Foundation
 import GameplayKit
 
-//MARK: - Record
+
+/// The Record model
+///
+/// Only 1 of this components exists in game
 class RecordComp: GKComponent {
 	let node = menuScene.rootNode.childNode(withName: "record", recursively: false)!
 
@@ -17,8 +20,8 @@ class RecordComp: GKComponent {
 		reset()
 		let song = self.entity?.component(ofType: SongComp.self)
 		song?.cover.addChildNode(self.node)
-		self.node.runAction(SCNAction.move(to: SCNVector3(0.53, 0, -0.01 ), duration: 0.5))
-		self.node.runAction(SCNAction.rotateTo(x: 0, y: 0, z: -0.25, duration: 0.5))
+		self.node.runAction(SCNAction.move(to: SCNVector3(0.475, 0, -0.01 ), duration: 0.5))
+		self.node.runAction(SCNAction.rotateTo(x: 0, y: 0, z: -0.25, duration: 0.5), forKey: "spinner")
 	}
 }
 

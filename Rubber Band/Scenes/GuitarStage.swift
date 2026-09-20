@@ -85,25 +85,25 @@ final class GuitarStage: Performing, Track, KeyUp {
 			stagemc.machine.enter(RewindState.self)
 		case is ScoreState:
 //			this events don't use the strum bar - maybe change it?
+//			??? why is this orange?
 			switch event {
+			case .left, .right:
+				smanager.makerandomnextselected()
+			case .down, .up:
+				smanager.refreshnext()
 			case .orange:
 //				play random song by previously played artist
-				smanager.selected.getcolumn().unhilight()
-				smanager.selectrandom(smanager.selected.song.artist!)
+				smanager.selectrandom(true)
 				stagemc.machine.enter(PlayState.self)
-				stagemc.loadsong()
 			case .blue:
 				// play random song
-				smanager.selected.getcolumn().unhilight()
 				smanager.selectrandom()
 				fallthrough
 			case .yellow:
 //				replay current song
 				stagemc.machine.enter(PlayState.self)
-				stagemc.loadsong()
 			default:
 				stagemc.machine.enter(DetailState.self)
-				stagemc.loadmenu()
 			}
 		default:
 			break

@@ -45,6 +45,14 @@ class User {
 		instrumentlabel.text 	= self.instrument.name()
 	}
 	
+	/// Saves config options to user database
+	///
+	/// Saved options:
+	/// - difficulty
+	///	- instrument
+	///	- volume
+	///	- kraken
+	///
 	func updateUser() {
 		player.difficulty 			= diff.rawValue
 		player.instrument 			= instrument.rawValue
@@ -101,22 +109,3 @@ private extension User {
 		return try! pc.viewContext.fetch(fet)
 	}
 }
-
-
-
-
-
-//
-//func setplayer (name: String) -> Player {
-//	print("settubg player")
-//	let fet:NSFetchRequest<Player> = Player.fetchRequest()
-//	fet.predicate 	= NSPredicate(format: "name == %@", name)
-//	fet.fetchLimit 	= 1
-//	let array = try? pc.viewContext.fetch(fet)
-//	if array?.isEmpty {
-//		print("no players found")
-//		return defaultuser()
-//	}
-//	print("player found and setting it")
-//	return array![0]
-//}

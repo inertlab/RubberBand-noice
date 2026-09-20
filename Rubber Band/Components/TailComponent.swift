@@ -23,9 +23,9 @@ final class Tailanimate: GKComponent {
 	}
 	
 	override func update (_ cgTime: CGFloat) {
-		let diff 	= cgTime - tail.node.position.z
-		let remain 	= tail.length - diff
-		let scale 	= ((remain / tail.length) - 1) * -1
+		let diff = cgTime - tail.node.position.z
+		let remain = tail.length - diff
+		let scale = ((remain / tail.length) - 1) * -1
 		scoredel?.tailupdate(scale * tail.beats * pts)
 		// scale is maxed out, remove component from system
 		if scale > 1 {

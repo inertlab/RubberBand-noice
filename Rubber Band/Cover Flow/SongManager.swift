@@ -28,9 +28,7 @@ enum Direction {
 	case left, right, up, down
 }
 
-let loadingscreen 	= SKScene(fileNamed: "LoadingScreen.sks")
-let loadcount 		= loadingscreen?.childNode(withName: "loadcount") as! SKLabelNode
-let noice 			= loadingscreen?.childNode(withName: "noice") as! SKSpriteNode
+
 
 let menuOverlay 	= SKScene(fileNamed: "titleDisplay.sks")
 
@@ -54,6 +52,8 @@ let menutext = MenuText()
 
 /// Retrieves Song information from coredata and creates album art for menu display
 class SongManager {
+	
+	var loadingscreen = LoadingScreen()
 	
 	//MARK: - Vars
 	/// selected album always has the record component
@@ -90,6 +90,14 @@ class SongManager {
 	/// - Needs to be rebuilt if cataloging songs again
 	var covers = [CoverArt]()
 	
+	
+	//MARK: - UpNext
+	
+	var randomplay = RandomPlay()
+	var nextrandom = SongComp(song: Song())
+	var nextbyArtist = SongComp(song: Song())
+	
+	
 	//MARK: -  Funcs
 	/// Creates cover art and displays progress for songs in the core library arranged by Artist
 	///
@@ -97,13 +105,13 @@ class SongManager {
 	private func createcovers (songs: [Song]) {
 		covers 		= []
 		var count 	= songs.count
-		let total 	= CGFloat(count)
+
 		var countup = 1
 		for song in songs {
 			count -= 1
 			countup += 1
-			noice.alpha 	= CGFloat(countup) / total
-			loadcount.text 	= String(format: "%04d", count)
+
+			loadingscreen.loadcount.text 	= String(format: "%04d", countup)
 			let entity 		= GKEntity()
 			let songcomp 	= SongComp(song: song)
 			// assign entity to the covernode so it can be reference by the frusturm
@@ -112,6 +120,8 @@ class SongManager {
 			songsystem.addComponent(foundIn: entity)
 			songenties.insert(entity)
 		}
+
+		loadingscreen.loadcount.text =  "-\(loadingscreen.loadcount.text!)-"
 		shuffled = songsystem.components.shuffled()
 	}
 	
@@ -136,8 +146,11 @@ class SongManager {
 		
 		sfinder.librarymodified()
 		
+		loadingscreen.lightup()
+		
+		
 		sorted = fetchSongs(sortBy: sortkeypath.value(), nil, nil)
-	
+		
 		createcovers(songs: sorted)
 		if !sorted.isEmpty{
 			iconAtlas.preload {
@@ -227,7 +240,7 @@ class SongManager {
 		fet.sortDescriptors = [sorter, second]
 		if limit != nil { fet.fetchLimit = limit!}
 		let array = try? pc.viewContext.fetch(fet)
-		print("ist me margaret")
+
 		return array!
 	}
 	
@@ -282,7 +295,7 @@ class SongManager {
 		return array![0]
 	}
 	
-	/// Removes all songs from coredata and cover art from view but nat the stats
+	/// Removes all songs from coredata and cover art from view but not the stats
 	func deleteCatalog() {
 		let delete:NSFetchRequest<Song> = Song.fetchRequest()
 		do {
@@ -351,9 +364,8 @@ class SongManager {
 	/// makes a record selection with animation
 	/// - Parameter newsong: the song to be selected
 	///
-	/// a different seleciton function needs to be made without the animating
+	/// a different selection function needs to be made without the animating
 	func updatesongselection(newsong: SongComp, state: SelState) {
-	
 		let oldcolumn 	= selected.entity?.component(ofType: ColumnComp.self)
 		selected.state 	= .notselected
 		selected 		= newsong
@@ -371,39 +383,79 @@ class SongManager {
 		}
 		
 		// update column vertically
+//		this should be part of the columncomp?
 		column!.node.runAction(SCNAction.move(to: SCNVector3(x: column!.node.position.x, y: -selected.row, z: 0.25), duration: 0.125)){
 			self.frustrumreveal()
 		}
 		UpNext.shared.rowcount(count: column!.node.childNodes.count, row: Int(-selected.row))
 	}
 	
-	func selectrandom() {
+	
+	
+	/// gets new random songs
+	func refreshnext(){
+		refreshnextpick()
+		refreshnextbyartist()
+		randomplay.update()
+	}
+	
+	/// makes the current random song the selected artist and randomizes again
+	func makerandomnextselected() {
+		updatesongselection(newsong: nextrandom, state: .detailview)
+		refreshnext()
+	}
+	
+	/// updates the next song to be played by random
+	///
+	/// does not update selection animations in main menu
+	/// currently does not work when game startsup - Fix IT!
+	private func refreshnextpick() {
 		if let comp = shuffled.last {
-//			if song has no tier in the current isntrument, remove from list and select new random song
+//			if song has no tier in the current instrument, remove from list and select new random song
 			if User.current.instrument.gettier(comp.song) == -1 {
 				shuffled.removeLast()
-				selectrandom()
+				refreshnext()
 				return
 			}
-			updatesongselection(newsong: comp, state: .detailview)
+			nextrandom = comp
+			shuffled.removeLast()
 		} else {
 //			if shuffled is empty reassign all components again
 			shuffled = songsystem.components.shuffled()
-			selectrandom()
+			refreshnext()
 		}
 	}
 	
-	func selectrandom(_ artist: String) {
-		if let song = shuffled.first(where: {$0.song.artist == artist}) {
-			updatesongselection(newsong: song, state: .detailview)
+	/// updates the next song to be played by the current artist
+	///
+	/// does not update selection animations in main menu
+	private func refreshnextbyartist() {
+		let artist = selected.song.artist
+		if let index = shuffled.firstIndex(where: {$0.song.artist == artist}) {
+			nextbyArtist = shuffled[index]
+			shuffled.remove(at: index)
 			return
 		}
-//		should i re-add the artist songs back to shuffled?
-		let songsby = songsystem.components.filter {$0.song.artist == artist && $0 != selected}
+		let songsby = songsystem.components.filter {$0.song.artist == artist}
 		if songsby.isEmpty { return }
-		updatesongselection(newsong: songsby.randomElement()!, state: .detailview)
+		nextbyArtist = songsby.randomElement()!
 	}
 	
+	
+	
+	
+	func selectrandom(_ byartist: Bool = false) {
+		selected.getcolumn().unhilight()
+		
+		if byartist {
+			updatesongselection(newsong: nextbyArtist, state: .detailview)
+		} else {
+			updatesongselection(newsong: nextrandom, state: .detailview)
+		}
+	}
+	
+	
+	/// deprecated
 	func removefromshuffle() {
 		if let index = shuffled.firstIndex(where: {$0 == selected}) {
 			shuffled.remove(at: index)
@@ -411,7 +463,10 @@ class SongManager {
 	}
 	
 	func moveselector(direction: Direction)  {
+//		if Jukebox.shared.trying{return}
+		
 		var i = selected.index
+		
 		Jukebox.shared.stop()
 
 		switch direction {
@@ -434,7 +489,7 @@ class SongManager {
 			break
 		case .down:
 			i += 1
-			var x = i + 3
+			var x = i + 4 // 4 is the number of songs displayed before selected song.
 			if songcount - x <= 0 {
 				x -= songcount
 			}
@@ -442,12 +497,12 @@ class SongManager {
 			UpNext.shared.scrolldown(title: songsystem[x].song.title!)
 			updatesongselection(newsong: songsystem[i], state: .selected)
 		case .up:
-			var x = i - 4
+			if i == 0 { i = songcount }
+			i -= 1
+			var x = i - 4 // 4 is the number of songs displayed after selected song.
 			if x < 0 {
 				x += songcount
 			}
-			if i == 0 { i = songcount }
-			i -= 1
 			UpNext.shared.scrollup(title: songsystem[x].song.title!)
 			updatesongselection(newsong: songsystem[i], state: .selected)
 		}
@@ -473,8 +528,8 @@ class SongManager {
 	/// - Parameter index: The currently selected Index
 	func songrange(index: Int) -> [String] {
 		var titles = [String]()
-		var base = index - 4
-		for _ in 0...6 {
+		var base = index - 5
+		for _ in 0...8 {
 			base += 1
 			if base < 0 {
 				base += songcount
@@ -508,8 +563,8 @@ private extension SongManager {
 	func flowcoverart () {
 		
 		var index 		= 0
-		var char		 	= ""
-		var row 			= CGFloat(1)
+		var char		= ""
+		var row 		= CGFloat(1)
 		var column 		= CGFloat(1)
 		/// this is the first column used always
 		var colnode 	= makeColumn(name: "col-" + column.description)
@@ -517,8 +572,8 @@ private extension SongManager {
 		colsystem.addComponent(columncomp)
 		colnode.position.x 	= column
 		
-		print(sorted.count)
-		print(colsystem.components.count)
+//		print(sorted.count)
+//		print(colsystem.components.count)
 		
 		for comp in songsystem.components {
 //			print(comp)
@@ -555,10 +610,10 @@ private extension SongManager {
 				colnode.position.x = column
 				columncomp.addletter(char: char)
 			}
-			comp.index 					= index
-			index 						+= 1
+			comp.index 				= index
+			index 					+= 1
 			comp.cover.position.y 	= row
-			comp.row 					= row
+			comp.row 				= row
 			colnode.addChildNode(comp.cover)
 			comp.entity?.addComponent(columncomp)
 			// check to see if cover is on screen at start
@@ -567,7 +622,6 @@ private extension SongManager {
 			}
 		}
 		songcount = songsystem.components.count
-//		resetcolumns()
 	}
 	
 	func createstats(uuid: String) -> Stats? {

@@ -68,23 +68,25 @@ final class DrumStage: Performing, Track {
 			stagemc.machine.enter(RewindState.self)
 		case is ScoreState:
 			switch event {
-			case .blue:
-				smanager.selected.getcolumn().unhilight()
-				smanager.selectrandom(smanager.selected.song.artist!)
-				stagemc.machine.enter(PlayState.self)
-				stagemc.loadsong()
+			case .yellow_c:
+				smanager.makerandomnextselected()
+			case .yellow:
+//				refresh up next
+//				to do: seperate functions into 2 seperate cases
+				smanager.refreshnext()
 			case .green_c:
+//				play random song by previous Artist
+				smanager.selectrandom(true)
+				stagemc.machine.enter(PlayState.self)
+			case .blue:
 				// play random song
-				smanager.selected.getcolumn().unhilight()
 				smanager.selectrandom()
-				print("playing random")
 				fallthrough
 			case .blue_c:
+//				repeats song
 				stagemc.machine.enter(PlayState.self)
-				stagemc.loadsong()
 			default:
 				stagemc.machine.enter(DetailState.self)
-				stagemc.loadmenu()
 			}
 		default:
 			return
@@ -103,6 +105,7 @@ final class DrumStage: Performing, Track {
 	//MARK: - Functions, public
 	func laytrack() {
 		MusicSheet.shared.layDrumTrack(self)
+		print(notesystem.components.count)
 	}
 	
 	/// hides notes that overlap activator notes and shows activators
@@ -163,7 +166,7 @@ private extension DrumStage {
 	///
 	/// This is different from Strings in that we have to check the first four NoteEntities not just the first
 	func notecheck(_ btn : Button) {
-
+		
 		let max = hwy.pista.position.z + pace.hitwindow
 		var checkcount = 0
 		
@@ -177,7 +180,7 @@ private extension DrumStage {
 							sp.activateSP(note.node.position.z)
 							hidesp()
 						}
-						
+
 						oneup(btn)
 						
 //						checks if a starrun has been completed

@@ -3,10 +3,19 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		ED0100DA305737B000C0A1C4 /* SwiftRPC in Frameworks */ = {isa = PBXBuildFile; productRef = ED0100D9305737B000C0A1C4 /* SwiftRPC */; };
+		ED01015F30574BAB00C0A1C4 /* LibVorbis in Frameworks */ = {isa = PBXBuildFile; productRef = ED01015E30574BAB00C0A1C4 /* LibVorbis */; };
+		ED01016130574C7200C0A1C4 /* OggDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED01016030574C7200C0A1C4 /* OggDecoder.swift */; };
+		ED01016330574C9400C0A1C4 /* AVAudioPCMBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED01016230574C9400C0A1C4 /* AVAudioPCMBuffer.swift */; };
+		ED01016730574D4A00C0A1C4 /* NoiceAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED01016630574D4A00C0A1C4 /* NoiceAudioPlayer.swift */; };
+		ED025D0730576486003710F4 /* SongDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED025D0630576486003710F4 /* SongDetails.swift */; };
+		ED025D2E30576EA6003710F4 /* Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED025D2D30576EA6003710F4 /* Actions.swift */; };
+		ED025D3C3059C616003710F4 /* iniCleanser.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED025D3B3059C616003710F4 /* iniCleanser.swift */; };
+		ED0318FB2A11F4A60091177B /* Experimental.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED0318FA2A11F4A60091177B /* Experimental.swift */; };
 		ED08671F2256DE3D00D36AA4 /* action.sks in Resources */ = {isa = PBXBuildFile; fileRef = ED08671E2256DE3D00D36AA4 /* action.sks */; };
 		ED0B5FBC204A847D00524979 /* SongFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED0B5FBB204A847D00524979 /* SongFinder.swift */; };
 		ED0CB21625FDC9D800B57428 /* Anal.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED0CB21525FDC9D800B57428 /* Anal.swift */; };
@@ -14,65 +23,21 @@
 		ED12650420649BAE002423A8 /* StarPower.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED12650320649BAE002423A8 /* StarPower.swift */; };
 		ED153706204297A300ADBA12 /* MIDIDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED153705204297A300ADBA12 /* MIDIDevices.swift */; };
 		ED1665362033E3FC0099DE12 /* FZMIDI.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1665352033E3FC0099DE12 /* FZMIDI.swift */; };
+		ED16ADAF2A06130F00AF1B9D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ED16ADAD2A06130F00AF1B9D /* Assets.xcassets */; };
+		ED16ADB72A06313100AF1B9D /* MyParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = ED16ADB62A06313100AF1B9D /* MyParticle.sks */; };
 		ED1CB7C925BE802900AD6D56 /* Octopus.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1CB7C825BE802900AD6D56 /* Octopus.swift */; };
 		ED1E87CD265F18A900A80228 /* help_drums.png in Resources */ = {isa = PBXBuildFile; fileRef = ED1E87CC265F18A900A80228 /* help_drums.png */; };
 		ED1F1E7C22B1CDC000B21883 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1F1E7B22B1CDC000B21883 /* Strings.swift */; };
 		ED20376B2255D88300E3AC22 /* noart.jpg in Resources */ = {isa = PBXBuildFile; fileRef = ED20376A2255D88300E3AC22 /* noart.jpg */; };
+		ED211C652A2FE37F0069F537 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = ED211C642A2FE37F0069F537 /* Localizable.xcstrings */; };
 		ED21999D274200E600808587 /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED21999C274200E600808587 /* extensions.swift */; };
-		ED26C3C62055048200CFE29C /* OggNo.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED26C3C52055048200CFE29C /* OggNo.swift */; };
 		ED274DA321141BA000CC788C /* ChartIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED274DA221141BA000CC788C /* ChartIcons.swift */; };
-		ED2903442058F8A0006BF673 /* scoredisplay.sks in Resources */ = {isa = PBXBuildFile; fileRef = ED2903432058F8A0006BF673 /* scoredisplay.sks */; };
+		ED2903442058F8A0006BF673 /* scoredisplay.sks in Resources */ = {isa = PBXBuildFile; fileRef = ED2903432058F8A0006BF673 /* scoredisplay.sks */; settings = {ASSET_TAGS = (UI, ); }; };
 		ED2AA00922B4838B00E61D89 /* SongMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2AA00822B4838B00E61D89 /* SongMenu.swift */; };
 		ED2AA00D22B4B53200E61D89 /* DrumStage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2AA00C22B4B53200E61D89 /* DrumStage.swift */; };
 		ED2AA00F22B4B8A000E61D89 /* GuitarStage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2AA00E22B4B8A000E61D89 /* GuitarStage.swift */; };
-		ED2B592B27B5DCBF00941C1C /* libavcodec.58.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED2B592727B5DCBE00941C1C /* libavcodec.58.dylib */; };
-		ED2B592C27B5DCBF00941C1C /* libswresample.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED2B592827B5DCBF00941C1C /* libswresample.3.dylib */; };
-		ED2B592D27B5DCBF00941C1C /* libavutil.56.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED2B592927B5DCBF00941C1C /* libavutil.56.dylib */; };
-		ED2B592E27B5DCBF00941C1C /* libavformat.58.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ED2B592A27B5DCBF00941C1C /* libavformat.58.dylib */; };
-		ED2B592F27B5DCE300941C1C /* libavcodec.58.dylib in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ED2B592727B5DCBE00941C1C /* libavcodec.58.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		ED2B593027B5DCE400941C1C /* libavformat.58.dylib in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ED2B592A27B5DCBF00941C1C /* libavformat.58.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		ED2B593127B5DCE600941C1C /* libavutil.56.dylib in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ED2B592927B5DCBF00941C1C /* libavutil.56.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		ED2B593227B5DCE700941C1C /* libswresample.3.dylib in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ED2B592827B5DCBF00941C1C /* libswresample.3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		ED2B5AB727B5E76C00941C1C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5A0627B5E76C00941C1C /* Constants.swift */; };
-		ED2B5ABE27B5E76C00941C1C /* PlayerScheduling.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5A8927B5E76C00941C1C /* PlayerScheduling.swift */; };
-		ED2B5ABF27B5E76C00941C1C /* FFmpegSampleConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5A8B27B5E76C00941C1C /* FFmpegSampleConverter.swift */; };
-		ED2B5AC027B5E76C00941C1C /* Decoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5A8C27B5E76C00941C1C /* Decoder.swift */; };
-		ED2B5AC127B5E76C00941C1C /* ChannelLayouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5A8D27B5E76C00941C1C /* ChannelLayouts.swift */; };
-		ED2B5AC227B5E76C00941C1C /* SampleConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5A8E27B5E76C00941C1C /* SampleConverter.swift */; };
-		ED2B5AC327B5E76C00941C1C /* FrameBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5A8F27B5E76C00941C1C /* FrameBuffer.swift */; };
-		ED2B5AC427B5E76C00941C1C /* AVFSampleConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5A9027B5E76C00941C1C /* AVFSampleConverter.swift */; };
-		ED2B5AC527B5E76C00941C1C /* AVFUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5A9127B5E76C00941C1C /* AVFUtils.swift */; };
-		ED2B5AC627B5E76C00941C1C /* FFPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5A9227B5E76C00941C1C /* FFPlayer.swift */; };
-		ED2B5AC827B5E76C00941C1C /* AudioEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5A9427B5E76C00941C1C /* AudioEngine.swift */; };
-		ED2B5AC927B5E76C00941C1C /* UtilsExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5A9727B5E76C00941C1C /* UtilsExtensions.swift */; };
-		ED2B5ACA27B5E76C00941C1C /* ConcurrentArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5A9827B5E76C00941C1C /* ConcurrentArray.swift */; };
-		ED2B5ACB27B5E76C00941C1C /* NumericStringFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5A9927B5E76C00941C1C /* NumericStringFormatter.swift */; };
-		ED2B5ACC27B5E76C00941C1C /* AtomicCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5A9A27B5E76C00941C1C /* AtomicCounter.swift */; };
-		ED2B5ACD27B5E76C00941C1C /* BufferFileWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5A9B27B5E76C00941C1C /* BufferFileWriter.swift */; };
-		ED2B5ACE27B5E76C00941C1C /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5A9C27B5E76C00941C1C /* Queue.swift */; };
-		ED2B5ACF27B5E76C00941C1C /* Mapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5A9D27B5E76C00941C1C /* Mapper.swift */; };
-		ED2B5AD027B5E76C00941C1C /* ffmpeg.c in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5A9E27B5E76C00941C1C /* ffmpeg.c */; };
-		ED2B5AD227B5E76C00941C1C /* SampleFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5AA127B5E76C00941C1C /* SampleFormat.swift */; };
-		ED2B5AD327B5E76C00941C1C /* StreamProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5AA227B5E76C00941C1C /* StreamProtocol.swift */; };
-		ED2B5AD427B5E76C00941C1C /* FFmpegAudioFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5AA327B5E76C00941C1C /* FFmpegAudioFormat.swift */; };
-		ED2B5AD527B5E76C00941C1C /* MetadataDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5AA427B5E76C00941C1C /* MetadataDictionary.swift */; };
-		ED2B5AD627B5E76C00941C1C /* ImageStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5AA527B5E76C00941C1C /* ImageStream.swift */; };
-		ED2B5AD727B5E76C00941C1C /* Codec.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5AA627B5E76C00941C1C /* Codec.swift */; };
-		ED2B5AD827B5E76C00941C1C /* PacketFrames.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5AA727B5E76C00941C1C /* PacketFrames.swift */; };
-		ED2B5AD927B5E76C00941C1C /* MEC.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5AA827B5E76C00941C1C /* MEC.swift */; };
-		ED2B5ADA27B5E76C00941C1C /* FormatContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5AA927B5E76C00941C1C /* FormatContext.swift */; };
-		ED2B5ADB27B5E76C00941C1C /* Frame.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5AAA27B5E76C00941C1C /* Frame.swift */; };
-		ED2B5ADC27B5E76C00941C1C /* Chapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5AAB27B5E76C00941C1C /* Chapter.swift */; };
-		ED2B5ADD27B5E76C00941C1C /* Packet.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5AAC27B5E76C00941C1C /* Packet.swift */; };
-		ED2B5ADE27B5E76C00941C1C /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5AAD27B5E76C00941C1C /* Errors.swift */; };
-		ED2B5ADF27B5E76C00941C1C /* ResamplingContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5AAE27B5E76C00941C1C /* ResamplingContext.swift */; };
-		ED2B5AE027B5E76C00941C1C /* PacketTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5AAF27B5E76C00941C1C /* PacketTable.swift */; };
-		ED2B5AE127B5E76C00941C1C /* AudioCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5AB027B5E76C00941C1C /* AudioCodec.swift */; };
-		ED2B5AE227B5E76C00941C1C /* MetadataEditingContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5AB127B5E76C00941C1C /* MetadataEditingContext.swift */; };
-		ED2B5AE327B5E76C00941C1C /* AudioFileContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5AB227B5E76C00941C1C /* AudioFileContext.swift */; };
-		ED2B5AE427B5E76C00941C1C /* AudioStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5AB327B5E76C00941C1C /* AudioStream.swift */; };
-		ED2B5AE527B5E76C00941C1C /* MetadataReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5AB527B5E76C00941C1C /* MetadataReader.swift */; };
-		ED2B5AE627B5E76C00941C1C /* TrackInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B5AB627B5E76C00941C1C /* TrackInfo.swift */; };
+		ED2CB5F029EA2CB200D6EB19 /* stars.atlas in Resources */ = {isa = PBXBuildFile; fileRef = ED2CB5EF29EA2CB200D6EB19 /* stars.atlas */; };
+		ED2CB5F429EA2D0E00D6EB19 /* starnormals.atlas in Resources */ = {isa = PBXBuildFile; fileRef = ED2CB5F329EA2D0E00D6EB19 /* starnormals.atlas */; };
 		ED2FB5E122CFB2D200A4B484 /* NoteEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2FB5E022CFB2D200A4B484 /* NoteEntity.swift */; };
 		ED2FE4A522D5833600F18789 /* Drums.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2FE4A422D5833600F18789 /* Drums.swift */; };
 		ED2FF7E8229A0AF6001B02C5 /* Jukebox.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2FF7E7229A0AF6001B02C5 /* Jukebox.swift */; };
@@ -82,6 +47,7 @@
 		ED4179D32676CC9F00C6C297 /* RewindState.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4179D22676CC9F00C6C297 /* RewindState.swift */; };
 		ED4179D52676CCD100C6C297 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = ED4179D42676CCD100C6C297 /* sounds */; };
 		ED4179D72676DA2B00C6C297 /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = ED4179D62676DA2B00C6C297 /* Fonts */; };
+		ED4509F329E4F2AC0034A098 /* RandomPlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4509F229E4F2AC0034A098 /* RandomPlay.swift */; };
 		ED45BD19202CC5FC00E4A9AD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED45BD18202CC5FC00E4A9AD /* AppDelegate.swift */; };
 		ED45BD1B202CC5FC00E4A9AD /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED45BD1A202CC5FC00E4A9AD /* GameViewController.swift */; };
 		ED45BD1D202CC5FC00E4A9AD /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = ED45BD1C202CC5FC00E4A9AD /* art.scnassets */; };
@@ -99,12 +65,9 @@
 		ED4B11E6267567A700E8D0AD /* PlayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4B11E5267567A700E8D0AD /* PlayState.swift */; };
 		ED4B11E826756E6100E8D0AD /* PausedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4B11E726756E6100E8D0AD /* PausedState.swift */; };
 		ED4B121826756FA300E8D0AD /* ScoreState.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4B121726756FA300E8D0AD /* ScoreState.swift */; };
-		ED4C8E7727AEF7CA00F7DFF7 /* SwordRPC in Frameworks */ = {isa = PBXBuildFile; productRef = ED4C8E7627AEF7CA00F7DFF7 /* SwordRPC */; };
 		ED51B8312796A4830010950B /* TitleCredit.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED51B8302796A4830010950B /* TitleCredit.swift */; };
-		ED527E0822A44C6000C63A4D /* Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED527E0722A44C6000C63A4D /* Actions.swift */; };
 		ED59D2AA24441D0000CF8617 /* catalog.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = ED59D2A824441D0000CF8617 /* catalog.xcdatamodeld */; };
 		ED5C68CE266079270081A557 /* Help.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5C68CD266079270081A557 /* Help.swift */; };
-		ED678046279CFCF80071CA9D /* SongDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED678045279CFCF80071CA9D /* SongDetails.swift */; };
 		ED678048279DE0630071CA9D /* StarsComp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED678047279DE0630071CA9D /* StarsComp.swift */; };
 		ED67804A279DE0E60071CA9D /* ColumnComp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED678049279DE0E60071CA9D /* ColumnComp.swift */; };
 		ED67804C279DE18A0071CA9D /* RecordComp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED67804B279DE18A0071CA9D /* RecordComp.swift */; };
@@ -112,12 +75,11 @@
 		ED6A3F2823D534D90095117E /* SongComp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED6A3F2723D534D90095117E /* SongComp.swift */; };
 		ED758160241588ED00A59BF7 /* ScoreBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED75815F241588ED00A59BF7 /* ScoreBoard.swift */; };
 		ED758162241588FF00A59BF7 /* ScoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED758161241588FF00A59BF7 /* ScoreManager.swift */; };
-		ED76173D27AAEFAD000D8A7B /* MIKMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED76173B27AAEF9C000D8A7B /* MIKMIDI.framework */; };
-		ED76173E27AAEFAD000D8A7B /* MIKMIDI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ED76173B27AAEF9C000D8A7B /* MIKMIDI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		ED78D0F3305E36AE00E60E1E /* NativeDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED78D0F2305E36AE00E60E1E /* NativeDecoder.swift */; };
 		ED792E732601553B0045EDFE /* Shaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED792E722601553B0045EDFE /* Shaders.swift */; };
-		ED7E4C6C2297CA4400E084F1 /* TextureMover.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7E4C6B2297CA4400E084F1 /* TextureMover.swift */; };
 		ED7EAC6B2050A124003F1A8E /* SongManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7EAC6A2050A124003F1A8E /* SongManager.swift */; };
 		ED8198CE211CDA17001849F7 /* CoverArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8198CD211CDA17001849F7 /* CoverArt.swift */; };
+		ED842F102A0AD1DB00542AC4 /* bubble.png in Resources */ = {isa = PBXBuildFile; fileRef = ED842F0F2A0AD1DB00542AC4 /* bubble.png */; };
 		ED85361827A8DD6C00CD9021 /* DiscordRP.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED85361727A8DD6C00CD9021 /* DiscordRP.swift */; };
 		ED85A41C22BF412C00D0C94D /* CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED85A41B22BF412C00D0C94D /* CoreData.swift */; };
 		ED8B5151206ED4CB000DB769 /* ScoreKeeper.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8B5150206ED4CB000DB769 /* ScoreKeeper.swift */; };
@@ -125,18 +87,17 @@
 		ED96C8C723DAD3E500D8B488 /* UpNext.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED96C8C623DAD3E500D8B488 /* UpNext.swift */; };
 		ED97F68020F1E373001FAAE0 /* TimeCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED97F67F20F1E373001FAAE0 /* TimeCode.swift */; };
 		ED9A4C25204CDD8E0060DB17 /* titleDisplay.sks in Resources */ = {isa = PBXBuildFile; fileRef = ED9A4C24204CDD8E0060DB17 /* titleDisplay.sks */; };
-		ED9BE13723CF8D310000EF6F /* Spherex.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED9BE13623CF8D310000EF6F /* Spherex.swift */; };
 		ED9BE2CE22CFCD0F00D7B9BC /* GKComponentSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED9BE2CD22CFCD0F00D7B9BC /* GKComponentSystem.swift */; };
+		ED9DF53D3059F6C100B1F1BC /* Stars.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED025D003057640B003710F4 /* Stars.swift */; };
 		EDA0FC6622AC2406005D5DFA /* Instrument.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA0FC6522AC2406005D5DFA /* Instrument.swift */; };
-		EDABD0DD27BA2BC000129C1C /* FZPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDABD0DA27BA2BC000129C1C /* FZPlayer.swift */; };
-		EDABD0DE27BA2BC000129C1C /* fzplayerscheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDABD0DB27BA2BC000129C1C /* fzplayerscheduler.swift */; };
-		EDABD0DF27BA2BC000129C1C /* FZAudioEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDABD0DC27BA2BC000129C1C /* FZAudioEngine.swift */; };
+		EDA3A5A329EF873D001B96AB /* LoadingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA3A5A229EF873D001B96AB /* LoadingScreen.swift */; };
 		EDADB14222A8EB890055A98D /* gameStats.sks in Resources */ = {isa = PBXBuildFile; fileRef = EDADB14122A8EB890055A98D /* gameStats.sks */; };
 		EDAE97F122D43052004A3DA7 /* DifficultyConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDAE97F022D43052004A3DA7 /* DifficultyConfig.swift */; };
 		EDB2B99E22B2B74D001A57D1 /* StageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB2B99D22B2B74D001A57D1 /* StageManager.swift */; };
 		EDB2B9C022B30F4B001A57D1 /* SongMenuOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB2B9BF22B30F4B001A57D1 /* SongMenuOverlay.swift */; };
 		EDB36DD522D2C06E00501DE2 /* StarNoteComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB36DD422D2C06E00501DE2 /* StarNoteComponent.swift */; };
 		EDB79421224203D10036AB69 /* Vocalist.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB79420224203D10036AB69 /* Vocalist.swift */; };
+		EDB7D8E03057286D002E8AC4 /* Spherex.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB7D8DF3057286D002E8AC4 /* Spherex.swift */; };
 		EDBD45BB22C9D64F001DB5D4 /* PianoStage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDBD45BA22C9D64F001DB5D4 /* PianoStage.swift */; };
 		EDBD45BD22C9DC14001DB5D4 /* KeyUpDel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDBD45BC22C9DC14001DB5D4 /* KeyUpDel.swift */; };
 		EDC7379B22D6D7F100B227A1 /* ActivatorComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC7379A22D6D7F100B227A1 /* ActivatorComponent.swift */; };
@@ -146,6 +107,7 @@
 		EDCAA7F9224221C200A4856C /* VocalCoach.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDCAA7F8224221C200A4856C /* VocalCoach.swift */; };
 		EDCACDD620F59EB4008C6DA4 /* ControlInputs.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDCACDD520F59EB4008C6DA4 /* ControlInputs.swift */; };
 		EDD1295B26008B730036FCA1 /* Backdrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD1295A26008B730036FCA1 /* Backdrop.swift */; };
+		EDD306E229E7BF770056CAE7 /* TextureMover.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD306E129E7BF770056CAE7 /* TextureMover.swift */; };
 		EDD3F07822C846A800A51672 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD3F07722C846A800A51672 /* Track.swift */; };
 		EDD3F07B22C8747B00A51672 /* Burstable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD3F07A22C8747B00A51672 /* Burstable.swift */; };
 		EDDF1E8B26DB3E6F00CAFCE6 /* MusicSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDF1E8A26DB3B6200CAFCE6 /* MusicSheet.swift */; };
@@ -157,28 +119,18 @@
 		EDF71BA323F09C6300EEE4DE /* RowCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF71BA223F09C6300EEE4DE /* RowCall.swift */; };
 		EDF83AC82285095800D07E7A /* KeyPaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF83AC72285095800D07E7A /* KeyPaths.swift */; };
 		EDF8DE0621103D5E00F0BAE8 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF8DE0521103D5E00F0BAE8 /* User.swift */; };
-		EDFB2D2325A9650000564689 /* OctopustComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDFB2D2225A9650000564689 /* OctopustComponent.swift */; };
+		EDFB2D2325A9650000564689 /* OctopusComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDFB2D2225A9650000564689 /* OctopusComponent.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		EDAB94FF27AA6FC400F18228 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 12;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				ED2B593027B5DCE400941C1C /* libavformat.58.dylib in Embed Frameworks */,
-				ED2B593127B5DCE600941C1C /* libavutil.56.dylib in Embed Frameworks */,
-				ED2B593227B5DCE700941C1C /* libswresample.3.dylib in Embed Frameworks */,
-				ED2B592F27B5DCE300941C1C /* libavcodec.58.dylib in Embed Frameworks */,
-				ED76173E27AAEFAD000D8A7B /* MIKMIDI.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
+		ED01016030574C7200C0A1C4 /* OggDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OggDecoder.swift; sourceTree = "<group>"; };
+		ED01016230574C9400C0A1C4 /* AVAudioPCMBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAudioPCMBuffer.swift; sourceTree = "<group>"; };
+		ED01016630574D4A00C0A1C4 /* NoiceAudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiceAudioPlayer.swift; sourceTree = "<group>"; };
+		ED025D003057640B003710F4 /* Stars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stars.swift; sourceTree = "<group>"; };
+		ED025D0630576486003710F4 /* SongDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongDetails.swift; sourceTree = "<group>"; };
+		ED025D2D30576EA6003710F4 /* Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Actions.swift; sourceTree = "<group>"; };
+		ED025D3B3059C616003710F4 /* iniCleanser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iniCleanser.swift; sourceTree = "<group>"; };
+		ED0318FA2A11F4A60091177B /* Experimental.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Experimental.swift; sourceTree = "<group>"; };
 		ED08671E2256DE3D00D36AA4 /* action.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = action.sks; path = "Rubber Band/resources/actions/action.sks"; sourceTree = SOURCE_ROOT; };
 		ED0B5FBB204A847D00524979 /* SongFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongFinder.swift; sourceTree = "<group>"; };
 		ED0CB21525FDC9D800B57428 /* Anal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anal.swift; sourceTree = "<group>"; };
@@ -186,178 +138,22 @@
 		ED12650320649BAE002423A8 /* StarPower.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarPower.swift; sourceTree = "<group>"; };
 		ED153705204297A300ADBA12 /* MIDIDevices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIDevices.swift; sourceTree = "<group>"; };
 		ED1665352033E3FC0099DE12 /* FZMIDI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FZMIDI.swift; sourceTree = "<group>"; };
+		ED16ADAD2A06130F00AF1B9D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		ED16ADB62A06313100AF1B9D /* MyParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MyParticle.sks; sourceTree = "<group>"; };
 		ED1CB7C825BE802900AD6D56 /* Octopus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Octopus.swift; sourceTree = "<group>"; };
 		ED1E87CC265F18A900A80228 /* help_drums.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = help_drums.png; sourceTree = "<group>"; };
 		ED1F1E7B22B1CDC000B21883 /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		ED20376A2255D88300E3AC22 /* noart.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = noart.jpg; sourceTree = "<group>"; };
+		ED211C632A2FE1890069F537 /* mul */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; name = mul; path = mul.lproj/Main.xcstrings; sourceTree = "<group>"; };
+		ED211C642A2FE37F0069F537 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		ED21999C274200E600808587 /* extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extensions.swift; sourceTree = "<group>"; };
-		ED26C3C52055048200CFE29C /* OggNo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OggNo.swift; sourceTree = "<group>"; };
 		ED274DA221141BA000CC788C /* ChartIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartIcons.swift; sourceTree = "<group>"; };
 		ED2903432058F8A0006BF673 /* scoredisplay.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = scoredisplay.sks; sourceTree = "<group>"; };
 		ED2AA00822B4838B00E61D89 /* SongMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongMenu.swift; sourceTree = "<group>"; };
 		ED2AA00C22B4B53200E61D89 /* DrumStage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrumStage.swift; sourceTree = "<group>"; };
 		ED2AA00E22B4B8A000E61D89 /* GuitarStage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuitarStage.swift; sourceTree = "<group>"; };
-		ED2B592727B5DCBE00941C1C /* libavcodec.58.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libavcodec.58.dylib; sourceTree = "<group>"; };
-		ED2B592827B5DCBF00941C1C /* libswresample.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libswresample.3.dylib; sourceTree = "<group>"; };
-		ED2B592927B5DCBF00941C1C /* libavutil.56.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libavutil.56.dylib; sourceTree = "<group>"; };
-		ED2B592A27B5DCBF00941C1C /* libavformat.58.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libavformat.58.dylib; sourceTree = "<group>"; };
-		ED2B5A0627B5E76C00941C1C /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		ED2B5A1127B5E76C00941C1C /* hwcontext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hwcontext.h; sourceTree = "<group>"; };
-		ED2B5A1227B5E76C00941C1C /* time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = time.h; sourceTree = "<group>"; };
-		ED2B5A1327B5E76C00941C1C /* hwcontext_cuda.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hwcontext_cuda.h; sourceTree = "<group>"; };
-		ED2B5A1427B5E76C00941C1C /* intfloat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = intfloat.h; sourceTree = "<group>"; };
-		ED2B5A1527B5E76C00941C1C /* error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = error.h; sourceTree = "<group>"; };
-		ED2B5A1627B5E76C00941C1C /* fifo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fifo.h; sourceTree = "<group>"; };
-		ED2B5A1727B5E76C00941C1C /* blowfish.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blowfish.h; sourceTree = "<group>"; };
-		ED2B5A1827B5E76C00941C1C /* hwcontext_mediacodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hwcontext_mediacodec.h; sourceTree = "<group>"; };
-		ED2B5A1927B5E76C00941C1C /* replaygain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = replaygain.h; sourceTree = "<group>"; };
-		ED2B5A1A27B5E76C00941C1C /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
-		ED2B5A1B27B5E76C00941C1C /* murmur3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = murmur3.h; sourceTree = "<group>"; };
-		ED2B5A1C27B5E76C00941C1C /* stereo3d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stereo3d.h; sourceTree = "<group>"; };
-		ED2B5A1D27B5E76C00941C1C /* samplefmt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = samplefmt.h; sourceTree = "<group>"; };
-		ED2B5A1E27B5E76C00941C1C /* pixdesc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pixdesc.h; sourceTree = "<group>"; };
-		ED2B5A1F27B5E76C00941C1C /* base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base64.h; sourceTree = "<group>"; };
-		ED2B5A2027B5E76C00941C1C /* rational.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rational.h; sourceTree = "<group>"; };
-		ED2B5A2127B5E76C00941C1C /* sha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha.h; sourceTree = "<group>"; };
-		ED2B5A2227B5E76C00941C1C /* motion_vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = motion_vector.h; sourceTree = "<group>"; };
-		ED2B5A2327B5E76C00941C1C /* avconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = avconfig.h; sourceTree = "<group>"; };
-		ED2B5A2427B5E76C00941C1C /* lfg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lfg.h; sourceTree = "<group>"; };
-		ED2B5A2527B5E76C00941C1C /* avutil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = avutil.h; sourceTree = "<group>"; };
-		ED2B5A2627B5E76C00941C1C /* hwcontext_vulkan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hwcontext_vulkan.h; sourceTree = "<group>"; };
-		ED2B5A2727B5E76C00941C1C /* xtea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xtea.h; sourceTree = "<group>"; };
-		ED2B5A2827B5E76C00941C1C /* crc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crc.h; sourceTree = "<group>"; };
-		ED2B5A2927B5E76C00941C1C /* hwcontext_vdpau.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hwcontext_vdpau.h; sourceTree = "<group>"; };
-		ED2B5A2A27B5E76C00941C1C /* frame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = frame.h; sourceTree = "<group>"; };
-		ED2B5A2B27B5E76C00941C1C /* file.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = file.h; sourceTree = "<group>"; };
-		ED2B5A2C27B5E76C00941C1C /* md5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = md5.h; sourceTree = "<group>"; };
-		ED2B5A2D27B5E76C00941C1C /* cast5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cast5.h; sourceTree = "<group>"; };
-		ED2B5A2E27B5E76C00941C1C /* hwcontext_vaapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hwcontext_vaapi.h; sourceTree = "<group>"; };
-		ED2B5A2F27B5E76C00941C1C /* spherical.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = spherical.h; sourceTree = "<group>"; };
-		ED2B5A3027B5E76C00941C1C /* ffversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffversion.h; sourceTree = "<group>"; };
-		ED2B5A3127B5E76C00941C1C /* hwcontext_opencl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hwcontext_opencl.h; sourceTree = "<group>"; };
-		ED2B5A3227B5E76C00941C1C /* audio_fifo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = audio_fifo.h; sourceTree = "<group>"; };
-		ED2B5A3327B5E76C00941C1C /* tree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tree.h; sourceTree = "<group>"; };
-		ED2B5A3427B5E76C00941C1C /* threadmessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = threadmessage.h; sourceTree = "<group>"; };
-		ED2B5A3527B5E76C00941C1C /* attributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = attributes.h; sourceTree = "<group>"; };
-		ED2B5A3627B5E76C00941C1C /* adler32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adler32.h; sourceTree = "<group>"; };
-		ED2B5A3727B5E76C00941C1C /* hwcontext_d3d11va.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hwcontext_d3d11va.h; sourceTree = "<group>"; };
-		ED2B5A3827B5E76C00941C1C /* timecode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = timecode.h; sourceTree = "<group>"; };
-		ED2B5A3927B5E76C00941C1C /* dovi_meta.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dovi_meta.h; sourceTree = "<group>"; };
-		ED2B5A3A27B5E76C00941C1C /* tx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tx.h; sourceTree = "<group>"; };
-		ED2B5A3B27B5E76C00941C1C /* sha512.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha512.h; sourceTree = "<group>"; };
-		ED2B5A3C27B5E76C00941C1C /* hwcontext_dxva2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hwcontext_dxva2.h; sourceTree = "<group>"; };
-		ED2B5A3D27B5E76C00941C1C /* display.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = display.h; sourceTree = "<group>"; };
-		ED2B5A3E27B5E76C00941C1C /* buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = buffer.h; sourceTree = "<group>"; };
-		ED2B5A3F27B5E76C00941C1C /* camellia.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = camellia.h; sourceTree = "<group>"; };
-		ED2B5A4027B5E76C00941C1C /* pixelutils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pixelutils.h; sourceTree = "<group>"; };
-		ED2B5A4127B5E76C00941C1C /* hwcontext_drm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hwcontext_drm.h; sourceTree = "<group>"; };
-		ED2B5A4227B5E76C00941C1C /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
-		ED2B5A4327B5E76C00941C1C /* hmac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hmac.h; sourceTree = "<group>"; };
-		ED2B5A4427B5E76C00941C1C /* eval.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = eval.h; sourceTree = "<group>"; };
-		ED2B5A4527B5E76C00941C1C /* dict.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dict.h; sourceTree = "<group>"; };
-		ED2B5A4627B5E76C00941C1C /* random_seed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = random_seed.h; sourceTree = "<group>"; };
-		ED2B5A4727B5E76C00941C1C /* opt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = opt.h; sourceTree = "<group>"; };
-		ED2B5A4827B5E76C00941C1C /* mastering_display_metadata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mastering_display_metadata.h; sourceTree = "<group>"; };
-		ED2B5A4927B5E76C00941C1C /* log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = log.h; sourceTree = "<group>"; };
-		ED2B5A4A27B5E76C00941C1C /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
-		ED2B5A4B27B5E76C00941C1C /* macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = macros.h; sourceTree = "<group>"; };
-		ED2B5A4C27B5E76C00941C1C /* bswap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bswap.h; sourceTree = "<group>"; };
-		ED2B5A4D27B5E76C00941C1C /* rc4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rc4.h; sourceTree = "<group>"; };
-		ED2B5A4E27B5E76C00941C1C /* tea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tea.h; sourceTree = "<group>"; };
-		ED2B5A4F27B5E76C00941C1C /* cpu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cpu.h; sourceTree = "<group>"; };
-		ED2B5A5027B5E76C00941C1C /* lzo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lzo.h; sourceTree = "<group>"; };
-		ED2B5A5127B5E76C00941C1C /* des.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = des.h; sourceTree = "<group>"; };
-		ED2B5A5227B5E76C00941C1C /* channel_layout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = channel_layout.h; sourceTree = "<group>"; };
-		ED2B5A5327B5E76C00941C1C /* encryption_info.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = encryption_info.h; sourceTree = "<group>"; };
-		ED2B5A5427B5E76C00941C1C /* twofish.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = twofish.h; sourceTree = "<group>"; };
-		ED2B5A5527B5E76C00941C1C /* imgutils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgutils.h; sourceTree = "<group>"; };
-		ED2B5A5627B5E76C00941C1C /* hwcontext_videotoolbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hwcontext_videotoolbox.h; sourceTree = "<group>"; };
-		ED2B5A5727B5E76C00941C1C /* video_enc_params.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = video_enc_params.h; sourceTree = "<group>"; };
-		ED2B5A5827B5E76C00941C1C /* mem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mem.h; sourceTree = "<group>"; };
-		ED2B5A5927B5E76C00941C1C /* parseutils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = parseutils.h; sourceTree = "<group>"; };
-		ED2B5A5A27B5E76C00941C1C /* ripemd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ripemd.h; sourceTree = "<group>"; };
-		ED2B5A5B27B5E76C00941C1C /* bprint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bprint.h; sourceTree = "<group>"; };
-		ED2B5A5C27B5E76C00941C1C /* hdr_dynamic_metadata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hdr_dynamic_metadata.h; sourceTree = "<group>"; };
-		ED2B5A5D27B5E76C00941C1C /* hwcontext_qsv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hwcontext_qsv.h; sourceTree = "<group>"; };
-		ED2B5A5E27B5E76C00941C1C /* pixfmt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pixfmt.h; sourceTree = "<group>"; };
-		ED2B5A5F27B5E76C00941C1C /* aes_ctr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes_ctr.h; sourceTree = "<group>"; };
-		ED2B5A6027B5E76C00941C1C /* timestamp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = timestamp.h; sourceTree = "<group>"; };
-		ED2B5A6127B5E76C00941C1C /* downmix_info.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = downmix_info.h; sourceTree = "<group>"; };
-		ED2B5A6227B5E76C00941C1C /* avassert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = avassert.h; sourceTree = "<group>"; };
-		ED2B5A6327B5E76C00941C1C /* hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hash.h; sourceTree = "<group>"; };
-		ED2B5A6427B5E76C00941C1C /* mathematics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mathematics.h; sourceTree = "<group>"; };
-		ED2B5A6527B5E76C00941C1C /* intreadwrite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = intreadwrite.h; sourceTree = "<group>"; };
-		ED2B5A6627B5E76C00941C1C /* avstring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = avstring.h; sourceTree = "<group>"; };
-		ED2B5A6827B5E76C00941C1C /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
-		ED2B5A6927B5E76C00941C1C /* avio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = avio.h; sourceTree = "<group>"; };
-		ED2B5A6A27B5E76C00941C1C /* avformat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = avformat.h; sourceTree = "<group>"; };
-		ED2B5A6C27B5E76C00941C1C /* adts_parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adts_parser.h; sourceTree = "<group>"; };
-		ED2B5A6D27B5E76C00941C1C /* avcodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = avcodec.h; sourceTree = "<group>"; };
-		ED2B5A6E27B5E76C00941C1C /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
-		ED2B5A6F27B5E76C00941C1C /* vdpau.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vdpau.h; sourceTree = "<group>"; };
-		ED2B5A7027B5E76C00941C1C /* codec_par.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = codec_par.h; sourceTree = "<group>"; };
-		ED2B5A7127B5E76C00941C1C /* qsv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qsv.h; sourceTree = "<group>"; };
-		ED2B5A7227B5E76C00941C1C /* vaapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vaapi.h; sourceTree = "<group>"; };
-		ED2B5A7327B5E76C00941C1C /* codec_desc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = codec_desc.h; sourceTree = "<group>"; };
-		ED2B5A7427B5E76C00941C1C /* videotoolbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = videotoolbox.h; sourceTree = "<group>"; };
-		ED2B5A7527B5E76C00941C1C /* xvmc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xvmc.h; sourceTree = "<group>"; };
-		ED2B5A7627B5E76C00941C1C /* mediacodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mediacodec.h; sourceTree = "<group>"; };
-		ED2B5A7727B5E76C00941C1C /* d3d11va.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = d3d11va.h; sourceTree = "<group>"; };
-		ED2B5A7827B5E76C00941C1C /* avfft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = avfft.h; sourceTree = "<group>"; };
-		ED2B5A7927B5E76C00941C1C /* codec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = codec.h; sourceTree = "<group>"; };
-		ED2B5A7A27B5E76C00941C1C /* jni.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jni.h; sourceTree = "<group>"; };
-		ED2B5A7B27B5E76C00941C1C /* packet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = packet.h; sourceTree = "<group>"; };
-		ED2B5A7C27B5E76C00941C1C /* bsf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bsf.h; sourceTree = "<group>"; };
-		ED2B5A7D27B5E76C00941C1C /* codec_id.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = codec_id.h; sourceTree = "<group>"; };
-		ED2B5A7E27B5E76C00941C1C /* dirac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dirac.h; sourceTree = "<group>"; };
-		ED2B5A7F27B5E76C00941C1C /* avdct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = avdct.h; sourceTree = "<group>"; };
-		ED2B5A8027B5E76C00941C1C /* ac3_parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ac3_parser.h; sourceTree = "<group>"; };
-		ED2B5A8127B5E76C00941C1C /* vorbis_parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vorbis_parser.h; sourceTree = "<group>"; };
-		ED2B5A8227B5E76C00941C1C /* dxva2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dxva2.h; sourceTree = "<group>"; };
-		ED2B5A8327B5E76C00941C1C /* dv_profile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dv_profile.h; sourceTree = "<group>"; };
-		ED2B5A8527B5E76C00941C1C /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
-		ED2B5A8627B5E76C00941C1C /* swresample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = swresample.h; sourceTree = "<group>"; };
-		ED2B5A8727B5E76C00941C1C /* ffmpeg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffmpeg.h; sourceTree = "<group>"; };
-		ED2B5A8927B5E76C00941C1C /* PlayerScheduling.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerScheduling.swift; sourceTree = "<group>"; };
-		ED2B5A8B27B5E76C00941C1C /* FFmpegSampleConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FFmpegSampleConverter.swift; sourceTree = "<group>"; };
-		ED2B5A8C27B5E76C00941C1C /* Decoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Decoder.swift; sourceTree = "<group>"; };
-		ED2B5A8D27B5E76C00941C1C /* ChannelLayouts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelLayouts.swift; sourceTree = "<group>"; };
-		ED2B5A8E27B5E76C00941C1C /* SampleConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleConverter.swift; sourceTree = "<group>"; };
-		ED2B5A8F27B5E76C00941C1C /* FrameBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameBuffer.swift; sourceTree = "<group>"; };
-		ED2B5A9027B5E76C00941C1C /* AVFSampleConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVFSampleConverter.swift; sourceTree = "<group>"; };
-		ED2B5A9127B5E76C00941C1C /* AVFUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVFUtils.swift; sourceTree = "<group>"; };
-		ED2B5A9227B5E76C00941C1C /* FFPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FFPlayer.swift; sourceTree = "<group>"; };
-		ED2B5A9427B5E76C00941C1C /* AudioEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioEngine.swift; sourceTree = "<group>"; };
-		ED2B5A9527B5E76C00941C1C /* FFmpegPlayer-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FFmpegPlayer-Bridging-Header.h"; sourceTree = "<group>"; };
-		ED2B5A9727B5E76C00941C1C /* UtilsExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UtilsExtensions.swift; sourceTree = "<group>"; };
-		ED2B5A9827B5E76C00941C1C /* ConcurrentArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConcurrentArray.swift; sourceTree = "<group>"; };
-		ED2B5A9927B5E76C00941C1C /* NumericStringFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumericStringFormatter.swift; sourceTree = "<group>"; };
-		ED2B5A9A27B5E76C00941C1C /* AtomicCounter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AtomicCounter.swift; sourceTree = "<group>"; };
-		ED2B5A9B27B5E76C00941C1C /* BufferFileWriter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferFileWriter.swift; sourceTree = "<group>"; };
-		ED2B5A9C27B5E76C00941C1C /* Queue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
-		ED2B5A9D27B5E76C00941C1C /* Mapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mapper.swift; sourceTree = "<group>"; };
-		ED2B5A9E27B5E76C00941C1C /* ffmpeg.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffmpeg.c; sourceTree = "<group>"; };
-		ED2B5AA127B5E76C00941C1C /* SampleFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleFormat.swift; sourceTree = "<group>"; };
-		ED2B5AA227B5E76C00941C1C /* StreamProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamProtocol.swift; sourceTree = "<group>"; };
-		ED2B5AA327B5E76C00941C1C /* FFmpegAudioFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FFmpegAudioFormat.swift; sourceTree = "<group>"; };
-		ED2B5AA427B5E76C00941C1C /* MetadataDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetadataDictionary.swift; sourceTree = "<group>"; };
-		ED2B5AA527B5E76C00941C1C /* ImageStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageStream.swift; sourceTree = "<group>"; };
-		ED2B5AA627B5E76C00941C1C /* Codec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Codec.swift; sourceTree = "<group>"; };
-		ED2B5AA727B5E76C00941C1C /* PacketFrames.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PacketFrames.swift; sourceTree = "<group>"; };
-		ED2B5AA827B5E76C00941C1C /* MEC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MEC.swift; sourceTree = "<group>"; };
-		ED2B5AA927B5E76C00941C1C /* FormatContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormatContext.swift; sourceTree = "<group>"; };
-		ED2B5AAA27B5E76C00941C1C /* Frame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Frame.swift; sourceTree = "<group>"; };
-		ED2B5AAB27B5E76C00941C1C /* Chapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chapter.swift; sourceTree = "<group>"; };
-		ED2B5AAC27B5E76C00941C1C /* Packet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Packet.swift; sourceTree = "<group>"; };
-		ED2B5AAD27B5E76C00941C1C /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
-		ED2B5AAE27B5E76C00941C1C /* ResamplingContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResamplingContext.swift; sourceTree = "<group>"; };
-		ED2B5AAF27B5E76C00941C1C /* PacketTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PacketTable.swift; sourceTree = "<group>"; };
-		ED2B5AB027B5E76C00941C1C /* AudioCodec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioCodec.swift; sourceTree = "<group>"; };
-		ED2B5AB127B5E76C00941C1C /* MetadataEditingContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetadataEditingContext.swift; sourceTree = "<group>"; };
-		ED2B5AB227B5E76C00941C1C /* AudioFileContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioFileContext.swift; sourceTree = "<group>"; };
-		ED2B5AB327B5E76C00941C1C /* AudioStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioStream.swift; sourceTree = "<group>"; };
-		ED2B5AB527B5E76C00941C1C /* MetadataReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetadataReader.swift; sourceTree = "<group>"; };
-		ED2B5AB627B5E76C00941C1C /* TrackInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackInfo.swift; sourceTree = "<group>"; };
+		ED2CB5EF29EA2CB200D6EB19 /* stars.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = stars.atlas; sourceTree = "<group>"; };
+		ED2CB5F329EA2D0E00D6EB19 /* starnormals.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = starnormals.atlas; sourceTree = "<group>"; };
 		ED2FB5E022CFB2D200A4B484 /* NoteEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteEntity.swift; sourceTree = "<group>"; };
 		ED2FE4A422D5833600F18789 /* Drums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drums.swift; sourceTree = "<group>"; };
 		ED2FF7E7229A0AF6001B02C5 /* Jukebox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Jukebox.swift; sourceTree = "<group>"; };
@@ -367,6 +163,7 @@
 		ED4179D22676CC9F00C6C297 /* RewindState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RewindState.swift; sourceTree = "<group>"; };
 		ED4179D42676CCD100C6C297 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
 		ED4179D62676DA2B00C6C297 /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Fonts; sourceTree = "<group>"; };
+		ED4509F229E4F2AC0034A098 /* RandomPlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomPlay.swift; sourceTree = "<group>"; };
 		ED45BD15202CC5FC00E4A9AD /* noice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = noice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED45BD18202CC5FC00E4A9AD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ED45BD1A202CC5FC00E4A9AD /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -387,7 +184,6 @@
 		ED4B11E726756E6100E8D0AD /* PausedState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PausedState.swift; sourceTree = "<group>"; };
 		ED4B121726756FA300E8D0AD /* ScoreState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreState.swift; sourceTree = "<group>"; };
 		ED51B8302796A4830010950B /* TitleCredit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCredit.swift; sourceTree = "<group>"; };
-		ED527E0722A44C6000C63A4D /* Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Actions.swift; sourceTree = "<group>"; };
 		ED59D2A924441D0000CF8617 /* catalog.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = catalog.xcdatamodel; sourceTree = "<group>"; };
 		ED5C68CD266079270081A557 /* Help.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Help.swift; sourceTree = "<group>"; };
 		ED655843245F5A170035EFCB /* noiceDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = noiceDebug.entitlements; sourceTree = "<group>"; };
@@ -399,14 +195,13 @@
 		ED6A3F2723D534D90095117E /* SongComp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongComp.swift; sourceTree = "<group>"; };
 		ED75815F241588ED00A59BF7 /* ScoreBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreBoard.swift; sourceTree = "<group>"; };
 		ED758161241588FF00A59BF7 /* ScoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreManager.swift; sourceTree = "<group>"; };
-		ED76173B27AAEF9C000D8A7B /* MIKMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MIKMIDI.framework; sourceTree = "<group>"; };
 		ED76762A22CE9FE500FA2C82 /* notes.txt */ = {isa = PBXFileReference; explicitFileType = text; path = notes.txt; sourceTree = "<group>"; };
 		ED77F6D22055C86D004CD1E4 /* RubberBand-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RubberBand-Bridging-Header.h"; sourceTree = "<group>"; };
+		ED78D0F2305E36AE00E60E1E /* NativeDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeDecoder.swift; sourceTree = "<group>"; };
 		ED792E722601553B0045EDFE /* Shaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shaders.swift; sourceTree = "<group>"; };
-		ED7E4C6B2297CA4400E084F1 /* TextureMover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureMover.swift; sourceTree = "<group>"; };
 		ED7EAC6A2050A124003F1A8E /* SongManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongManager.swift; sourceTree = "<group>"; };
 		ED8198CD211CDA17001849F7 /* CoverArt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoverArt.swift; sourceTree = "<group>"; };
-		ED85361227A8D93100CD9021 /* SwordRPC */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SwordRPC; path = ../../../../../../../Applications/SwordRPC; sourceTree = "<group>"; };
+		ED842F0F2A0AD1DB00542AC4 /* bubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bubble.png; sourceTree = "<group>"; };
 		ED85361727A8DD6C00CD9021 /* DiscordRP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscordRP.swift; sourceTree = "<group>"; };
 		ED85A41B22BF412C00D0C94D /* CoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreData.swift; sourceTree = "<group>"; };
 		ED8B5150206ED4CB000DB769 /* ScoreKeeper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreKeeper.swift; sourceTree = "<group>"; };
@@ -414,19 +209,16 @@
 		ED96C8C623DAD3E500D8B488 /* UpNext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpNext.swift; sourceTree = "<group>"; };
 		ED97F67F20F1E373001FAAE0 /* TimeCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeCode.swift; sourceTree = "<group>"; };
 		ED9A4C24204CDD8E0060DB17 /* titleDisplay.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = titleDisplay.sks; sourceTree = "<group>"; };
-		ED9BE13623CF8D310000EF6F /* Spherex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Spherex.swift; path = "/Users/fernando/Library/Mobile Documents/com~apple~CloudDocs/Development/xcode/Rubberband/RubberBand/Rubber Band/GamePlay/Spherex.swift"; sourceTree = "<absolute>"; };
 		ED9BE2CD22CFCD0F00D7B9BC /* GKComponentSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GKComponentSystem.swift; sourceTree = "<group>"; };
 		EDA0FC6522AC2406005D5DFA /* Instrument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Instrument.swift; sourceTree = "<group>"; };
-		EDABD0DA27BA2BC000129C1C /* FZPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FZPlayer.swift; sourceTree = "<group>"; };
-		EDABD0DB27BA2BC000129C1C /* fzplayerscheduler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = fzplayerscheduler.swift; sourceTree = "<group>"; };
-		EDABD0DC27BA2BC000129C1C /* FZAudioEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FZAudioEngine.swift; sourceTree = "<group>"; };
+		EDA3A5A229EF873D001B96AB /* LoadingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingScreen.swift; sourceTree = "<group>"; };
 		EDADB14122A8EB890055A98D /* gameStats.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = gameStats.sks; sourceTree = "<group>"; };
 		EDAE97F022D43052004A3DA7 /* DifficultyConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DifficultyConfig.swift; sourceTree = "<group>"; };
 		EDB2B99D22B2B74D001A57D1 /* StageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StageManager.swift; sourceTree = "<group>"; };
 		EDB2B9BF22B30F4B001A57D1 /* SongMenuOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongMenuOverlay.swift; sourceTree = "<group>"; };
 		EDB36DD422D2C06E00501DE2 /* StarNoteComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarNoteComponent.swift; sourceTree = "<group>"; };
-		EDB55A3727D08D2F00A8AAFA /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		EDB79420224203D10036AB69 /* Vocalist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vocalist.swift; sourceTree = "<group>"; };
+		EDB7D8DF3057286D002E8AC4 /* Spherex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spherex.swift; sourceTree = "<group>"; };
 		EDBD45BA22C9D64F001DB5D4 /* PianoStage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoStage.swift; sourceTree = "<group>"; };
 		EDBD45BC22C9DC14001DB5D4 /* KeyUpDel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyUpDel.swift; sourceTree = "<group>"; };
 		EDC7379A22D6D7F100B227A1 /* ActivatorComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivatorComponent.swift; sourceTree = "<group>"; };
@@ -436,6 +228,8 @@
 		EDCAA7F8224221C200A4856C /* VocalCoach.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocalCoach.swift; sourceTree = "<group>"; };
 		EDCACDD520F59EB4008C6DA4 /* ControlInputs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlInputs.swift; sourceTree = "<group>"; };
 		EDD1295A26008B730036FCA1 /* Backdrop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backdrop.swift; sourceTree = "<group>"; };
+		EDD306DF29E7BF3C0056CAE7 /* Stars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Stars.swift; path = "Rubber Band/Stars.swift"; sourceTree = SOURCE_ROOT; };
+		EDD306E129E7BF770056CAE7 /* TextureMover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureMover.swift; sourceTree = "<group>"; };
 		EDD3F07722C846A800A51672 /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		EDD3F07A22C8747B00A51672 /* Burstable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Burstable.swift; sourceTree = "<group>"; };
 		EDDF1E8A26DB3B6200CAFCE6 /* MusicSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicSheet.swift; sourceTree = "<group>"; };
@@ -449,34 +243,26 @@
 		EDF71BA223F09C6300EEE4DE /* RowCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowCall.swift; sourceTree = "<group>"; };
 		EDF83AC72285095800D07E7A /* KeyPaths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPaths.swift; sourceTree = "<group>"; };
 		EDF8DE0521103D5E00F0BAE8 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		EDFB2D2225A9650000564689 /* OctopustComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OctopustComponent.swift; sourceTree = "<group>"; };
+		EDFB2D2225A9650000564689 /* OctopusComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OctopusComponent.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		ED78D0F6305E3F0D00E60E1E /* deprecated */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = deprecated; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		ED45BD12202CC5FC00E4A9AD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ED2B592E27B5DCBF00941C1C /* libavformat.58.dylib in Frameworks */,
-				ED2B592D27B5DCBF00941C1C /* libavutil.56.dylib in Frameworks */,
-				ED2B592B27B5DCBF00941C1C /* libavcodec.58.dylib in Frameworks */,
-				ED4C8E7727AEF7CA00F7DFF7 /* SwordRPC in Frameworks */,
-				ED2B592C27B5DCBF00941C1C /* libswresample.3.dylib in Frameworks */,
-				ED76173D27AAEFAD000D8A7B /* MIKMIDI.framework in Frameworks */,
+				ED01015F30574BAB00C0A1C4 /* LibVorbis in Frameworks */,
+				ED0100DA305737B000C0A1C4 /* SwiftRPC in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		ED12F0FC27A8D42600B59222 /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-				ED85361227A8D93100CD9021 /* SwordRPC */,
-			);
-			name = Packages;
-			sourceTree = "<group>";
-		};
 		ED1CB7C725BE801300AD6D56 /* fun stuff */ = {
 			isa = PBXGroup;
 			children = (
@@ -488,11 +274,14 @@
 		ED2037682255D4E600E3AC22 /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				ED2CB5F329EA2D0E00D6EB19 /* starnormals.atlas */,
+				ED2CB5EF29EA2CB200D6EB19 /* stars.atlas */,
 				ED4179D62676DA2B00C6C297 /* Fonts */,
 				ED9A4C23204CDCF10060DB17 /* gui */,
 				ED527E0622A44C3D00C63A4D /* actions */,
 				EDEBC43E22A3187D00655BB9 /* icon.atlas */,
 				ED2037692255D87600E3AC22 /* textures */,
+				ED211C642A2FE37F0069F537 /* Localizable.xcstrings */,
 			);
 			path = resources;
 			sourceTree = "<group>";
@@ -500,6 +289,7 @@
 		ED2037692255D87600E3AC22 /* textures */ = {
 			isa = PBXGroup;
 			children = (
+				ED842F0F2A0AD1DB00542AC4 /* bubble.png */,
 				ED0EFC0F2661B5210006E7F9 /* keyboard_key.png */,
 				ED1E87CC265F18A900A80228 /* help_drums.png */,
 				ED20376A2255D88300E3AC22 /* noart.jpg */,
@@ -507,258 +297,11 @@
 			path = textures;
 			sourceTree = "<group>";
 		};
-		ED2B5A0527B5E76C00941C1C /* ffPlayer */ = {
-			isa = PBXGroup;
-			children = (
-				ED2B5A0627B5E76C00941C1C /* Constants.swift */,
-				ED2B5A0F27B5E76C00941C1C /* ffmpeg */,
-				ED2B5A8727B5E76C00941C1C /* ffmpeg.h */,
-				ED2B5A8827B5E76C00941C1C /* ffPlayer */,
-				ED2B5A9527B5E76C00941C1C /* FFmpegPlayer-Bridging-Header.h */,
-				ED2B5A9627B5E76C00941C1C /* Utils */,
-				ED2B5A9E27B5E76C00941C1C /* ffmpeg.c */,
-				ED2B5AA027B5E76C00941C1C /* FFmpegWrappers */,
-				ED2B5AB427B5E76C00941C1C /* Metadata */,
-			);
-			path = ffPlayer;
-			sourceTree = "<group>";
-		};
-		ED2B5A0F27B5E76C00941C1C /* ffmpeg */ = {
-			isa = PBXGroup;
-			children = (
-				ED2B5A1027B5E76C00941C1C /* libavutil */,
-				ED2B5A6727B5E76C00941C1C /* libavformat */,
-				ED2B5A6B27B5E76C00941C1C /* libavcodec */,
-				ED2B5A8427B5E76C00941C1C /* libswresample */,
-			);
-			path = ffmpeg;
-			sourceTree = "<group>";
-		};
-		ED2B5A1027B5E76C00941C1C /* libavutil */ = {
-			isa = PBXGroup;
-			children = (
-				ED2B5A1127B5E76C00941C1C /* hwcontext.h */,
-				ED2B5A1227B5E76C00941C1C /* time.h */,
-				ED2B5A1327B5E76C00941C1C /* hwcontext_cuda.h */,
-				ED2B5A1427B5E76C00941C1C /* intfloat.h */,
-				ED2B5A1527B5E76C00941C1C /* error.h */,
-				ED2B5A1627B5E76C00941C1C /* fifo.h */,
-				ED2B5A1727B5E76C00941C1C /* blowfish.h */,
-				ED2B5A1827B5E76C00941C1C /* hwcontext_mediacodec.h */,
-				ED2B5A1927B5E76C00941C1C /* replaygain.h */,
-				ED2B5A1A27B5E76C00941C1C /* version.h */,
-				ED2B5A1B27B5E76C00941C1C /* murmur3.h */,
-				ED2B5A1C27B5E76C00941C1C /* stereo3d.h */,
-				ED2B5A1D27B5E76C00941C1C /* samplefmt.h */,
-				ED2B5A1E27B5E76C00941C1C /* pixdesc.h */,
-				ED2B5A1F27B5E76C00941C1C /* base64.h */,
-				ED2B5A2027B5E76C00941C1C /* rational.h */,
-				ED2B5A2127B5E76C00941C1C /* sha.h */,
-				ED2B5A2227B5E76C00941C1C /* motion_vector.h */,
-				ED2B5A2327B5E76C00941C1C /* avconfig.h */,
-				ED2B5A2427B5E76C00941C1C /* lfg.h */,
-				ED2B5A2527B5E76C00941C1C /* avutil.h */,
-				ED2B5A2627B5E76C00941C1C /* hwcontext_vulkan.h */,
-				ED2B5A2727B5E76C00941C1C /* xtea.h */,
-				ED2B5A2827B5E76C00941C1C /* crc.h */,
-				ED2B5A2927B5E76C00941C1C /* hwcontext_vdpau.h */,
-				ED2B5A2A27B5E76C00941C1C /* frame.h */,
-				ED2B5A2B27B5E76C00941C1C /* file.h */,
-				ED2B5A2C27B5E76C00941C1C /* md5.h */,
-				ED2B5A2D27B5E76C00941C1C /* cast5.h */,
-				ED2B5A2E27B5E76C00941C1C /* hwcontext_vaapi.h */,
-				ED2B5A2F27B5E76C00941C1C /* spherical.h */,
-				ED2B5A3027B5E76C00941C1C /* ffversion.h */,
-				ED2B5A3127B5E76C00941C1C /* hwcontext_opencl.h */,
-				ED2B5A3227B5E76C00941C1C /* audio_fifo.h */,
-				ED2B5A3327B5E76C00941C1C /* tree.h */,
-				ED2B5A3427B5E76C00941C1C /* threadmessage.h */,
-				ED2B5A3527B5E76C00941C1C /* attributes.h */,
-				ED2B5A3627B5E76C00941C1C /* adler32.h */,
-				ED2B5A3727B5E76C00941C1C /* hwcontext_d3d11va.h */,
-				ED2B5A3827B5E76C00941C1C /* timecode.h */,
-				ED2B5A3927B5E76C00941C1C /* dovi_meta.h */,
-				ED2B5A3A27B5E76C00941C1C /* tx.h */,
-				ED2B5A3B27B5E76C00941C1C /* sha512.h */,
-				ED2B5A3C27B5E76C00941C1C /* hwcontext_dxva2.h */,
-				ED2B5A3D27B5E76C00941C1C /* display.h */,
-				ED2B5A3E27B5E76C00941C1C /* buffer.h */,
-				ED2B5A3F27B5E76C00941C1C /* camellia.h */,
-				ED2B5A4027B5E76C00941C1C /* pixelutils.h */,
-				ED2B5A4127B5E76C00941C1C /* hwcontext_drm.h */,
-				ED2B5A4227B5E76C00941C1C /* common.h */,
-				ED2B5A4327B5E76C00941C1C /* hmac.h */,
-				ED2B5A4427B5E76C00941C1C /* eval.h */,
-				ED2B5A4527B5E76C00941C1C /* dict.h */,
-				ED2B5A4627B5E76C00941C1C /* random_seed.h */,
-				ED2B5A4727B5E76C00941C1C /* opt.h */,
-				ED2B5A4827B5E76C00941C1C /* mastering_display_metadata.h */,
-				ED2B5A4927B5E76C00941C1C /* log.h */,
-				ED2B5A4A27B5E76C00941C1C /* aes.h */,
-				ED2B5A4B27B5E76C00941C1C /* macros.h */,
-				ED2B5A4C27B5E76C00941C1C /* bswap.h */,
-				ED2B5A4D27B5E76C00941C1C /* rc4.h */,
-				ED2B5A4E27B5E76C00941C1C /* tea.h */,
-				ED2B5A4F27B5E76C00941C1C /* cpu.h */,
-				ED2B5A5027B5E76C00941C1C /* lzo.h */,
-				ED2B5A5127B5E76C00941C1C /* des.h */,
-				ED2B5A5227B5E76C00941C1C /* channel_layout.h */,
-				ED2B5A5327B5E76C00941C1C /* encryption_info.h */,
-				ED2B5A5427B5E76C00941C1C /* twofish.h */,
-				ED2B5A5527B5E76C00941C1C /* imgutils.h */,
-				ED2B5A5627B5E76C00941C1C /* hwcontext_videotoolbox.h */,
-				ED2B5A5727B5E76C00941C1C /* video_enc_params.h */,
-				ED2B5A5827B5E76C00941C1C /* mem.h */,
-				ED2B5A5927B5E76C00941C1C /* parseutils.h */,
-				ED2B5A5A27B5E76C00941C1C /* ripemd.h */,
-				ED2B5A5B27B5E76C00941C1C /* bprint.h */,
-				ED2B5A5C27B5E76C00941C1C /* hdr_dynamic_metadata.h */,
-				ED2B5A5D27B5E76C00941C1C /* hwcontext_qsv.h */,
-				ED2B5A5E27B5E76C00941C1C /* pixfmt.h */,
-				ED2B5A5F27B5E76C00941C1C /* aes_ctr.h */,
-				ED2B5A6027B5E76C00941C1C /* timestamp.h */,
-				ED2B5A6127B5E76C00941C1C /* downmix_info.h */,
-				ED2B5A6227B5E76C00941C1C /* avassert.h */,
-				ED2B5A6327B5E76C00941C1C /* hash.h */,
-				ED2B5A6427B5E76C00941C1C /* mathematics.h */,
-				ED2B5A6527B5E76C00941C1C /* intreadwrite.h */,
-				ED2B5A6627B5E76C00941C1C /* avstring.h */,
-			);
-			path = libavutil;
-			sourceTree = "<group>";
-		};
-		ED2B5A6727B5E76C00941C1C /* libavformat */ = {
-			isa = PBXGroup;
-			children = (
-				ED2B5A6827B5E76C00941C1C /* version.h */,
-				ED2B5A6927B5E76C00941C1C /* avio.h */,
-				ED2B5A6A27B5E76C00941C1C /* avformat.h */,
-			);
-			path = libavformat;
-			sourceTree = "<group>";
-		};
-		ED2B5A6B27B5E76C00941C1C /* libavcodec */ = {
-			isa = PBXGroup;
-			children = (
-				ED2B5A6C27B5E76C00941C1C /* adts_parser.h */,
-				ED2B5A6D27B5E76C00941C1C /* avcodec.h */,
-				ED2B5A6E27B5E76C00941C1C /* version.h */,
-				ED2B5A6F27B5E76C00941C1C /* vdpau.h */,
-				ED2B5A7027B5E76C00941C1C /* codec_par.h */,
-				ED2B5A7127B5E76C00941C1C /* qsv.h */,
-				ED2B5A7227B5E76C00941C1C /* vaapi.h */,
-				ED2B5A7327B5E76C00941C1C /* codec_desc.h */,
-				ED2B5A7427B5E76C00941C1C /* videotoolbox.h */,
-				ED2B5A7527B5E76C00941C1C /* xvmc.h */,
-				ED2B5A7627B5E76C00941C1C /* mediacodec.h */,
-				ED2B5A7727B5E76C00941C1C /* d3d11va.h */,
-				ED2B5A7827B5E76C00941C1C /* avfft.h */,
-				ED2B5A7927B5E76C00941C1C /* codec.h */,
-				ED2B5A7A27B5E76C00941C1C /* jni.h */,
-				ED2B5A7B27B5E76C00941C1C /* packet.h */,
-				ED2B5A7C27B5E76C00941C1C /* bsf.h */,
-				ED2B5A7D27B5E76C00941C1C /* codec_id.h */,
-				ED2B5A7E27B5E76C00941C1C /* dirac.h */,
-				ED2B5A7F27B5E76C00941C1C /* avdct.h */,
-				ED2B5A8027B5E76C00941C1C /* ac3_parser.h */,
-				ED2B5A8127B5E76C00941C1C /* vorbis_parser.h */,
-				ED2B5A8227B5E76C00941C1C /* dxva2.h */,
-				ED2B5A8327B5E76C00941C1C /* dv_profile.h */,
-			);
-			path = libavcodec;
-			sourceTree = "<group>";
-		};
-		ED2B5A8427B5E76C00941C1C /* libswresample */ = {
-			isa = PBXGroup;
-			children = (
-				ED2B5A8527B5E76C00941C1C /* version.h */,
-				ED2B5A8627B5E76C00941C1C /* swresample.h */,
-			);
-			path = libswresample;
-			sourceTree = "<group>";
-		};
-		ED2B5A8827B5E76C00941C1C /* ffPlayer */ = {
-			isa = PBXGroup;
-			children = (
-				EDABD0DC27BA2BC000129C1C /* FZAudioEngine.swift */,
-				EDABD0DA27BA2BC000129C1C /* FZPlayer.swift */,
-				EDABD0DB27BA2BC000129C1C /* fzplayerscheduler.swift */,
-				ED2B5A8927B5E76C00941C1C /* PlayerScheduling.swift */,
-				ED2B5A8A27B5E76C00941C1C /* Utils */,
-				ED2B5A9227B5E76C00941C1C /* FFPlayer.swift */,
-				ED2B5A9427B5E76C00941C1C /* AudioEngine.swift */,
-			);
-			path = ffPlayer;
-			sourceTree = "<group>";
-		};
-		ED2B5A8A27B5E76C00941C1C /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				ED2B5A8B27B5E76C00941C1C /* FFmpegSampleConverter.swift */,
-				ED2B5A8C27B5E76C00941C1C /* Decoder.swift */,
-				ED2B5A8D27B5E76C00941C1C /* ChannelLayouts.swift */,
-				ED2B5A8E27B5E76C00941C1C /* SampleConverter.swift */,
-				ED2B5A8F27B5E76C00941C1C /* FrameBuffer.swift */,
-				ED2B5A9027B5E76C00941C1C /* AVFSampleConverter.swift */,
-				ED2B5A9127B5E76C00941C1C /* AVFUtils.swift */,
-			);
-			path = Utils;
-			sourceTree = "<group>";
-		};
-		ED2B5A9627B5E76C00941C1C /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				ED2B5A9727B5E76C00941C1C /* UtilsExtensions.swift */,
-				ED2B5A9827B5E76C00941C1C /* ConcurrentArray.swift */,
-				ED2B5A9927B5E76C00941C1C /* NumericStringFormatter.swift */,
-				ED2B5A9A27B5E76C00941C1C /* AtomicCounter.swift */,
-				ED2B5A9B27B5E76C00941C1C /* BufferFileWriter.swift */,
-				ED2B5A9C27B5E76C00941C1C /* Queue.swift */,
-				ED2B5A9D27B5E76C00941C1C /* Mapper.swift */,
-			);
-			path = Utils;
-			sourceTree = "<group>";
-		};
-		ED2B5AA027B5E76C00941C1C /* FFmpegWrappers */ = {
-			isa = PBXGroup;
-			children = (
-				ED2B5AA127B5E76C00941C1C /* SampleFormat.swift */,
-				ED2B5AA227B5E76C00941C1C /* StreamProtocol.swift */,
-				ED2B5AA327B5E76C00941C1C /* FFmpegAudioFormat.swift */,
-				ED2B5AA427B5E76C00941C1C /* MetadataDictionary.swift */,
-				ED2B5AA527B5E76C00941C1C /* ImageStream.swift */,
-				ED2B5AA627B5E76C00941C1C /* Codec.swift */,
-				ED2B5AA727B5E76C00941C1C /* PacketFrames.swift */,
-				ED2B5AA827B5E76C00941C1C /* MEC.swift */,
-				ED2B5AA927B5E76C00941C1C /* FormatContext.swift */,
-				ED2B5AAA27B5E76C00941C1C /* Frame.swift */,
-				ED2B5AAB27B5E76C00941C1C /* Chapter.swift */,
-				ED2B5AAC27B5E76C00941C1C /* Packet.swift */,
-				ED2B5AAD27B5E76C00941C1C /* Errors.swift */,
-				ED2B5AAE27B5E76C00941C1C /* ResamplingContext.swift */,
-				ED2B5AAF27B5E76C00941C1C /* PacketTable.swift */,
-				ED2B5AB027B5E76C00941C1C /* AudioCodec.swift */,
-				ED2B5AB127B5E76C00941C1C /* MetadataEditingContext.swift */,
-				ED2B5AB227B5E76C00941C1C /* AudioFileContext.swift */,
-				ED2B5AB327B5E76C00941C1C /* AudioStream.swift */,
-			);
-			path = FFmpegWrappers;
-			sourceTree = "<group>";
-		};
-		ED2B5AB427B5E76C00941C1C /* Metadata */ = {
-			isa = PBXGroup;
-			children = (
-				ED2B5AB527B5E76C00941C1C /* MetadataReader.swift */,
-				ED2B5AB627B5E76C00941C1C /* TrackInfo.swift */,
-			);
-			path = Metadata;
-			sourceTree = "<group>";
-		};
 		ED2FB5DF22CFB23A00A4B484 /* Components */ = {
 			isa = PBXGroup;
 			children = (
 				ED2FB5E022CFB2D200A4B484 /* NoteEntity.swift */,
-				EDFB2D2225A9650000564689 /* OctopustComponent.swift */,
+				EDFB2D2225A9650000564689 /* OctopusComponent.swift */,
 				ED6A3F2723D534D90095117E /* SongComp.swift */,
 				ED67804B279DE18A0071CA9D /* RecordComp.swift */,
 				ED678049279DE0E60071CA9D /* ColumnComp.swift */,
@@ -774,8 +317,12 @@
 		ED2FF7E6229A0AD3001B02C5 /* Playback */ = {
 			isa = PBXGroup;
 			children = (
-				ED26C3C52055048200CFE29C /* OggNo.swift */,
+				ED01016630574D4A00C0A1C4 /* NoiceAudioPlayer.swift */,
+				ED78D0F2305E36AE00E60E1E /* NativeDecoder.swift */,
+				ED01016030574C7200C0A1C4 /* OggDecoder.swift */,
+				ED01016230574C9400C0A1C4 /* AVAudioPCMBuffer.swift */,
 				ED2FF7E7229A0AF6001B02C5 /* Jukebox.swift */,
+				ED78D0F6305E3F0D00E60E1E /* deprecated */,
 			);
 			path = Playback;
 			sourceTree = "<group>";
@@ -799,9 +346,6 @@
 		ED45BD0C202CC5FC00E4A9AD = {
 			isa = PBXGroup;
 			children = (
-				EDB55A3727D08D2F00A8AAFA /* File.swift */,
-				ED76172C27AAEF5D000D8A7B /* Frameworks */,
-				ED12F0FC27A8D42600B59222 /* Packages */,
 				ED655843245F5A170035EFCB /* noiceDebug.entitlements */,
 				EDE5D21F2442FB20008D0B33 /* noiceRelease.entitlements */,
 				ED59D2A824441D0000CF8617 /* catalog.xcdatamodeld */,
@@ -823,30 +367,29 @@
 		ED45BD17202CC5FC00E4A9AD /* Rubber Band */ = {
 			isa = PBXGroup;
 			children = (
-				ED76762A22CE9FE500FA2C82 /* notes.txt */,
-				EDE65C0127C44DB50076279B /* Constants */,
-				ED2B5A0527B5E76C00941C1C /* ffPlayer */,
+				ED4179D42676CCD100C6C297 /* sounds */,
 				ED45BD23202CC5FC00E4A9AD /* Info.plist */,
+				ED45BD1C202CC5FC00E4A9AD /* art.scnassets */,
 				ED45BD18202CC5FC00E4A9AD /* AppDelegate.swift */,
 				ED45BD38202CC69900E4A9AD /* GameView.swift */,
 				ED45BD1A202CC5FC00E4A9AD /* GameViewController.swift */,
+				ED76762A22CE9FE500FA2C82 /* notes.txt */,
 				ED45BD1E202CC5FC00E4A9AD /* Assets.xcassets */,
-				ED45BD20202CC5FC00E4A9AD /* Main.storyboard */,
-				ED45BD1C202CC5FC00E4A9AD /* art.scnassets */,
 				ED2FB5DF22CFB23A00A4B484 /* Components */,
+				EDE65C0127C44DB50076279B /* Constants */,
 				EDF6EA81229CD35D008E4E12 /* Cover Flow */,
 				ED1CB7C725BE801300AD6D56 /* fun stuff */,
 				EDF6EA83229CD47F008E4E12 /* GamePlay */,
 				EDA0FC6422AC23C8005D5DFA /* Input Devices */,
+				ED45BD20202CC5FC00E4A9AD /* Main.storyboard */,
 				EDF6EA82229CD3D0008E4E12 /* MIDI */,
 				ED2FF7E6229A0AD3001B02C5 /* Playback */,
 				ED2037682255D4E600E3AC22 /* resources */,
 				EDB2B99C22B2B72A001A57D1 /* Scenes */,
-				ED4179D42676CCD100C6C297 /* sounds */,
 				ED3E0634266D9C70009AA716 /* state machine */,
-				ED7E4C6B2297CA4400E084F1 /* TextureMover.swift */,
 				EDD3F07922C8744C00A51672 /* triggers */,
 				ED69356922ACE08C00C35F78 /* User Data */,
+				EDD306DC29E7BCB70056CAE7 /* Utilities */,
 			);
 			path = "Rubber Band";
 			sourceTree = "<group>";
@@ -865,9 +408,9 @@
 		ED527E0622A44C3D00C63A4D /* actions */ = {
 			isa = PBXGroup;
 			children = (
+				ED025D2D30576EA6003710F4 /* Actions.swift */,
 				ED3FC50022422EFA00A87047 /* MyActions.sks */,
 				ED08671E2256DE3D00D36AA4 /* action.sks */,
-				ED527E0722A44C6000C63A4D /* Actions.swift */,
 			);
 			path = actions;
 			sourceTree = "<group>";
@@ -886,25 +429,15 @@
 			path = "User Data";
 			sourceTree = "<group>";
 		};
-		ED76172C27AAEF5D000D8A7B /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				ED2B592727B5DCBE00941C1C /* libavcodec.58.dylib */,
-				ED2B592A27B5DCBF00941C1C /* libavformat.58.dylib */,
-				ED2B592927B5DCBF00941C1C /* libavutil.56.dylib */,
-				ED2B592827B5DCBF00941C1C /* libswresample.3.dylib */,
-				ED76173B27AAEF9C000D8A7B /* MIKMIDI.framework */,
-			);
-			path = Frameworks;
-			sourceTree = "<group>";
-		};
 		ED9A4C23204CDCF10060DB17 /* gui */ = {
 			isa = PBXGroup;
 			children = (
 				ED2903432058F8A0006BF673 /* scoredisplay.sks */,
 				ED9A4C24204CDD8E0060DB17 /* titleDisplay.sks */,
 				ED8C8A7D22815B5A00A95214 /* LoadingScreen.sks */,
+				ED16ADAD2A06130F00AF1B9D /* Assets.xcassets */,
 				EDADB14122A8EB890055A98D /* gameStats.sks */,
+				ED16ADB62A06313100AF1B9D /* MyParticle.sks */,
 			);
 			path = gui;
 			sourceTree = "<group>";
@@ -922,6 +455,7 @@
 		EDB2B99C22B2B72A001A57D1 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				ED025D0630576486003710F4 /* SongDetails.swift */,
 				EDB2B99D22B2B74D001A57D1 /* StageManager.swift */,
 				EDB2B9BF22B30F4B001A57D1 /* SongMenuOverlay.swift */,
 				ED2AA00822B4838B00E61D89 /* SongMenu.swift */,
@@ -934,6 +468,18 @@
 				ED792E722601553B0045EDFE /* Shaders.swift */,
 			);
 			path = Scenes;
+			sourceTree = "<group>";
+		};
+		EDD306DC29E7BCB70056CAE7 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				EDD306E129E7BF770056CAE7 /* TextureMover.swift */,
+				ED025D3B3059C616003710F4 /* iniCleanser.swift */,
+				EDD306DF29E7BF3C0056CAE7 /* Stars.swift */,
+				EDA3A5A229EF873D001B96AB /* LoadingScreen.swift */,
+				ED0318FA2A11F4A60091177B /* Experimental.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 		EDD3F07922C8744C00A51672 /* triggers */ = {
@@ -991,12 +537,14 @@
 		EDF6EA83229CD47F008E4E12 /* GamePlay */ = {
 			isa = PBXGroup;
 			children = (
+				ED025D003057640B003710F4 /* Stars.swift */,
 				ED8B5150206ED4CB000DB769 /* ScoreKeeper.swift */,
 				ED75815F241588ED00A59BF7 /* ScoreBoard.swift */,
+				ED4509F229E4F2AC0034A098 /* RandomPlay.swift */,
 				ED758161241588FF00A59BF7 /* ScoreManager.swift */,
 				ED12650320649BAE002423A8 /* StarPower.swift */,
 				EDF5320922894937006F17AC /* Highway.swift */,
-				ED9BE13623CF8D310000EF6F /* Spherex.swift */,
+				EDB7D8DF3057286D002E8AC4 /* Spherex.swift */,
 				EDCAA7F8224221C200A4856C /* VocalCoach.swift */,
 				ED51B8302796A4830010950B /* TitleCredit.swift */,
 			);
@@ -1013,15 +561,18 @@
 				ED45BD11202CC5FC00E4A9AD /* Sources */,
 				ED45BD12202CC5FC00E4A9AD /* Frameworks */,
 				ED45BD13202CC5FC00E4A9AD /* Resources */,
-				EDAB94FF27AA6FC400F18228 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
+			fileSystemSynchronizedGroups = (
+				ED78D0F6305E3F0D00E60E1E /* deprecated */,
+			);
 			name = noice;
 			packageProductDependencies = (
-				ED4C8E7627AEF7CA00F7DFF7 /* SwordRPC */,
+				ED0100D9305737B000C0A1C4 /* SwiftRPC */,
+				ED01015E30574BAB00C0A1C4 /* LibVorbis */,
 			);
 			productName = "Rubber Band";
 			productReference = ED45BD15202CC5FC00E4A9AD /* noice.app */;
@@ -1033,8 +584,12 @@
 		ED45BD0D202CC5FC00E4A9AD /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				KnownAssetTags = (
+					UI,
+				);
 				LastSwiftUpdateCheck = 0920;
-				LastUpgradeCheck = 1320;
+				LastUpgradeCheck = 2700;
 				ORGANIZATIONNAME = Artecolote;
 				TargetAttributes = {
 					ED45BD14202CC5FC00E4A9AD = {
@@ -1055,9 +610,12 @@
 			knownRegions = (
 				en,
 				Base,
+				"es-419",
 			);
 			mainGroup = ED45BD0C202CC5FC00E4A9AD;
 			packageReferences = (
+				ED0100D8305737B000C0A1C4 /* XCRemoteSwiftPackageReference "SwiftRPC" */,
+				ED01015D30574BAB00C0A1C4 /* XCRemoteSwiftPackageReference "vorbis-swift" */,
 			);
 			productRefGroup = ED45BD16202CC5FC00E4A9AD /* Products */;
 			projectDirPath = "";
@@ -1073,19 +631,25 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ED2CB5F429EA2D0E00D6EB19 /* starnormals.atlas in Resources */,
 				ED45BD22202CC5FC00E4A9AD /* Main.storyboard in Resources */,
 				ED2903442058F8A0006BF673 /* scoredisplay.sks in Resources */,
+				ED16ADAF2A06130F00AF1B9D /* Assets.xcassets in Resources */,
 				EDADB14222A8EB890055A98D /* gameStats.sks in Resources */,
+				ED211C652A2FE37F0069F537 /* Localizable.xcstrings in Resources */,
 				ED9A4C25204CDD8E0060DB17 /* titleDisplay.sks in Resources */,
 				ED08671F2256DE3D00D36AA4 /* action.sks in Resources */,
 				EDEBC43F22A3187E00655BB9 /* icon.atlas in Resources */,
 				ED3FC50122422EFA00A87047 /* MyActions.sks in Resources */,
 				ED1E87CD265F18A900A80228 /* help_drums.png in Resources */,
+				ED16ADB72A06313100AF1B9D /* MyParticle.sks in Resources */,
 				ED4179D52676CCD100C6C297 /* sounds in Resources */,
 				ED8C8A7E22815B5A00A95214 /* LoadingScreen.sks in Resources */,
 				ED20376B2255D88300E3AC22 /* noart.jpg in Resources */,
 				ED0EFC102661B5210006E7F9 /* keyboard_key.png in Resources */,
+				ED2CB5F029EA2CB200D6EB19 /* stars.atlas in Resources */,
 				ED4179D72676DA2B00C6C297 /* Fonts in Resources */,
+				ED842F102A0AD1DB00542AC4 /* bubble.png in Resources */,
 				ED45BD1F202CC5FC00E4A9AD /* Assets.xcassets in Resources */,
 				ED45BD1D202CC5FC00E4A9AD /* art.scnassets in Resources */,
 			);
@@ -1099,130 +663,95 @@
 			buildActionMask = 2147483647;
 			files = (
 				ED6A3F2823D534D90095117E /* SongComp.swift in Sources */,
+				ED9DF53D3059F6C100B1F1BC /* Stars.swift in Sources */,
 				EDDF1E8B26DB3E6F00CAFCE6 /* MusicSheet.swift in Sources */,
-				ED2B5AE427B5E76C00941C1C /* AudioStream.swift in Sources */,
 				ED153706204297A300ADBA12 /* MIDIDevices.swift in Sources */,
-				EDFB2D2325A9650000564689 /* OctopustComponent.swift in Sources */,
+				EDFB2D2325A9650000564689 /* OctopusComponent.swift in Sources */,
 				ED4718B3266DB61700B15DD8 /* ListState.swift in Sources */,
-				ED2B5ADF27B5E76C00941C1C /* ResamplingContext.swift in Sources */,
-				ED2B5ACD27B5E76C00941C1C /* BufferFileWriter.swift in Sources */,
 				EDB2B9C022B30F4B001A57D1 /* SongMenuOverlay.swift in Sources */,
 				ED85A41C22BF412C00D0C94D /* CoreData.swift in Sources */,
-				EDABD0DF27BA2BC000129C1C /* FZAudioEngine.swift in Sources */,
 				ED45BD1B202CC5FC00E4A9AD /* GameViewController.swift in Sources */,
+				EDA3A5A329EF873D001B96AB /* LoadingScreen.swift in Sources */,
 				ED4A77E426025D54008ECCA9 /* SongLister.swift in Sources */,
-				ED2B5AD027B5E76C00941C1C /* ffmpeg.c in Sources */,
-				ED2B5AE127B5E76C00941C1C /* AudioCodec.swift in Sources */,
-				ED7E4C6C2297CA4400E084F1 /* TextureMover.swift in Sources */,
-				ED2B5AC227B5E76C00941C1C /* SampleConverter.swift in Sources */,
 				ED8B5151206ED4CB000DB769 /* ScoreKeeper.swift in Sources */,
 				ED4718BF266DF7A800B15DD8 /* RelatedState.swift in Sources */,
-				ED26C3C62055048200CFE29C /* OggNo.swift in Sources */,
 				EDF5320A22894937006F17AC /* Highway.swift in Sources */,
 				ED2AA00F22B4B8A000E61D89 /* GuitarStage.swift in Sources */,
+				ED025D2E30576EA6003710F4 /* Actions.swift in Sources */,
 				EDAE97F122D43052004A3DA7 /* DifficultyConfig.swift in Sources */,
 				ED4718BD266DF77300B15DD8 /* AddedState.swift in Sources */,
 				ED59D2AA24441D0000CF8617 /* catalog.xcdatamodeld in Sources */,
 				EDB2B99E22B2B74D001A57D1 /* StageManager.swift in Sources */,
 				EDD1295B26008B730036FCA1 /* Backdrop.swift in Sources */,
-				ED2B5AD727B5E76C00941C1C /* Codec.swift in Sources */,
 				ED1F1E7C22B1CDC000B21883 /* Strings.swift in Sources */,
 				EDF8DE0621103D5E00F0BAE8 /* User.swift in Sources */,
 				ED12650420649BAE002423A8 /* StarPower.swift in Sources */,
-				ED2B5ADC27B5E76C00941C1C /* Chapter.swift in Sources */,
 				ED3E0636266D9C7E009AA716 /* HelpState.swift in Sources */,
 				ED0CB21625FDC9D800B57428 /* Anal.swift in Sources */,
 				ED2FE4A522D5833600F18789 /* Drums.swift in Sources */,
-				ED2B5ADD27B5E76C00941C1C /* Packet.swift in Sources */,
 				ED2AA00D22B4B53200E61D89 /* DrumStage.swift in Sources */,
-				ED2B5ABE27B5E76C00941C1C /* PlayerScheduling.swift in Sources */,
 				ED7EAC6B2050A124003F1A8E /* SongManager.swift in Sources */,
 				ED97F68020F1E373001FAAE0 /* TimeCode.swift in Sources */,
 				EDF83AC82285095800D07E7A /* KeyPaths.swift in Sources */,
-				EDABD0DD27BA2BC000129C1C /* FZPlayer.swift in Sources */,
-				ED2B5AE027B5E76C00941C1C /* PacketTable.swift in Sources */,
-				ED2B5AD827B5E76C00941C1C /* PacketFrames.swift in Sources */,
-				ED2B5ACA27B5E76C00941C1C /* ConcurrentArray.swift in Sources */,
-				ED2B5AC627B5E76C00941C1C /* FFPlayer.swift in Sources */,
-				ED2B5AE227B5E76C00941C1C /* MetadataEditingContext.swift in Sources */,
-				ED2B5AD527B5E76C00941C1C /* MetadataDictionary.swift in Sources */,
-				ED2B5AD927B5E76C00941C1C /* MEC.swift in Sources */,
 				ED1665362033E3FC0099DE12 /* FZMIDI.swift in Sources */,
 				EDC7379B22D6D7F100B227A1 /* ActivatorComponent.swift in Sources */,
-				ED2B5ADA27B5E76C00941C1C /* FormatContext.swift in Sources */,
-				ED2B5AD227B5E76C00941C1C /* SampleFormat.swift in Sources */,
-				ED527E0822A44C6000C63A4D /* Actions.swift in Sources */,
 				ED2FF7E8229A0AF6001B02C5 /* Jukebox.swift in Sources */,
 				EDCACDD620F59EB4008C6DA4 /* ControlInputs.swift in Sources */,
-				ED2B5ACE27B5E76C00941C1C /* Queue.swift in Sources */,
+				ED01016130574C7200C0A1C4 /* OggDecoder.swift in Sources */,
 				ED274DA321141BA000CC788C /* ChartIcons.swift in Sources */,
+				ED025D0730576486003710F4 /* SongDetails.swift in Sources */,
+				ED025D3C3059C616003710F4 /* iniCleanser.swift in Sources */,
 				ED758162241588FF00A59BF7 /* ScoreManager.swift in Sources */,
-				ED2B5AC927B5E76C00941C1C /* UtilsExtensions.swift in Sources */,
+				ED01016330574C9400C0A1C4 /* AVAudioPCMBuffer.swift in Sources */,
 				EDCAA7F9224221C200A4856C /* VocalCoach.swift in Sources */,
 				ED69356B22ACE0AF00C35F78 /* Defaults.swift in Sources */,
 				ED85361827A8DD6C00CD9021 /* DiscordRP.swift in Sources */,
 				ED5C68CE266079270081A557 /* Help.swift in Sources */,
 				EDED00DB22C9587300D3D804 /* Performing.swift in Sources */,
-				ED2B5AC827B5E76C00941C1C /* AudioEngine.swift in Sources */,
 				ED3EFCD220EF3AA10015701A /* PaceMaker.swift in Sources */,
 				ED45BD39202CC69900E4A9AD /* GameView.swift in Sources */,
 				EDC7379F22D6D8EF00B227A1 /* StringTriggers.swift in Sources */,
 				EDC85A4422D147DD00D05BA1 /* TailComponent.swift in Sources */,
 				ED45BD19202CC5FC00E4A9AD /* AppDelegate.swift in Sources */,
 				EDB79421224203D10036AB69 /* Vocalist.swift in Sources */,
-				ED2B5AE527B5E76C00941C1C /* MetadataReader.swift in Sources */,
+				EDB7D8E03057286D002E8AC4 /* Spherex.swift in Sources */,
 				ED67804C279DE18A0071CA9D /* RecordComp.swift in Sources */,
 				EDA0FC6622AC2406005D5DFA /* Instrument.swift in Sources */,
 				ED4718B5266DB68F00B15DD8 /* MenuState.swift in Sources */,
 				ED2AA00922B4838B00E61D89 /* SongMenu.swift in Sources */,
-				ED2B5AC327B5E76C00941C1C /* FrameBuffer.swift in Sources */,
-				ED9BE13723CF8D310000EF6F /* Spherex.swift in Sources */,
-				ED2B5ADE27B5E76C00941C1C /* Errors.swift in Sources */,
-				ED2B5AC027B5E76C00941C1C /* Decoder.swift in Sources */,
 				ED51B8312796A4830010950B /* TitleCredit.swift in Sources */,
 				ED0B5FBC204A847D00524979 /* SongFinder.swift in Sources */,
-				ED2B5AD427B5E76C00941C1C /* FFmpegAudioFormat.swift in Sources */,
 				ED9BE2CE22CFCD0F00D7B9BC /* GKComponentSystem.swift in Sources */,
 				ED8198CE211CDA17001849F7 /* CoverArt.swift in Sources */,
 				EDF71BA323F09C6300EEE4DE /* RowCall.swift in Sources */,
 				ED1CB7C925BE802900AD6D56 /* Octopus.swift in Sources */,
 				EDBD45BB22C9D64F001DB5D4 /* PianoStage.swift in Sources */,
-				ED2B5AC527B5E76C00941C1C /* AVFUtils.swift in Sources */,
-				ED2B5AC127B5E76C00941C1C /* ChannelLayouts.swift in Sources */,
+				ED0318FB2A11F4A60091177B /* Experimental.swift in Sources */,
 				ED4718B7266DB6B700B15DD8 /* DetailState.swift in Sources */,
 				ED678048279DE0630071CA9D /* StarsComp.swift in Sources */,
 				ED4718BB266DF47000B15DD8 /* HistoryState.swift in Sources */,
-				ED2B5ACF27B5E76C00941C1C /* Mapper.swift in Sources */,
 				ED4B11E6267567A700E8D0AD /* PlayState.swift in Sources */,
-				ED2B5ADB27B5E76C00941C1C /* Frame.swift in Sources */,
 				EDBD45BD22C9DC14001DB5D4 /* KeyUpDel.swift in Sources */,
-				ED2B5AB727B5E76C00941C1C /* Constants.swift in Sources */,
-				ED2B5ACB27B5E76C00941C1C /* NumericStringFormatter.swift in Sources */,
 				ED21999D274200E600808587 /* extensions.swift in Sources */,
 				ED45BD3B202CC6DC00E4A9AD /* GemMaker.swift in Sources */,
-				ED2B5AE627B5E76C00941C1C /* TrackInfo.swift in Sources */,
+				EDD306E229E7BF770056CAE7 /* TextureMover.swift in Sources */,
 				EDD3F07B22C8747B00A51672 /* Burstable.swift in Sources */,
-				ED678046279CFCF80071CA9D /* SongDetails.swift in Sources */,
 				EDE65C0527C44EDC0076279B /* Color.swift in Sources */,
-				ED2B5ABF27B5E76C00941C1C /* FFmpegSampleConverter.swift in Sources */,
 				ED96C8C723DAD3E500D8B488 /* UpNext.swift in Sources */,
 				EDC7379D22D6D87100B227A1 /* DrumTrigger.swift in Sources */,
+				ED78D0F3305E36AE00E60E1E /* NativeDecoder.swift in Sources */,
 				EDB36DD522D2C06E00501DE2 /* StarNoteComponent.swift in Sources */,
 				ED67804A279DE0E60071CA9D /* ColumnComp.swift in Sources */,
+				ED01016730574D4A00C0A1C4 /* NoiceAudioPlayer.swift in Sources */,
 				ED792E732601553B0045EDFE /* Shaders.swift in Sources */,
 				ED758160241588ED00A59BF7 /* ScoreBoard.swift in Sources */,
 				ED4B121826756FA300E8D0AD /* ScoreState.swift in Sources */,
-				ED2B5ACC27B5E76C00941C1C /* AtomicCounter.swift in Sources */,
 				EDE65C0727C4509D0076279B /* GemBit.swift in Sources */,
 				ED4B11E826756E6100E8D0AD /* PausedState.swift in Sources */,
-				ED2B5AE327B5E76C00941C1C /* AudioFileContext.swift in Sources */,
-				ED2B5AD327B5E76C00941C1C /* StreamProtocol.swift in Sources */,
+				ED4509F329E4F2AC0034A098 /* RandomPlay.swift in Sources */,
 				EDD3F07822C846A800A51672 /* Track.swift in Sources */,
-				ED2B5AD627B5E76C00941C1C /* ImageStream.swift in Sources */,
-				ED2B5AC427B5E76C00941C1C /* AVFSampleConverter.swift in Sources */,
 				ED4179D32676CC9F00C6C297 /* RewindState.swift in Sources */,
 				ED2FB5E122CFB2D200A4B484 /* NoteEntity.swift in Sources */,
-				EDABD0DE27BA2BC000129C1C /* fzplayerscheduler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1233,6 +762,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				ED45BD21202CC5FC00E4A9AD /* Base */,
+				ED211C632A2FE1890069F537 /* mul */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -1244,6 +774,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1265,7 +796,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -1274,9 +805,12 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = R3QXN3P2CK;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				EXCLUDED_ARCHS = "";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1292,10 +826,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -1305,6 +841,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1326,7 +863,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -1335,9 +872,12 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = R3QXN3P2CK;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				EXCLUDED_ARCHS = "";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1347,11 +887,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
-				SWIFT_COMPILATION_MODE = wholemodule;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Release;
@@ -1360,17 +901,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES_ERROR;
 				CODE_SIGN_ENTITLEMENTS = noiceDebug.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 14;
-				DEVELOPMENT_TEAM = "";
+				CURRENT_PROJECT_VERSION = 28;
+				DEAD_CODE_STRIPPING = YES;
 				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SRCROOT)/Frameworks/MIKMIDI.framework\"",
+					"\"$(SRCROOT)\"/**",
 					"$(PROJECT_DIR)/Frameworks",
 				);
 				HEADER_SEARCH_PATHS = (
@@ -1378,6 +921,9 @@
 					"${SOURCE_ROOT}/**",
 				);
 				INFOPLIST_FILE = "Rubber Band/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = noice;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music-games";
+				LD_QUOTE_LINKER_ARGUMENTS_FOR_COMPILER_DRIVER = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -1387,14 +933,16 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Frameworks/MIKMIDI.framework/Versions/A",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MARKETING_VERSION = 0.17;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MARKETING_VERSION = 1.2;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.inertlab.noice;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "RubberBand-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1405,17 +953,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES_ERROR;
 				CODE_SIGN_ENTITLEMENTS = noiceRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 14;
-				DEVELOPMENT_TEAM = R3QXN3P2CK;
+				CURRENT_PROJECT_VERSION = 28;
+				DEAD_CODE_STRIPPING = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SRCROOT)/Frameworks/MIKMIDI.framework\"",
+					"\"$(SRCROOT)\"/**",
 					"$(PROJECT_DIR)/Frameworks",
 				);
 				HEADER_SEARCH_PATHS = (
@@ -1423,6 +973,9 @@
 					"${SOURCE_ROOT}/**",
 				);
 				INFOPLIST_FILE = "Rubber Band/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = noice;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music-games";
+				LD_QUOTE_LINKER_ARGUMENTS_FOR_COMPILER_DRIVER = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -1432,14 +985,16 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Frameworks/MIKMIDI.framework/Versions/A",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MARKETING_VERSION = 0.17;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MARKETING_VERSION = 1.2;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.inertlab.noice;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "RubberBand-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
@@ -1468,10 +1023,35 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		ED0100D8305737B000C0A1C4 /* XCRemoteSwiftPackageReference "SwiftRPC" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/TopScrech/SwiftRPC.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+		ED01015D30574BAB00C0A1C4 /* XCRemoteSwiftPackageReference "vorbis-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/HealsCodes/vorbis-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.7;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
-		ED4C8E7627AEF7CA00F7DFF7 /* SwordRPC */ = {
+		ED0100D9305737B000C0A1C4 /* SwiftRPC */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = SwordRPC;
+			package = ED0100D8305737B000C0A1C4 /* XCRemoteSwiftPackageReference "SwiftRPC" */;
+			productName = SwiftRPC;
+		};
+		ED01015E30574BAB00C0A1C4 /* LibVorbis */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ED01015D30574BAB00C0A1C4 /* XCRemoteSwiftPackageReference "vorbis-swift" */;
+			productName = LibVorbis;
 		};
 /* End XCSwiftPackageProductDependency section */
 

@@ -17,26 +17,26 @@ class PaceMaker {
 	/// controls the speed and distance between notes
 	var fps:CGFloat
 	/// double version of fps to avoid casting in computations
-	var fps_d:Double 		= 8
+	var fps_d:Double = 8
 	/// speed of the highway texture
 	var asphalt:CGFloat
-	var hitwindow:CGFloat	= 2
-	var tempo:Double		= 120
+	var hitwindow:CGFloat = 2
+	var tempo:Double = 120
 	init() {
-		self.fps 		= CGFloat(fps_d)
-		self.asphalt	= fps / 8 		// 8 is derived from the size of the texture
-		self.hitwindow 	= fps * 0.2
+		self.fps = CGFloat(fps_d)
+		self.asphalt = fps / 8 		// 8 is derived from the size of the texture
+		self.hitwindow = fps * 0.2
 	}
 	
 	/// Updates the speeds for individual songs with average tempo
 	///
 	/// - Parameter miditempo: the average tempo from the midid track
 	func setFPS(miditempo: Double) {
-		tempo		= miditempo
-//		fps_d		= round(miditempo / 100 * 12)
-		fps_d		= 16
-		fps 		= CGFloat(fps_d)
-		asphalt		= fps / 32
+		tempo = miditempo
+		// fps_d = round(miditempo / 100 * 12)
+		fps_d = 16
+		fps = CGFloat(fps_d)
+		asphalt = fps / 32
 		self.hitwindow = fps * 0.1
 		print("average tempo = \(miditempo)\nHit window = \(hitwindow) \nfps = \(fps)")
 	}

@@ -11,6 +11,12 @@ import SceneKit
 import GameplayKit
 
 
+var dateformat:DateComponentsFormatter{
+	let form = DateComponentsFormatter()
+	form.allowedUnits = [.minute, .second]
+	return form
+}
+
 let stagemc = StageManager()
 
 final class StageManager:NSObject,  SCNSceneRendererDelegate {
@@ -59,9 +65,7 @@ final class StageManager:NSObject,  SCNSceneRendererDelegate {
 		currentact = songmenu
 		presentmenu()
 	}
-	func loadstage() {
-		
-	}
+
 	
 	func loadsong()  {
 		switch User.current.instrument {
@@ -83,7 +87,7 @@ final class StageManager:NSObject,  SCNSceneRendererDelegate {
 
 	func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
 		if machine.currentState is PlayState {
-//		if track.state == .playing {
+
 			if let songtime = Jukebox.shared.currenttime() {
 				/// songtime cast as CGFloat - not altered
 				let cgsongtime = CGFloat(songtime)
@@ -94,7 +98,7 @@ final class StageManager:NSObject,  SCNSceneRendererDelegate {
 
 				track.tracker(cgsongtime, hwytime)
 			} else {
-				print(Error.Type.self)
+				print(Error.self)
 			}
 		}
 	}
@@ -105,11 +109,12 @@ private extension StageManager {
 	func presentmenu() {
 		Jukebox.shared.stop()
 		menuOverlay?.isPaused 			= false
+		
 		mainView.overlaySKScene		 	= menuOverlay
 		mainView.overlaySKScene?.alpha 	= 0
-		mainView.overlaySKScene?.run(SKAction.fadeIn(withDuration: 1.5))
-		mainView.present(currentact.scn, with: .crossFade(withDuration: 1.5), incomingPointOfView: nil) {
-		}
+		mainView.overlaySKScene?.run(SKAction.fadeIn(withDuration: 0.5))
+	
+		mainView.present(currentact.scn, with: .crossFade(withDuration: 1), incomingPointOfView: nil)
 		mainView.autoenablesDefaultLighting = false
 	}
 	
@@ -119,12 +124,16 @@ private extension StageManager {
 		// this stops the preview song from playing
 		// when playing oggs, stop removes the file from the player. do not use after getting song files
 		Jukebox.shared.stop()
-		Jukebox.shared.getsongfiles(folder: smanager.selected.song.folder!)
+//		delay because the stop is delayed by 0.15 so after 0.15 it will delete the files again
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.2 ){
+			Jukebox.shared.getsongfiles(folder: smanager.selected.song.folder!)
+		}
 	}
 	
 	func loadGamePlay(){
-		reset()
 		
+		reset()
+	
 //		remove songs from shuffled
 		smanager.removefromshuffle()
 		
@@ -133,18 +142,20 @@ private extension StageManager {
 		mainView.prepare(currentact.scn, shouldAbortBlock: {return true})
 	
 		let midiUrl = smanager.selected.song.folder!.appendingPathComponent("notes.mid")
+		
 		MusicSheet.shared.setSeq(url: midiUrl)
 	
-		let _ = MusicSheet.shared.averagetempo()
-		
-		self.track.laytrack()
+//		dispatchques causes all kinds of problems with race conditions. this needs to be delayed or else the first few notes are missing from notecomponentsystem. sigh
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+			self.track.laytrack()
+		}
 		
 		// initiate new vocal coach
-		vocalcoach 		= Vocalcoach()
-		let vocalist 	= Vocalist()
+		vocalcoach = Vocalcoach()
+		let vocalist = Vocalist()
 			vocalist.updatecoach(coach: vocalcoach)
 		
-		Anal.shared.event()
+		Anal.shared.songevent(smanager.selected.song)
 
 		if bg {
 			if let octo = currentact.scn.rootNode.childNode(withName: "octo", recursively: false) {
@@ -154,7 +165,6 @@ private extension StageManager {
 			}
 		}
 
-//		Jukebox.shared.stop()
 		mainView.present(currentact.scn, with: .crossFade(withDuration: 1), incomingPointOfView: nil) {
 			mainView.overlaySKScene?.removeAllActions()
 			mainView.overlaySKScene = scoreDisplay
@@ -169,41 +179,20 @@ private extension StageManager {
 				if self.tc.show {
 					self.tc.display(smanager.selected.song)
 				}
-				
-				NotificationCenter.default.addObserver(forName: .player_playbackCompleted, object: nil, queue: OperationQueue.main) {
-					(player) in
-					print(player)
 
-					NotificationCenter.default.removeObserver(self)
-					return
-				}
+				
 				Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
 					if self.track.state != .playing {timer.invalidate()}
 					let timeup = Jukebox.shared.timeremaining()
 					
-					self.track.scorekeeper.time.text = format.string(from: timeup)
+					self.track.scorekeeper.time.text = dateformat.string(from: timeup)
 					if timeup < 1 {
 						timer.invalidate()
-						print("song ended presenting stuff")
 						self.machine.enter(ScoreState.self)
 					}
 				}
 			}
 		}
 		scoreDisplay?.scaleMode = .aspectFit
-	}
-	
-	/// creates subview and assigns currentact to it's scene
-	/// this is unused
-	func subview() {
-		currentact.scn.background.contents = .none
-		sub = SCNView(frame: mainView.visibleRect)
-		sub?.autoresizingMask = [.height, .width]
-		sub?.scene = self.currentact.scn
-		sub?.backgroundColor = .clear
-		mainView.addSubview(sub!)
-		mainView.overlaySKScene?.run(SKAction.fadeOut(withDuration: 1))
-		sub?.overlaySKScene = scoreDisplay
-		sub?.overlaySKScene?.run(SKAction.fadeIn(withDuration: 1))
 	}
 }

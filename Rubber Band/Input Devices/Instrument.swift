@@ -8,6 +8,8 @@
 
 import Foundation
 
+
+
 /// extend to different handle different diffs later
 enum DrumEvent: String {
 	typealias RawValue = String
@@ -25,14 +27,6 @@ enum DrumEvent: String {
 	func flip() -> Bool {
 		switch self {
 		case .mix3d0d, .mix3d1d, .mix3d2d, .mix3d3d, .mix3d4d:
-			return true
-		default:
-			return false
-		}
-	}
-	func noflip() -> Bool {
-		switch self {
-		case .mix3d0, .mix3d1, .mix3d2, .mix3d3, .mix3d4:
 			return true
 		default:
 			return false
@@ -221,5 +215,6 @@ enum TrackName: String {
 		 keys 	= "PART KEYS",
 		 vocals = "PART VOCALS",
 		 beat 	= "BEAT",
-		 events = "EVENTS"
+		 events = "EVENTS",
+		 tempo 	= "TEMPO TRACK"
 }

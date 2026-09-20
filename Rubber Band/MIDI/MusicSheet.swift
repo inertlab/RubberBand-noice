@@ -8,382 +8,286 @@
 
 
 import Foundation
-import MIKMIDI
+//import MIKMIDI
 import SceneKit
 
-
-typealias NoteList = [(start:Double, btn:Button)]
-
+typealias TimeBtn = (time:Double, btn:Button)
+typealias BtnList = [TimeBtn]
+/// Sets up gem not locations etc from MIDI events
 class MusicSheet {
 	static let shared = MusicSheet()
 	
-	var seq = MIKMIDISequence()
+//	var seq = MIKMIDISequence()
 		/// MIDI notes in the chart by difficulty
 	var difficultyConfig = DifficultyConfig()
 		/// convenience reference to timecop
-	let tc = TimeCode.tc
+//	let tc = TimeCode.tc
+	var fzmidi: FZMIDI?
 	private init() {}
 	
-		/// Updates timesheet with the current song music sequence
-		/// - Parameter url: File location of notes.mid file
-		///
-		/// When a new sequence is set, TimeCode gets updated here
-		/// this will have to change when multiplayer is added as we don't want to conflict 2 TimeCodes
+	/// Updates timesheet with the current song music sequence
+	/// - Parameter url: File location of notes.mid file
+	///
+	/// When a new sequence is set, TimeCode gets updated here
+	/// this will have to change when multiplayer is added as we don't want to conflict 2 TimeCodes
 	func setSeq (url: URL) {
-		self.seq = try! MIKMIDISequence(fileAt: url, convertMIDIChannelsToTracks: false)
-		self.difficultyConfig = User.current.instrument.config(diff: User.current.diff)
-		TimeCode.tc.initTimeCode(seq: self.seq)
-	}
-	
-	func getTrackByName (partname: TrackName = .drums) -> MIKMIDITrack? {
-		var track:MIKMIDITrack?
-		
-	loop: for t in seq.tracks{
-		for e in t.events(of: MIKMIDIMetaTrackSequenceNameEvent.self, fromTimeStamp: 0, toTimeStamp: 10) {
-			let nevent = e as! MIKMIDIMetaTrackSequenceNameEvent
-			if nevent.string == partname.rawValue {
-				track = t
-				break loop
-			}
+		if let fzmidi = FZMIDI(url: url) {
+			self.fzmidi = fzmidi
 		}
-	}
-		return track
+//		self.seq = try! MIKMIDISequence(fileAt: url, convertMIDIChannelsToTracks: false)
+		self.difficultyConfig = User.current.instrument.config(diff: User.current.diff)
+//		TimeCode.tc.initTimeCode(seq: self.seq)
+		setaveragetempo()
 	}
 	
 	typealias Chord = (btns: Set<Button>, start: Double, end: Double, beats: CGFloat?)
-		/// [Chord]
-		///
-		/// Chord: (btns: Set[Button], start: Double, end: Double)
-		///
-		/// The time values have been translated from MidiTimestamps to Seconds - if end == 0, then the note has no duration or tail. I'm using endTimeStamp instead of Duration to define where the tail ends clearly
+	
+	/// [Chord]
+	///
+	/// Chord: (btns: Set[Button], start: Double, end: Double)
+	///
+	/// The time values have been translated from MidiTimestamps to Seconds - if end == 0, then the note has no duration or tail. I'm using endTimeStamp instead of Duration to define where the tail ends clearly
 	typealias ChordList = [Chord]
 	
-		/// Returns a sorted ChordList from the User current instrument selection
+	/// Returns a sorted ChordList from the User current instrument selection
 	func get5lanenotes() -> ChordList {
 		
-		let track		= getTrackByName(partname: User.current.instrument.track())
-		var chordlist 	= ChordList()
-		var chord		= Chord([], -1, 0, nil)
-		var time:MusicTimeStamp  = -1
+		var chordlist = ChordList()
 		
-		for n in track!.notes {
-			
-			if n.eventType == .metaText {
-				print("event type ", n)
-				continue
-			}
-			
-			if appendSP(n) { continue }
-			
-			/// if true, button was found in valid set of notes
-			if let button = difficultyConfig[n.note] {
-				// note belongs in the current chord
-				// there will never be a note at -1
-				// compare stamp to stamp (never converted to seconds
-				if time == n.timeStamp {
-					chord.btns.insert(button)
-					continue
-				}
-				if !chord.btns.isEmpty {
-					chordlist.append(chord)
-				}
-//				make a new chord here
-				time = n.timeStamp
-				chord = ([button], tc.beattosec(beat: n.timeStamp), 0, nil)
-				if n.duration > 0.26 {
-					chord.end = tc.beattosec(beat: n.endTimeStamp)
-					chord.beats = CGFloat( n.endTimeStamp - n.timeStamp )
+		guard let events = fzmidi?.notes else {
+			print("no events")
+			return chordlist
+		}
+		
+		var chord = Chord([], -1, 0, nil)
+		var time: Float64 = -1
+		
+		for event in events {
+			if case .note(_,_,_,let beats) = event {
+				if appendSP(event) {continue}
+				if let button = difficultyConfig[event.note!] {
+					if event.time == time {
+						chord.btns.insert(button)
+						continue
+					}
+					if !chord.btns.isEmpty {
+						chordlist.append(chord)
+					}
+					time = event.time
+					chord = Chord([button], event.time, 0, nil)
+					if beats > 0.26 {
+						chord.end = event.end!
+						chord.beats = CGFloat(beats) // the old way used beats instead of seconds might be bad?
+					}
 				}
 			}
 		}
-		// append the last chord to the list
+		
 		chordlist.append(chord)
+//		print(chordlist)
 //		not sure if sorting is needed
 		return chordlist.sorted { $0.start < $1.start }
 	}
 	
 	
-		/// gets all the notes for track
-		///
-		/// - Returns: returns a list of timestamps and .colors
-		/// this doesn't work because string instruments require endtimestamps
-	func getDrumNotes () -> NoteList {
+	/// gets all the notes for track
+	///
+	/// - Returns: returns a list of timestamps and .colors
+	/// this doesn't work because string instruments require endtimestamps
+	func getDrumNotes() -> BtnList {
 		if User.current.instrument == .drums {
 			return drumnotesVanilla()
 		}
 		return drumnotesPro()
 	}
 	
-	func drumnotesVanilla () -> NoteList {
+	func drumnotesVanilla() -> BtnList {
 
-		var notes = NoteList()
+		var btnlist = BtnList()
 		
-		let track = getTrackByName()
+		guard let noteevents = fzmidi?.notes else {
+			return btnlist
+		}
 		
-		for n in track!.notes {
+		for nevent in noteevents {
 			
-			if appendSP(n) {
+			guard let note = nevent.note else {continue} // this no longer filters out text events
+			
+			if appendSP(nevent) {
 				continue
 			}
 			
-			if let button = difficultyConfig[n.note] {
-				let starttime = tc.beattosec(beat: n.timeStamp)
+			if let button = difficultyConfig[note] {
+				var timebtn = TimeBtn(nevent.time, button)
 				switch button{
 				case .plus:
 						// in future add start time to a different note for activator tail
-					notes.append((tc.beattosec(beat: n.endTimeStamp), button))
+//					activator goes at the end of the tail
+					timebtn.time = nevent.end!
 				case .blue, .green, .yellow:
+					// timebtn doesn't get added to list
 					continue
 				case .yellow_c:
-					notes.append((starttime, .yellow))
+					timebtn.btn = .yellow
 				case .blue_c:
-					notes.append((starttime, .blue))
+					timebtn.btn = .blue
 				case .green_c:
-					notes.append((starttime, .green))
+					timebtn.btn = .green
 				default:
-					notes.append((starttime, button))
+					// .orange
 					break
 				}
+				btnlist.append(timebtn)
 			}
+			
 		}
 		
-		let sortednotes = notes.sorted {$0.0 < $1.0 }
-		return sortednotes
+//		print(btnlist)
+		return btnlist.sorted {$0.0 < $1.0 }
 	}
 	
-		/// retrieves drum note information with discoflips etc
-		///
-		/// - Returns: a tuple array with MusicTimeStamp (beat) and the ControlInput (like .yellow_c) sorted by musicstamp, small to big
-	func drumnotesPro () -> NoteList {
-			/// an array of Tupples [(MusicTimeStamp, Button)]
-		var drumnotes = NoteList()
+	/// retrieves drum note information with discoflips etc
+	///
+	/// - Returns: a tuple array with MusicTimeStamp (beat) and the ControlInput (like .yellow_c) sorted by musicstamp, small to big
+	func drumnotesPro () -> BtnList {
+		/// an array of Tupples [(MusicTimeStamp, Button)]
+		var drumbtnlist = BtnList()
+		guard var drumevents = fzmidi?.notes else {return drumbtnlist}
 		
-			/// the track from the midi sequence
-		let drumtrack = getTrackByName()
+
 		
-			//		temporaty note holders for comparison
-		var tom110:		[MIKMIDINoteEvent] = []
-		var tom111:		[MIKMIDINoteEvent] = []
-		var tom112:		[MIKMIDINoteEvent] = []
-		var cymbal98:	[MIKMIDINoteEvent] = []
-		var cymbal99:	[MIKMIDINoteEvent] = []
-		var cymbal100:	[MIKMIDINoteEvent] = []
+		drumevents.sort(by: {($0.time, $1.note!) < ($1.time, $0.note!)})
+//		drumevents.sort(by: {$0.time < $1.time && $0.note! > $1.note!})
 		
-			/// [whether to flip or not, start of the flip, end of the flip]
-		var discoFlipMe = [(Bool, MusicTimeStamp, MusicTimeStamp)]()
+		print(drumevents)
 		
-		guard let textevents = drumtrack?.events(of: MIKMIDIMetaTextEvent.self, fromTimeStamp: 0, toTimeStamp: (drumtrack?.events.last?.timeStamp)!) else { return [] }
+	
+		var flip = false // while this is true, we flip red and yellow_c
+		var yellow = 0.0
+		var blue = 0.0
+		var green = 0.0
 		
-		var fliptuple = (false, 0.0, 0.0)
-		
-			// this works now, some midi files aren't marked with a nodiscoflip event, in which case add a closing event at the end of the file
-		for e in textevents{
-			let starttime 	= tc.beattosec(beat: e.timeStamp)
-			let etext 		= e as! MIKMIDIMetaTextEvent
-			
-			if let drumevent = DrumEvent(rawValue: etext.string!) {
-				if drumevent.flip() {
-					fliptuple.0 = true
-					fliptuple.1 = starttime
+		for event in drumevents {
+			switch event {
+			case .meta(let event, _):
+				if let drumevent = DrumEvent(rawValue: event) {
+					flip = drumevent.flip()
 				}
-				if drumevent.noflip() && fliptuple.0 {
-					fliptuple.2 = starttime
-				}
-			}
-			
-			if fliptuple.0 && fliptuple.2 > fliptuple.1 {
-				discoFlipMe.append(fliptuple)
-				fliptuple = (false, 0.0, 0.0)
-			}
-		}
-			// check if there is a fliptuple without a nodiscoflip event. if there is one add it
-		if fliptuple.0 {
-			fliptuple.2 = tc.beattosec(beat: drumtrack!.length)
-			discoFlipMe.append(fliptuple)
-		}
-		
-		for n in drumtrack!.notes{
-			
-			if appendSP(n) { continue }
-			
-			if let cinput = difficultyConfig[n.note] {
-				switch cinput{
-				case .yellow:
-					tom110.append(n)
-				case .blue:
-					tom111.append(n)
-				case .green:
-					tom112.append(n)
-				case .yellow_c:
-					cymbal98.append(n)
-				case .blue_c:
-					cymbal99.append(n)
-				case .green_c:
-					cymbal100.append(n)
-				case .plus:
-						// in future add start time to a different note for activator tail
-					drumnotes.append((tc.beattosec(beat: n.endTimeStamp), cinput))
-				default:
-					drumnotes.append((tc.beattosec(beat: n.timeStamp), cinput))
-					break
-				}
-			}
-		}
-		
-		swapCymbaltoTom(toms: tom110, cymbals: &cymbal98	, dnotes: &drumnotes)
-		swapCymbaltoTom(toms: tom111, cymbals: &cymbal99	, dnotes: &drumnotes)
-		swapCymbaltoTom(toms: tom112, cymbals: &cymbal100	, dnotes: &drumnotes)
-		
-		for (f, start, end) in discoFlipMe {
-			if f {
-				for ( i, dn) in drumnotes.enumerated() {
-					switch dn.0 {
-					case start...end:
-						if dn.1 == .red 		{drumnotes[i].1 = .yellow_c}
-						if dn.1 == .yellow_c {drumnotes[i].1 = .red}
+				break;
+			case .note(_,_,_,_):
+				if appendSP(event) {break}
+				
+				if let button = difficultyConfig[event.note!] {
+					var timebtn = TimeBtn(event.time, button)
+					switch button {
+					case .plus:
+						timebtn.time = event.end!
+					case .red:
+						if flip {
+							timebtn.btn = .yellow_c
+						}
+					case .yellow_c:
+						if flip {
+							timebtn.btn = .red
+							break;
+						}
+						if event.time <= yellow {
+							timebtn.btn = .yellow
+						}
+					case .blue_c:
+						if event.time <= blue {
+							timebtn.btn = .blue
+						}
+					case .green_c:
+						if event.time <= green {
+							timebtn.btn = .green
+						}
+					case .blue:
+						blue = event.end!
+						continue
+					case .yellow:
+						yellow = event.end!
+						continue
+					case .green:
+						green = event.end!
+						continue
 					default:
-						break
+						break;
 					}
+					drumbtnlist.append(timebtn)
 				}
+				break;
+			default: //lyric
+				continue
 			}
 		}
-		
-		let sortednotes = drumnotes.sorted(by: { $0.0 < $1.0 })
-		return sortednotes
+		return drumbtnlist.sorted(by: { $0.0 < $1.0 })
 	}
 	
-	func averagetempo() -> Double {
-		let bpmlist 		= seq.tempoEvents()
-		var bpms:Double	= 0
-		for t in bpmlist {
-			bpms += t.bpm
+	private func setaveragetempo() {
+		var bpm = 120.0
+		if let tempos = fzmidi?.tempos {
+			bpm = tempos.reduce(0.0, +) / Double(tempos.count)
 		}
-		bpms = round(bpms / Double(bpmlist.count))
-		pace.setFPS(miditempo: bpms)
-			//		self.setOverallTempo(bpms)
-		return bpms
+		pace.setFPS(miditempo: round(Double(bpm)))
 	}
 	
-	func getvocals() -> MIKMIDITrack {
-		return getTrackByName(partname: .vocals) ?? MIKMIDITrack()
-	}
-	
-		/// makes and layers beat marks on the track
-		///
-		/// - Note: at the end of the track beats tend to dip
+	/// makes and layers beat marks on the track
+	///
+	/// - Note: at the end of the track beats tend to dip
 	func layBeat () -> Int {
-		let beats = getTrackByName(partname: .beat)
-		if beats == nil {
-			layBeatnotrack()
-			return Int(seq.length)
-		} else {
-			layBeatwithtrack()
-			return (beats?.notes.count)!
+		if let beats = fzmidi?.beats {
+			laybeattrack(beats)
+			return (beats.count)
 		}
+		
+		return laybeattrack()
 	}
 }
 
 private extension MusicSheet {
 	
-		/// Checks if note is Star Power, If it is then it appends it to SP list and returns True
-		/// - Parameter n: midi note event
-	func appendSP (_ n: MIKMIDINoteEvent) -> Bool {
-		if n.note == 116 {
-			let sta = tc.beattosec(beat: n.timeStamp)
-			let end = tc.beattosec(beat: n.endTimeStamp)
-			stagemc.track.sp.starnotes.append(([.plus], sta, end, nil))
+	/// Checks if note is Star Power, If it is then it appends it to SP list and returns True
+	/// - Parameter n: midi note event
+	func appendSP (_ event: NoteEvent) -> Bool {
+		if event.note == 116 {
+			stagemc.track.sp.starnotes.append(([.plus], event.time, event.end!, nil))
 			return true
 		}
 		return false
 	}
 	
-		/// Swaps cymbals to toms for Pro Drums
-		///
-		/// - Parameters:
-		///   - toms: Arry of tom markers
-		///   - cymbals: Array of cymbal notes
-		///   - dnotes: array of collected notes
-	func swapCymbaltoTom (toms: [MIKMIDINoteEvent], cymbals: inout [MIKMIDINoteEvent], dnotes: inout NoteList){
-			// removes the tom corresponding to cymbals
-		for c in toms {
-			for (i, t) in cymbals.enumerated().reversed() {
-				switch t.timeStamp {
-				case c.timeStamp...c.endTimeStamp:
-					dnotes.append((tc.beattosec(beat: t.timeStamp), difficultyConfig[c.note]!))
-					cymbals.remove(at: i)
-				default:
-					break
+	func laybeattrack(_ beats: NoteEvents) {
+		for beat in beats {
+			if let note = beat.note {
+				var line: SCNNode
+				if note == 12 {
+					line = gemmaker.beat.fat.clone()
+				} else {
+					line = gemmaker.beat.thin.clone()
 				}
+				line.position.z = CGFloat(beat.time) * pace.fps
+				stagemc.track.hwy.beatlines.addChildNode(line)
 			}
-		}
-			//	add remainding results to drumnotes
-		for r in cymbals{
-			dnotes.append((tc.beattosec(beat: r.timeStamp), difficultyConfig[r.note]!))
 		}
 	}
 	
-	func layBeatwithtrack () {
-		let beats = getTrackByName(partname: .beat)
-		if beats == nil {return} // what happens if there is no beat track?
-		for beat in beats!.notes {
+	func laybeattrack() -> Int {
+		let length = fzmidi!.getmusiclength()
+		let beats = Int(length.beats)
+		let bps = length.beats / length.seconds
+		for beat in 0...beats {
 			var line: SCNNode
-			let time = tc.beattosec(beat: beat.timeStamp)
-			if beat.noteLetter == "C" {
+			let z = Double(beat) * bps * pace.fps
+			if beat % 4 != 3 {
 				line = gemmaker.beat.fat.clone()
-//				print(beat.noteLetter)
 			} else {
 				line = gemmaker.beat.thin.clone()
-//				print(beat.noteLetter)
 			}
-			line.position.z = CGFloat(time) * pace.fps
+			line.position.z = z
 			stagemc.track.hwy.beatlines.addChildNode(line)
 		}
-	}
-	
-	func layBeatnotrack () {
-		for beat in 0...Int(seq.length) {
-			let z 	= CGFloat(tc.beattosec(beat: Double(beat))) * pace.fps
-			let fl 	= gemmaker.beat.fat.clone()
-			fl.position.z 	= z
-			stagemc.track.hwy.beatlines.addChildNode(fl)
-		}
-	}
-	
-	func lyricist() -> [(Double, String)] {
-		let lyrictrack 	= getTrackByName(partname: .vocals)
-		var phrases 	= [(Double, String)]()
-		var phrase 		= (0.0, "")
-		var text 	 	= ""
-		var time 		= 0.0
-		
-		for e in lyrictrack!.events{
-			if e.eventType == .metaLyricText {
-				let t = e as! MIKMIDIMetaLyricEvent
-				if t.string != nil {
-					let st = t.string!
-					switch st.last{
-					case "-":
-						text += st.dropLast()
-					case "+":
-						continue
-					default:
-						text += (st + " ")
-					}
-				}
-				continue
-			}
-			
-			if e.eventType == .midiNoteMessage {
-				let note = e as! MIKMIDINoteEvent
-				if note.note == 105 || note.note == 106 {
-					phrase = (time, text)
-					phrases.append(phrase)
-					time = tc.beattosec(beat: note.timeStamp)
-					text = ""
-				}
-			}
-		}
-		return (phrases)
+		return beats
 	}
 }
 

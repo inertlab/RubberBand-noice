@@ -9,13 +9,15 @@
 import Foundation
 import SceneKit
 
+/// states that react in the background. all custom background should adopt this state to interact with music
 enum BGState {
 	case combo2, combo3, combo4, start, idle, groove, angry, seeingstars
 }
 
+/// Protocol for backgrounds
 protocol Backdrop {
 	var active	:Bool {get set}
-	var node		:SCNNode {get set}
+	var node	:SCNNode {get set}
 	var state	:BGState {get set}
 	func state(_ state: BGState)
 	func setnode(node: SCNNode)
@@ -26,6 +28,7 @@ class Pentapuss: Backdrop {
 	var active 	= false
 	var color 	= NSColor.black
 	private var material = SCNMaterial()
+	private var animation = SCNAnimationPlayer()
 
 	var state: BGState = .idle {
 		didSet {
@@ -33,26 +36,28 @@ class Pentapuss: Backdrop {
 			case .start:
 				start()
 			case .combo2:
+				animation.speed = 0.65
 				material.addAnimation(NCAnimation.flash(color: NCColor.combo2), forKey: nil)
 			case .combo3:
+				animation.speed = 0.55
 				material.addAnimation(NCAnimation.flash(color: NCColor.combo3), forKey: nil)
 			case .combo4:
+				animation.speed = 0.35
 				material.removeAllAnimations()
-				material.diffuse.contents = NSColor.black
-				material.addAnimation(NCAnimation.flash(color: NSColor.magenta), forKey: nil)
 				material.addAnimation(NCAnimation.glow(), forKey: nil)
 				material.addAnimation(NCAnimation.flow(), forKey: nil)
-				material.multiply.intensity = 1
+				material.addAnimation(NCAnimation.intensify(property: "multiply", 0.5), forKey: nil)
+				spartiscle?.speedFactor = 0.2
 			case .idle:
+				animation.speed = 0.75
+				spartiscle?.speedFactor = 1
 				material.removeAllAnimations()
-				material.diffuse.contents 	= color
 				material.diffuse.intensity 	= 1
 				material.multiply.intensity = 0
 				material.selfIllumination.intensity = 0
 				material.addAnimation(NCAnimation.flash(color: NSColor.red), forKey: nil)
 				NCAnimation.retreat(node: node)
-			default:
-				print("everyhitng else")
+			default: break
 			}
 		}
 	}
@@ -62,9 +67,21 @@ class Pentapuss: Backdrop {
 		self.node 	= node
 		node.position.z = -10
 		
+		self.animation = (node.childNode(withName: "joint0", recursively: true)?.animationPlayer(forKey: "animation1"))!
+	
+		
 		let nodes = node.childNodes { (node, stop) -> Bool in
 			if node.name == "tentacle" {return true}
 			return false
+		}
+		
+		let joints = node.childNodes { (node, stop) -> Bool in
+			if node.name == "joint0" {return true}
+			return false
+		}
+		
+		for j in joints {
+			j.addAnimationPlayer(animation, forKey: "animation1")
 		}
 		
 		for n in nodes {
@@ -88,8 +105,9 @@ class Pentapuss: Backdrop {
 	
 	private func start() {
 		material.removeAllAnimations()
+		animation.speed = 0.65
 		node.runAction(SCNAction.move(to: SCNVector3(0, 0, 0), duration: 2)){
-			self.material.addAnimation(NCAnimation.lightup(property: "diffuse"), forKey:nil)
+			self.material.addAnimation(NCAnimation.intensify(property: "diffuse"), forKey:nil)
 		}
 	}
 }
@@ -101,24 +119,34 @@ enum NCAnimation {
 		}
 	}
 	
-	static func lightup(property: String ) -> CABasicAnimation {
+	static func intensify(property: String, _ time: Double = 3 ) -> CABasicAnimation {
 		let animation = CABasicAnimation(keyPath: "\(property).intensity")
-			animation.fromValue 		= 0
+			animation.fromValue 	= 0
 			animation.toValue 		= 1
-			animation.duration 		= 3
+			animation.duration 		= time
 			animation.autoreverses 	= false
 			animation.fillMode 		= CAMediaTimingFillMode.forwards
 			animation.isRemovedOnCompletion = false
 		return animation
 	}
 	
+	static func fadeintensity(property: String ) -> CABasicAnimation {
+		let animation = CABasicAnimation(keyPath: "\(property).intensity")
+			animation.fromValue 	= 1
+			animation.toValue 		= 0
+			animation.duration 		= 3
+			animation.autoreverses 	= false
+			animation.fillMode 		= CAMediaTimingFillMode.forwards
+			animation.isRemovedOnCompletion = false
+		return animation
+	}
+
 	static func grow(property: String ) -> CABasicAnimation {
 		let animation = CABasicAnimation(keyPath: property)
-			animation.fromValue 		= 1
+			animation.fromValue 	= 1
 			animation.toValue 		= 0.5
 			animation.duration 		= 600
 			animation.autoreverses 	= false
-//			animation.fillMode 		= CAMediaTimingFillMode.forwards
 			animation.isRemovedOnCompletion = false
 		return animation
 	}
@@ -145,7 +173,7 @@ enum NCAnimation {
 	static func flow()  -> CABasicAnimation {
 		let ani = CABasicAnimation(keyPath: "emission.contentsTransform.m41")
 			ani.byValue 		= -1
-			ani.duration 		= 20
+			ani.duration 		= 30
 			ani.timingFunction  = CAMediaTimingFunction(name: .linear)
 			ani.repeatCount = .infinity
 		return ani
@@ -161,10 +189,10 @@ enum NCAnimation {
 }
 
 enum NCColor {
-	static var happy = NSColor(srgbRed: 1, green: 1, blue: 0, alpha: 1)
-	static var sad = NSColor(srgbRed: 0, green: 0, blue: 1, alpha: 1)
-	static var combo2 = NSColor(srgbRed: 0, green: 1, blue: 1, alpha: 1)
-	static var combo3 = NSColor(srgbRed: 1, green: 0.85, blue: 0, alpha: 1)
+	static var happy 	= NSColor(srgbRed: 1, green: 1, blue: 0, alpha: 1)
+	static var sad 		= NSColor(srgbRed: 0, green: 0, blue: 1, alpha: 1)
+	static var combo2 	= NSColor(srgbRed: 0, green: 1, blue: 1, alpha: 1)
+	static var combo3 	= NSColor(srgbRed: 1, green: 0.85, blue: 0, alpha: 1)
 }
 
 extension NSImage {

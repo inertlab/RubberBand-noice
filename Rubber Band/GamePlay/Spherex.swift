@@ -6,13 +6,9 @@
 //  Copyright © 2020 Artecolote. All rights reserved.
 //
 
-
 import Foundation
 import SceneKit
 
-//enum Flow {
-//	case empty, flow, starpower, starflow
-//}
 
 /// reference to highway 3D model and model parts
 class Spherex {

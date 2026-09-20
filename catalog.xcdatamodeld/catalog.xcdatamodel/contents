@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21E258" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="24233.13" systemVersion="24F74" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Album" representedClassName="Album" syncable="YES" codeGenerationType="class">
         <attribute name="albumArt" optional="YES" attributeType="URI"/>
         <attribute name="artist" optional="YES" attributeType="String"/>
@@ -85,13 +85,4 @@
         <attribute name="keys" attributeType="Integer 16" defaultValueString="-1" usesScalarValueType="YES"/>
         <relationship name="song" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Song" inverseName="tier" inverseEntity="Song"/>
     </entity>
-    <elements>
-        <element name="Album" positionX="-9.045166015625" positionY="120.4954833984375" width="128" height="105"/>
-        <element name="Config" positionX="-179.2208862304688" positionY="-112.6907653808594" width="128" height="134"/>
-        <element name="Player" positionX="62.35699462890625" positionY="-91.40069580078125" width="128" height="163"/>
-        <element name="Score" positionX="153.088623046875" positionY="-311.1379089355469" width="128" height="164"/>
-        <element name="Song" positionX="-217.2142944335938" positionY="95.37567138671875" width="128" height="269"/>
-        <element name="Stats" positionX="315.07861328125" positionY="111.5203552246094" width="128" height="165"/>
-        <element name="Tiers" positionX="115.0670776367188" positionY="325.4884338378906" width="128" height="104"/>
-    </elements>
 </model>

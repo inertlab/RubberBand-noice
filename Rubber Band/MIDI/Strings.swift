@@ -59,10 +59,10 @@ extension MusicSheet {
 				break;
 			}
 			
-			let entity 		= NoteEntity()
+			let entity = NoteEntity()
 			
-			let start		= CGFloat(chord.start * pace.fps_d)
-			let notecomp 	= entity.component(ofType: NoteComp.self)!
+			let start = CGFloat(chord.start * pace.fps_d)
+			let notecomp = entity.component(ofType: NoteComp.self)!
 
 			notecomp.chord = chord.btns
 			notecomp.node.position.z = start
@@ -81,9 +81,9 @@ extension MusicSheet {
 				score += (Double(chord.btns.count) * 12 * multiplier * beats).rounded()
 //				score += CGFloat(chord.btns.count * 12 * multiplier) * beats).rounded()
 				
-				let end 	= CGFloat(chord.end * pace.fps_d)
-				let length 	= end - start
-				let tail 	= TailComp(length, beats: beats)
+				let end = CGFloat(chord.end * pace.fps_d)
+				let length = end - start
+				let tail = TailComp(length, beats: beats)
 				tail.node.position.z = start
 				let diffusescale = length * 0.05
 				for btn in chord.btns {
@@ -95,7 +95,6 @@ extension MusicSheet {
 				
 				stagemc.track.hwy.notes.addChildNode(tail.node)
 				entity.addComponent(tail)
-//				print(end, start)
 			}
 		
 			// check to see if note is within star range, if it's beyond then start new range if possible

@@ -8,7 +8,7 @@
 
 import Foundation
 import GameplayKit
-import SwordRPC
+import SwiftRPC
 
 
 class HelpState: GKState {
@@ -37,6 +37,7 @@ class HelpState: GKState {
 	}
 	
 	override func willExit(to nextState: GKState) {
+//		this can potentially crash on quit. not a big deal
 		help.hidehelp()
 	}
 }

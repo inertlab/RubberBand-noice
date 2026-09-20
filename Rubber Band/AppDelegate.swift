@@ -16,6 +16,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	@IBOutlet weak var previewvolume: NSSlider!
 	@IBOutlet weak var crowdslider	: NSSlider!
 	@IBOutlet weak var kraken		: NSMenuItem!
+	@IBOutlet weak var fullscreen  	: NSMenuItem!
 	
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
 			// Insert code here to initialize your application
@@ -30,11 +31,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			stagemc.bg 		= true
 			kraken.state 	= .on
 		}
+		
+		if User.current.player.config!.fullscreen {
+			fullscreen.state = .on
+		}
 	}
 	
 	
 	
 	func applicationWillTerminate(_ notification: Notification) {
+//		print(notification)
 		Jukebox.shared.stop()
 		User.current.updateUser()
 	}
@@ -53,7 +59,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 		/// writes a list of songs to json file
-		/// - Parameter sender: i have no idea
+		/// - Parameter sender: i have no idea what this is?
 	@IBAction func printStat (_ sender: NSMenuItem) {
 		var songs = [StatPrintable]()
 		for s in User.current.player.stats! {
@@ -111,6 +117,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			//		}
 	}
 	
+//MARK: options
+	@IBAction func fullscreenoption(_ sender: NSMenuItem) {
+		if sender.state == .on {
+			sender.state = .off
+			User.current.player.config?.fullscreen = false
+		} else {
+			sender.state = .on
+			User.current.player.config?.fullscreen = true
+		}
+		do {
+			try pc.viewContext.save()
+		} catch  {
+			print(error)
+		}
+	}
+	
 	@IBAction func mastervolume(_ sender: NSSlider) {
 		Jukebox.shared.setvolume(vol: sender.floatValue)
 		User.current.updateUser()
@@ -129,11 +151,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	@IBAction func releasekraken(_ sender: NSMenuItem) {
 		if sender.state == .off {
-			sender.state 	= .on
-			stagemc.bg 		= true
+			sender.state = .on
+			stagemc.bg = true
 		} else {
-			sender.state 	= .off
-			stagemc.bg 		= false
+			sender.state = .off
+			stagemc.bg = false
 		}
 		User.current.updateUser()
 	}

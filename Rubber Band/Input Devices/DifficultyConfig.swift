@@ -96,8 +96,8 @@ let drumsEasy:[UInt8: Button] = [
 	62 	: .yellow_c,
 	63	: .blue_c,
 	64	: .green_c,
-	110	: .yellow,
-	111 : .blue,
-	112	: .green,
+	110	: .yellow, // turns yello_c to toms
+	111 : .blue, // turns blue_c to toms
+	112	: .green, // turns green_c to toms
 	120	: .plus
 ]

@@ -8,10 +8,9 @@
 
 import Foundation
 import GameplayKit
-import SwordRPC
+import SwiftRPC
 
 // this state does not contain a discord event because it requires too much info from ScoreBoard, so it's there instead.
-
 
 class ScoreState: GKState {
 	
@@ -21,8 +20,8 @@ class ScoreState: GKState {
 		(stagemc.currentact as! Track).showstats()
 		
 		if DiscordRP.rpc != nil {
-			rp.details = smanager.selected.song.artist
-			rp.state = smanager.selected.song.title
+			rp.details = smanager.selected.song.artist!
+			rp.state = smanager.selected.song.title!
 			rp.assets.largeImage = "stars-\(stagemc.track.scorekeeper.starvalues?.stars ?? 0)-1"
 			rp.assets.largeText = "scored \(stagemc.track.scorekeeper.total.dec) on \(User.current.diff.text())"
 			DiscordRP.rpc?.setPresence(rp)

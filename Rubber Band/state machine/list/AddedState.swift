@@ -20,4 +20,5 @@ class AddedState: ListState {
 	override func willExit(to nextState: GKState) {
 		fadeout(nextState)
 	}
+	
 }

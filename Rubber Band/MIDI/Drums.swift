@@ -23,8 +23,6 @@ extension MusicSheet {
 		
 		var activatortimes 	= [CGFloat]()
 	
-//		let gemmaker 		= GemMaker() // turn this into a singleton
-		
 		gemmaker.loadgems(type: .drums)
 		
 		let beats = layBeat()
@@ -55,7 +53,7 @@ extension MusicSheet {
 		for note in drumNotes {
 
 			let entity 		= NoteEntity()
-			let start		= CGFloat(note.start * pace.fps_d)
+			let start		= CGFloat(note.time * pace.fps_d)
 			let notecomp	= entity.component(ofType: NoteComp.self)!
 			
 			notecount += 1
@@ -75,7 +73,7 @@ extension MusicSheet {
 			notecomp.chord.insert(note.btn)
 			notecomp.node.position.z = start
 			if note.btn == .plus {
-				// this is anx activator button
+				// this is an activator button
 				let activator 	= ActivatorComp()
 				notecomp.chord = [.green, .green_c]
 				entity.addComponent(activator)
@@ -86,8 +84,8 @@ extension MusicSheet {
 			} else {
 //				the else omits activatorcomps from getting included in starnotes
 //				check to see if note is within star range, if it's beyond then start new range if possible
-				if note.start < starnote.end {
-					if note.start >= starnote.start {
+				if note.time < starnote.end {
+					if note.time >= starnote.start {
 						lastStar = StarNoteComp(starset)
 						entity.addComponent(lastStar)
 						stage.starsystem.addComponent(foundIn: entity)

@@ -55,6 +55,8 @@ extension Track {
 	func showstats() {
 		self.state = .stats
 		let scoreboard = ScoreBoard(scorekeeper: self.scorekeeper)
+		
+		smanager.refreshnext()
 
 		scoreboard.displaystat()
 		hwy.base.removeAllActions()
@@ -66,9 +68,8 @@ extension Track {
 	func startparticle() {
 		let box 			= SCNNode()
 		box.name 			= "box"
-		box.position.z 		= -22
-		box.position.y 		= 2
-		box.renderingOrder 	= -2
+		box.position.z 		= -9
+		box.position.y 		= 3
 		box.addParticleSystem(spartiscle!)
 		self.hwy.base.parent?.addChildNode(box)
 	}
@@ -149,4 +150,4 @@ extension Track {
 }
 
 
-fileprivate let spartiscle = SCNParticleSystem(named: "sparticle.scnp", inDirectory: particleDir)
+let spartiscle = SCNParticleSystem(named: "sparticle.scnp", inDirectory: particleDir)

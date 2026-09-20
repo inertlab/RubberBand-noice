@@ -32,7 +32,7 @@ final class SongMenu: Performing {
 	enum State {
 		case start, select, details, options, relatedsongs, history, help
 	}
-	let sound 	= SCNAudioSource(fileNamed: "sounds/rewind_01.m4a")!
+	let sound = SCNAudioSource(fileNamed: "sounds/rewind_01.m4a")!
 	
 	init(){
 		sound.volume = 20
@@ -172,7 +172,7 @@ private extension SongMenu {
 			}){
 				smanager.updatesongselection(newsong: song, state: .detailview)
 				UpNext.shared.refreshlist(nexttitles: smanager.songrange(index: song.index))
-				smanager.frustrumreveal()
+				smanager.frustrumreveal(after: 0.25)
 			}
 			stagemc.machine.enter(DetailState.self)
 		default:
@@ -184,46 +184,7 @@ private extension SongMenu {
 			stagemc.machine.enter(MenuState.self)
 		}
 	}
-	
-	// MARK: - functions
-
-	/// unused, keep for references
-	func displayoptions() {
-		state = .options
-		let optiondisplay = SKScene(fileNamed: "optionmenu.sks")
-		let bg 			= optiondisplay?.childNode(withName: "bg") as! SKSpriteNode
-		let snap 		= mainView.snapshot()
-		let snapdata 	= snap.tiffRepresentation
-		let ciimage 	= CIImage(data: snapdata!)
-		let filt 		= CIFilter(
-			name: "CIGaussianBlur",
-			parameters: [  "inputImage": ciimage!, "inputRadius" : 10]
-		)
-		
-		var image 	= filt?.outputImage!
-		let filt2 	= CIFilter(
-			name: "CICMYKHalftone",
-			parameters: ["inputImage" : image!, "inputWidth": 16, "inputSharpness": 1]
-		)
-		image 		= filt2?.outputImage!
-		let final 	= context.createCGImage(image!, from: ciimage!.extent)
-		bg.texture 	= SKTexture(cgImage: final!)
-		
-		mainView.overlaySKScene 	= optiondisplay
-		optiondisplay?.scaleMode 	= .aspectFit
-	}
-	
-	func hideoptions () {
-		state 	= .select
-		let cam = menuScene.rootNode.childNode(withName: "menucam", recursively: true)
-		
-		mainView.overlaySKScene = menuOverlay
-		cam?.camera?.vignettingIntensity 	= 0
-		cam?.camera?.colorFringeIntensity 	= 0
-		cam?.camera?.saturation 			= 1
-	}
 }
 
 
 let frustum = menuScene.rootNode.childNode(withName: "frustum", recursively: false)
-fileprivate let context = CIContext()

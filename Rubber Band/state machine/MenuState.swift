@@ -7,7 +7,7 @@
 //
 
 import GameKit
-import SwordRPC
+import SwiftRPC
 
 class MenuState: GKState {
 	

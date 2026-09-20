@@ -1,0 +1,42 @@
+{
+  "originHash" : "e4de6dee835cdad5952e05be9a3ea7d9fe5688b3ac623ea6bc619721a8b7eb3e",
+  "pins" : [
+    {
+      "identity" : "bluesocket",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Kitura/BlueSocket",
+      "state" : {
+        "revision" : "7b23a867008e0027bfd6f4d398d44720707bc8ca",
+        "version" : "2.0.4"
+      }
+    },
+    {
+      "identity" : "ogg-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/HealsCodes/ogg-swift",
+      "state" : {
+        "revision" : "b26219bc2229234a07a5e57c3d4fbeb7afbdd98a",
+        "version" : "1.3.5"
+      }
+    },
+    {
+      "identity" : "swiftrpc",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/TopScrech/SwiftRPC.git",
+      "state" : {
+        "revision" : "1877e34c3e48fcf02a8fe4f2271fb4a89d58e57a",
+        "version" : "1.0.1"
+      }
+    },
+    {
+      "identity" : "vorbis-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/HealsCodes/vorbis-swift.git",
+      "state" : {
+        "revision" : "a3e2493aa5afb23633f3a7e4e673b503de021b6b",
+        "version" : "1.3.7"
+      }
+    }
+  ],
+  "version" : 3
+}

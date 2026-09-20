@@ -51,9 +51,11 @@ final class SongLister {
 	private var indexes = [Mode: Int]()
 	private var limit 	= 0
 	
-	private let leading:CGFloat = 30
-	private let ptSmall:CGFloat = 12
-	private let ptLarge:CGFloat = 15
+	//MARK: Styles
+//	controls the size of the song list
+	private let leading:CGFloat = 65 //todo: make relative to screen height
+	private let ptSmall:CGFloat = 22
+	private let ptLarge:CGFloat = 26
 	private var mode = Mode.relatedsongs
 	
 
@@ -64,7 +66,7 @@ final class SongLister {
 		listnode?.removeAllChildren()
 		nodes.removeAll()
 		listhistory()
-		listnode?.position.y = CGFloat(index) * leading
+		movelist()
 		selectlabel()
 	}
 	
@@ -88,7 +90,7 @@ final class SongLister {
 			label.text 		= song.title!
 			y -= leading
 		}
-		listnode?.position.y = CGFloat(index) * leading
+		movelist()
 		selectlabel()
 	}
 	
@@ -101,8 +103,7 @@ final class SongLister {
 			self.artist.text = artist
 			listrelatedsongs()
 		}
-			listnode?.position.y = CGFloat(index) * leading
-//			TextureMover.shared.updatechartericon(icon: song?.icon ?? "")
+			movelist()
 			moreorless()
 			updatetime()
 			selectlabel()
@@ -136,7 +137,7 @@ final class SongLister {
 		}
 		listnode?.removeAllActions()
 		index += 1
-		listnode?.position.y = leading * CGFloat(index)
+		movelist()
 		selectlabel()
 	}
 
@@ -149,12 +150,16 @@ final class SongLister {
 		}
 		listnode?.removeAllActions()
 		index -= 1
-		listnode?.position.y = leading * CGFloat(index)
+		movelist()
 		selectlabel()
 	}
 }
 
 private extension SongLister {
+	
+	func movelist() {
+		listnode?.position.y = CGFloat(index) * leading - 10
+	}
 	
 	func wraparoundup() {
 		index = 0
@@ -221,7 +226,7 @@ private extension SongLister {
 		case nil, 0:
 			timemore.text = ""
 		default:
-			timemore.text = format.string(from: song!.length)
+			timemore.text = dateformat.string(from: song!.length)
 		}
 	}
 
@@ -295,14 +300,16 @@ private extension SongLister {
 		}
 	}
 	
+	/// Makes an SKLabelNode for list items
+	/// - Returns: SKLabelNode
 	func makelabel() -> SKLabelNode{
-		let label 		= SKLabelNode()
-		label.fontSize 	= ptSmall
-		label.fontName 	= "SFProText-Medium"
-		label.verticalAlignmentMode 	= .center
-		label.numberOfLines 			= 1
-		label.preferredMaxLayoutWidth 	= 360
-		label.lineBreakMode 			= .byTruncatingMiddle
+		let label = SKLabelNode()
+		label.fontSize = ptSmall
+		label.fontName = "SFProText-Medium"
+		label.verticalAlignmentMode = .baseline
+		label.numberOfLines = 1
+		label.preferredMaxLayoutWidth = 800 //to do: Make dynmic - should be relative to screen
+		label.lineBreakMode = .byTruncatingMiddle
 		return label
 	}
 	

@@ -13,11 +13,11 @@ import CoreData
 class Defaults {
 	
 	/// checks if library folder has been modified
-	static func modifiedlib () -> Bool {
+	static func modifiedlib() -> Bool {
 		return false
 	}
 	
-	static func config () -> Config {
+	static func config() -> Config {
 		let fetconfig:NSFetchRequest<Config> = Config.fetchRequest()
 		
 		let configs = try? pc.viewContext.fetch(fetconfig)
@@ -49,7 +49,7 @@ class Defaults {
 	}
 	
 	/// checks for players and returns player[0], makes one
-	static func getplayer () -> Player {
+	static func getplayer() -> Player {
 		let fet:NSFetchRequest<Player> = Player.fetchRequest()
 		let array = try? pc.viewContext.fetch(fet)
 		

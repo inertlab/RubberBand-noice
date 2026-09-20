@@ -12,7 +12,6 @@ import SceneKit
 
 protocol IDable {
 	var id:UUID {get}
-//	var node:SCNNode {get}
 }
 
 class CoverArt: SCNNode, IDable  {
@@ -31,4 +30,4 @@ class CoverArt: SCNNode, IDable  {
 }
 
 //fileprivate let albumscn = SCNScene(named: "art.scnassets/scns/album.scn")!
-fileprivate let cover 	= albumscn.rootNode.childNode(withName: "cover", recursively: false)!
+fileprivate let cover = albumscn.rootNode.childNode(withName: "cover", recursively: false)!

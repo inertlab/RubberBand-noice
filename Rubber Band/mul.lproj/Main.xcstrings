@@ -1,0 +1,558 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "1dM-4M-9Po.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"volume slider\"; ObjectID = \"1dM-4M-9Po\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "volume slider"
+          }
+        }
+      }
+    },
+    "1Xt-HY-uBw.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"noice\"; ObjectID = \"1Xt-HY-uBw\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "noice"
+          }
+        }
+      }
+    },
+    "2iX-oj-whc.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Bring All to Front\"; ObjectID = \"2iX-oj-whc\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Bring All to Front"
+          }
+        }
+      }
+    },
+    "2zo-FD-fAg.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Start In Full Screen\"; ObjectID = \"2zo-FD-fAg\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Start In Full Screen"
+          }
+        }
+      }
+    },
+    "4sb-4s-VLi.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Quit noice\"; ObjectID = \"4sb-4s-VLi\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Quit noice"
+          }
+        }
+      }
+    },
+    "5kV-Vb-QxS.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"About noice\"; ObjectID = \"5kV-Vb-QxS\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "About noice"
+          }
+        }
+      }
+    },
+    "7Ib-PK-Fgx.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Mixer\"; ObjectID = \"7Ib-PK-Fgx\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Mixer"
+          }
+        }
+      }
+    },
+    "9gR-Ge-Ldv.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Minimize\"; ObjectID = \"9gR-Ge-Ldv\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Minimize"
+          }
+        }
+      }
+    },
+    "97q-Vy-C12.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Zoom\"; ObjectID = \"97q-Vy-C12\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Zoom"
+          }
+        }
+      }
+    },
+    "Ava-Un-sRS.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Count Stats\"; ObjectID = \"Ava-Un-sRS\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Count Stats"
+          }
+        }
+      }
+    },
+    "AYu-sK-qS6.title" : {
+      "comment" : "Class = \"NSMenu\"; title = \"Main Menu\"; ObjectID = \"AYu-sK-qS6\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Main Menu"
+          }
+        }
+      }
+    },
+    "Bw1-t7-tYI.title" : {
+      "comment" : "Class = \"NSMenu\"; title = \"Catalog\"; ObjectID = \"Bw1-t7-tYI\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Catalog"
+          }
+        }
+      }
+    },
+    "ddd-zy-CuP.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Print History\"; ObjectID = \"ddd-zy-CuP\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Print History"
+          }
+        }
+      }
+    },
+    "DtZ-6F-gHo.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Tier\"; ObjectID = \"DtZ-6F-gHo\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Tier"
+          }
+        }
+      }
+    },
+    "Em6-FR-wZs.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Stars\"; ObjectID = \"Em6-FR-wZs\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Stars"
+          }
+        }
+      }
+    },
+    "eWa-BN-SOw.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Preview:\"; ObjectID = \"eWa-BN-SOw\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Preview:"
+          }
+        }
+      }
+    },
+    "F2S-fz-NVQ.title" : {
+      "comment" : "Class = \"NSMenu\"; title = \"Help\"; ObjectID = \"F2S-fz-NVQ\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        }
+      }
+    },
+    "FKE-Sm-Kum.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"noice Help\"; ObjectID = \"FKE-Sm-Kum\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "noice Help"
+          }
+        }
+      }
+    },
+    "fn4-ul-4al.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Delete Stat\"; ObjectID = \"fn4-ul-4al\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Delete Stat"
+          }
+        }
+      }
+    },
+    "gai-wx-Ptm.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"User\"; ObjectID = \"gai-wx-Ptm\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "User"
+          }
+        }
+      }
+    },
+    "gOq-Vc-ecT.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Update Metadata\"; ObjectID = \"gOq-Vc-ecT\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Update Metadata"
+          }
+        }
+      }
+    },
+    "IQv-IB-iLA.title" : {
+      "comment" : "Class = \"NSWindow\"; title = \"noice\"; ObjectID = \"IQv-IB-iLA\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "noice"
+          }
+        }
+      }
+    },
+    "jZR-qA-vpo.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Window\"; ObjectID = \"jZR-qA-vpo\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Window"
+          }
+        }
+      }
+    },
+    "K9L-tG-KoC.title" : {
+      "comment" : "Class = \"NSMenu\"; title = \"Sort By\"; ObjectID = \"K9L-tG-KoC\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort By"
+          }
+        }
+      }
+    },
+    "Kd2-mp-pUS.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Show All\"; ObjectID = \"Kd2-mp-pUS\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Show All"
+          }
+        }
+      }
+    },
+    "l09-Iw-2G3.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Delete All Stats\"; ObjectID = \"l09-Iw-2G3\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Delete All Stats"
+          }
+        }
+      }
+    },
+    "l9E-Ol-oBM.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Artist\"; ObjectID = \"l9E-Ol-oBM\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Artist"
+          }
+        }
+      }
+    },
+    "MKE-VX-t0O.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Master:\"; ObjectID = \"MKE-VX-t0O\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Master:"
+          }
+        }
+      }
+    },
+    "mSw-xh-wv5.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"volume slider\"; ObjectID = \"mSw-xh-wv5\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "volume slider"
+          }
+        }
+      }
+    },
+    "mTU-Z9-qrz.title" : {
+      "comment" : "Class = \"NSMenu\"; title = \"Window\"; ObjectID = \"mTU-Z9-qrz\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Window"
+          }
+        }
+      }
+    },
+    "Mzc-PD-ppD.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Crowd:\"; ObjectID = \"Mzc-PD-ppD\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Crowd:"
+          }
+        }
+      }
+    },
+    "n2l-pd-HTt.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Sort By\"; ObjectID = \"n2l-pd-HTt\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sort By"
+          }
+        }
+      }
+    },
+    "nCx-0f-Bsk.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Release it?\"; ObjectID = \"nCx-0f-Bsk\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Release it?"
+          }
+        }
+      }
+    },
+    "oEs-Vw-w5x.title" : {
+      "comment" : "Class = \"NSMenu\"; title = \"User\"; ObjectID = \"oEs-Vw-w5x\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "User"
+          }
+        }
+      }
+    },
+    "Olw-nP-bQN.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Hide noice\"; ObjectID = \"Olw-nP-bQN\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide noice"
+          }
+        }
+      }
+    },
+    "PeT-ml-yqR.title" : {
+      "comment" : "Class = \"NSMenu\"; title = \"Kraken\"; ObjectID = \"PeT-ml-yqR\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Kraken"
+          }
+        }
+      }
+    },
+    "R4u-9d-YbD.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Kraken\"; ObjectID = \"R4u-9d-YbD\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Kraken"
+          }
+        }
+      }
+    },
+    "rcK-Cf-l1c.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"volume slider\"; ObjectID = \"rcK-Cf-l1c\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "volume slider"
+          }
+        }
+      }
+    },
+    "Tkv-Pq-0WC.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Song\"; ObjectID = \"Tkv-Pq-0WC\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Song"
+          }
+        }
+      }
+    },
+    "uhK-uU-hV9.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Catalog\"; ObjectID = \"uhK-uU-hV9\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Catalog"
+          }
+        }
+      }
+    },
+    "uQy-DD-JDr.title" : {
+      "comment" : "Class = \"NSMenu\"; title = \"noice\"; ObjectID = \"uQy-DD-JDr\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "noice"
+          }
+        }
+      }
+    },
+    "Vdr-fp-XzO.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Hide Others\"; ObjectID = \"Vdr-fp-XzO\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide Others"
+          }
+        }
+      }
+    },
+    "wfU-fB-Rel.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"reCatalog\"; ObjectID = \"wfU-fB-Rel\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "reCatalog"
+          }
+        }
+      }
+    },
+    "wpr-3q-Mcd.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Help\"; ObjectID = \"wpr-3q-Mcd\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Help"
+          }
+        }
+      }
+    },
+    "y11-Qd-b9o.title" : {
+      "comment" : "Class = \"NSMenu\"; title = \"Mixer\"; ObjectID = \"y11-Qd-b9o\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Mixer"
+          }
+        }
+      }
+    },
+    "yzP-yC-B1T.title" : {
+      "comment" : "Class = \"NSMenuItem\"; title = \"Print Stat\"; ObjectID = \"yzP-yC-B1T\";",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Print Stat"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

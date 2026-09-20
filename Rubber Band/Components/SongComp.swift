@@ -29,7 +29,6 @@ enum SelState {
 }
 
 
-
 private let labeln = menuOverlay?.childNode(withName: "name") 	as! SKLabelNode
 private let labela = menuOverlay?.childNode(withName: "artist") as! SKLabelNode
 private let labelt = menuOverlay?.childNode(withName: "time") 	as! SKLabelNode
@@ -51,16 +50,15 @@ class SongComp: GKComponent {
 				switch oldValue {
 				case .notselected, .othersongs:
 					initiateselected()
+					animatecover()
 					time()
-					previewsong(song: self)
 					fallthrough
-					case .detailview:
-						cover.runAction(SCNAction.move(to: SCNVector3(x: 0.42, y: row, z: state.z()), duration: 0.4), forKey: "movez")
+				case .detailview:
+					cover.runAction(SCNAction.move(to: SCNVector3(x: 0.42, y: row, z: state.z()), duration: 0.4), forKey: "movez")
 				default:
 					break
 				}
 			case .notselected:
-//				Jukebox.shared.stop()
 				cover.opacity = 1
 				reset()
 			case .detailview:
@@ -72,16 +70,17 @@ class SongComp: GKComponent {
 				}
 				cover.runAction(SCNAction.move(to: SCNVector3(x: 0.42, y: row, z: state.z()), duration: 0.5), forKey: "movez")
 			case .othersongs:
+//				cover.removeAllActions()
 				cover.runAction(SCNAction.move(to: SCNVector3(x: 0.42, y: row, z: state.z()), duration: 0.5), forKey: "movez")
-				cover.runAction(SCNAction.fadeOpacity(to: 0.05, duration: 0.75), forKey: "coveropacity")
+				cover.runAction(SCNAction.fadeOpacity(to: 0.05, duration: 0.75), forKey: "looper")
 			}
 		}
 	}
 	
-	let song		: Song
-	var index 		= 0
+	let song: Song
+	var index = 0
 	var row:CGFloat	= 0
-	let cover 		= makecoverart()
+	let cover = makecoverart()
 	
 	init(song:Song) {
 		self.song = song
@@ -106,14 +105,14 @@ private extension SongComp {
 		if song.length > 0 {
 			var secs 	= DateComponents()
 			secs.second = Int(song.length)
-			labelt.text = format.string(for: secs)
+			labelt.text = dateformat.string(for: secs)
 		}else{
 			labelt.text = ""
 		}
 	}
 	
 	func initiateselected() {
-		UpNext.shared.listnodes[3].text = "# \(index + 1)"
+		UpNext.shared.listnodes[4].text = "# \(index + 1)"
 		getcolumn().index = index
 		self.entity?.addComponent(smanager.record)
 		self.entity?.addComponent(smanager.stars)
@@ -126,6 +125,17 @@ private extension SongComp {
 		cover.runAction(SCNAction.move(to: SCNVector3(x: 0, y: row, z: 0), duration: 0.4))
 		cover.runAction(SCNAction.rotateTo(x: 0, y: 0, z: 0, duration: 0.4))
 	}
+	
+	func animatecover() {
+		cover.runAction(wad, forKey: "looper") {
+	//		song.cover.runAction(wadtwice, forKey: "looper") // this causes a memory leak
+			self.cover.runAction(.sequence([
+				SCNAction.rotateTo(x: 0, y: 0.5, z: 0, duration: 1.25),
+				SCNAction.rotateTo(x: 0, y: 0.6, z: 0, duration: 1.25)
+			]))
+			Jukebox.shared.previewsong(song: self)
+		}
+	}
 }
 
 //MARK: - Functions
@@ -137,49 +147,12 @@ fileprivate func makecoverart() -> SCNNode {
 	return node
 }
 
-fileprivate func previewsong(song: SongComp) {
-
-	Jukebox.shared.timeit()
-	song.cover.runAction(wad, forKey: "looper") {
-		song.cover.runAction(wadtwice, forKey: "looper")
-		Jukebox.shared.getsongfiles(folder: song.song.folder!)
-		if Jukebox.shared.players.isEmpty && Jukebox.shared.fplayers.isEmpty {
-			print("no players found, you should exit here")
-		} else {
-			// if song duration is not marked get the song duration
-			if song.song.length < 1 {
-				song.song.length = Jukebox.shared.duration()!
-				labelt.text = format.string(from: song.song.length)
-				try? pc.viewContext.save()
-			}
-			
-			if Jukebox.shared.timer.isValid {
-				if song.song.preview == 0 {
-					Jukebox.shared.preview(from: 30)
-				}else {
-					Jukebox.shared.preview(from: song.song.preview)
-				}
-			}
-		}
-	}
-}
-
 
 let albumscn = SCNScene(named: "art.scnassets/scns/album.scn")!
 fileprivate let cover 	= albumscn.rootNode.childNode(withName: "cover", recursively: false)!
 
 //MARK: - Waddle Animations
-fileprivate var waddle1:SCNAction {
-	let scna = SCNAction.rotateTo(x: 0, y: 0.5, z: 0, duration: 1.25)
-	scna.timingMode = .easeIn
-	return scna
-}
 
-fileprivate var waddle2:SCNAction {
-	let scna = SCNAction.rotateTo(x: 0, y: 0.6, z: 0, duration: 1.25)
-	scna.timingMode = .easeIn
-	return scna
-}
 
 fileprivate var waddle3:SCNAction {
 	let scna = SCNAction.rotateTo(x: 0, y: 0.55, z: 0, duration: 1.25)
@@ -193,5 +166,8 @@ fileprivate var wad:SCNAction {
 	return scna
 }
 
-fileprivate let wadtwice = SCNAction.sequence([waddle1, waddle2, waddle3])
+
+
+// doing this method in combination with Computed Var causes a memory leak
+//fileprivate let wadtwice = SCNAction.sequence([waddle1, waddle2, waddle3])
 

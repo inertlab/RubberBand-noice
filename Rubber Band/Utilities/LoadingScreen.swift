@@ -132,10 +132,10 @@ class LoadingScreen {
 	let loading		:SKLabelNode
 	/// temp label for color values. delete in future
 	let col  		:SKLabelNode
-	private let randomx 	= GKRandomDistribution(lowestValue: -720, highestValue: 720)
-	private let randomy 	= GKRandomDistribution(lowestValue: -450, highestValue: 450)
+	private let randomx = GKRandomDistribution(lowestValue: -720, highestValue: 720)
+	private let randomy = GKRandomDistribution(lowestValue: -450, highestValue: 450)
 
-	private let scaleindex 	= GKRandomDistribution(lowestValue: 0, highestValue: 4)
+	private let scaleindex = GKRandomDistribution(lowestValue: 0, highestValue: 4)
 	
 	private let scales:[CGFloat] = [0.5, 0.625, 0.75, 0.875, 1]
 	

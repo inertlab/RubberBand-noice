@@ -7,7 +7,7 @@
 //
 
 import SceneKit
-import MIKMIDI
+//import MIKMIDI
 import SpriteKit
 import AVFoundation
 

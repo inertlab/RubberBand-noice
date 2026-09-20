@@ -52,8 +52,7 @@ class RowCall {
 				break
 			}
 		}
-	}
-	
+	}	
 }
 
 private extension RowCall {

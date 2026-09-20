@@ -11,6 +11,7 @@ import WebKit
 import SceneKit
 
 
+/// tracks anaylitcs with Google - disable in viewcontroller for debug
 class Anal {
 	static let shared = Anal()
 	private init() {}
@@ -19,32 +20,31 @@ class Anal {
 	let view = WKWebView()
 	
 	func addsubview(_ parentview: SCNView)  {
-		if track {
-			parentview.addSubview(view)
-			
-			if let url = URL(string: "http://artecolote.com/noice/session/") {
-				let request = URLRequest(url: url)
-				view.load(request)
-			}
+		if !track {return}
+
+		parentview.addSubview(view)
+		
+		if let url = URL(string: "https://inertlab.com/noice/session") {
+			let request = URLRequest(url: url)
+			view.load(request)
 		}
 	}
 	
-	func event() {
-		if track {
-			event(script: "evented(\"\(smanager.selected.song.artist!): \(smanager.selected.song.title!)\", \"\(User.current.instrument.name())\" )")
-		}
+	func songevent(_ song: Song) {
+		if !track {return}
+//		"evented" is a function defined in the html file, i could also just send gtag() script directly
+//		evented(instrument, artist, title)
+		event(script: "evented(\"\(User.current.instrument.name())\", \"\(song.artist!)\", \"\(song.title!)\")")
 	}
 	
 	/// Evaulates event inside webview
 	/// - Parameter script: javascript in string format
 	func event(script: String) {
-		if track {
-			view.evaluateJavaScript(script, completionHandler: { (result, error) in
-				if error != nil {
-					print(error ?? "error")
-				}
-			})
-			print(script)
-		}
+		view.evaluateJavaScript(script, completionHandler: { (result, error) in
+			if error != nil {
+				print(error ?? "website error")
+			}
+		})
+		print(script)
 	}
 }

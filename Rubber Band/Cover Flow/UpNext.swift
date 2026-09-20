@@ -9,9 +9,7 @@
 import Foundation
 import SpriteKit
 
-
-
-/// controls the list of songs in the main menu. currently crashes if there is less that 7 songs
+/// Controls and Displays the list of songs in the main menu.
 final class UpNext {
 	
 	static let shared = UpNext()
@@ -29,7 +27,7 @@ final class UpNext {
 	let upnextgroup = menuOverlay?.childNode(withName: "upnext")
 	var listnodes 	= [SKLabelNode]()
 	
-	var list 		= ["","","","","","",""]
+	var list 		= ["","","","","","","","",""]
 	
 	func scrollup (title: String) {
 		list.removeLast()
@@ -45,6 +43,7 @@ final class UpNext {
 	
 	func refreshlist (nexttitles: [String]) {
 		list = nexttitles
+//		print(nexttitles)
 		updatenodes()
 	}
 	
@@ -72,14 +71,14 @@ final class UpNext {
 	}
 
 	private func updatenodes() {
-		for i in 0...6 {
-			if i == 3 {
+		
+		for i in 0...list.count-1 {
+			if i == 4 {
 				continue
 			}
 			listnodes[i].text = list[i]
 		}
 	}
-
 }
 
 

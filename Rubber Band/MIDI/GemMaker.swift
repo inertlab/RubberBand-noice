@@ -13,9 +13,6 @@ import SceneKit
 // this needs to be more flexlible too
 let gemmaker = GemMaker()
 
-enum IType {
-	case strings, drums
-}
 
 /// asset manager for Gems
 ///
@@ -24,6 +21,9 @@ enum IType {
 ///
 /// Should this expand to a full theme or just jems? the frets should probably be part of the same theme?
 class GemMaker {
+	enum IType {
+		case strings, drums
+	}
 	/// if this takes a file then gemmaker needs to take a file too.
 	/// remove this SOON!
 //	let gems = Gems()
@@ -84,7 +84,6 @@ class GemMaker {
 			drumtail = drumnode?.childNode(withName: "tail", recursively: false)
 			
 			if let tom = drumnode?.childNode(withName: "toms", recursively: false) {
-				print("found toms")
 //				if "toms" is found, then use it for all toms
 				for tn in tomnotes {
 					gemSet[tn] = clonegem(instrument: tom)
@@ -198,12 +197,11 @@ class GemMaker {
 
 private extension GemMaker {
 
-	
 	/// Copies node and geometry
 	/// - Returns: returns copy of the node
 	func clonegem (instrument:SCNNode) -> SCNNode {
-		let node 			= instrument.clone()
-			node.geometry 	= instrument.geometry?.copy() as? SCNGeometry
+		let node = instrument.clone()
+			node.geometry = instrument.geometry?.copy() as? SCNGeometry
 		return node
 	}
 }

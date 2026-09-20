@@ -17,7 +17,6 @@ class StringTrigger {
 
 	let note: 	Button
 	let node: 	SCNNode
-//	let burst: 	SCNNode
 	let particle:SCNParticleSystem?
 	let pressed:SCNMaterial?
 	let neutral:SCNMaterial?
@@ -88,7 +87,6 @@ class StringTrigger {
 	
 	
 	func miss(){
-//		let mat = node.geometry?.firstMaterial
 		node.geometry?.firstMaterial = missed
 		btnring?.geometry?.firstMaterial?.diffuse.intensity = 0
 		node.runAction(SCNAction.wait(duration: 0.1), forKey: "wating") {

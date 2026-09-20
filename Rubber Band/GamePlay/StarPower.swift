@@ -87,6 +87,7 @@ class StarPower {
 	let activators	:SCNNode
 	let portal 		:SCNNode
 	let party 		:SCNParticleSystem
+	var GH = false
 	
 	init(_ hwy: HWY) {
 		self.hwy 		= hwy
@@ -94,6 +95,10 @@ class StarPower {
 		self.portal 	= hwy.base.parent!.childNode(withName: "portal", recursively: true)!
 		self.party 		= portal.particleSystems![0]
 		self.portal.removeAllParticleSystems()
+//		if there are no activator nodes, then this sogn is a guitar hero song. activate SP when it hits 4
+		if activators.childNodes.isEmpty {
+			self.GH = true
+		}
 	}
 	 
 	var state 		= State.low
@@ -112,14 +117,12 @@ class StarPower {
 	var power		= 1
 	/// start power acquired max value is 4. player needs at least 2 to activate sp
 	var meter:CGFloat 		= 0
-//	var activetime:CGFloat 	= 0
 	private var activated 	= false
 	
 	/// Keeps track of streak during SP segment used in timefunction
 	///
 	/// - Parameter time: current play time from the midi file
 	func trackpower (time: CGFloat){
-		
 		if state == .activated {
 			if meter == 0 {
 				portal.removeAllParticleSystems()
@@ -194,6 +197,10 @@ class StarPower {
 		// add to star meter
 		if meter >= 16 && state != .activated {
 			state = .ready
+		}
+//		if this is a guitar hero track, activate starpower as soon as you hit 32
+		if GH && meter >= 32 {
+			activateSP(Jukebox.shared.currenttime()! * pace.fps)
 		}
 	}
 }

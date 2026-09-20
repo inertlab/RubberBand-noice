@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="25098" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
-        <plugIn identifier="com.apple.SceneKitIBPlugin" version="19529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="25098"/>
+        <plugIn identifier="com.apple.SceneKitIBPlugin" version="25098"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -24,9 +24,6 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
-                                        <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW"/>
-                                        <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
-                                        <menuItem isSeparatorItem="YES" id="4je-JR-u6R"/>
                                         <menuItem title="Hide noice" keyEquivalent="h" id="Olw-nP-bQN">
                                             <connections>
                                                 <action selector="hide:" target="Ady-hI-5gd" id="PnN-Uc-m68"/>
@@ -45,21 +42,9 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="kCx-OE-vgT"/>
-                                        <menuItem title="Quit GameTemplate" keyEquivalent="q" id="4sb-4s-VLi">
+                                        <menuItem title="Quit noice" keyEquivalent="q" id="4sb-4s-VLi">
                                             <connections>
                                                 <action selector="terminate:" target="Ady-hI-5gd" id="Te7-pn-YzF"/>
-                                            </connections>
-                                        </menuItem>
-                                    </items>
-                                </menu>
-                            </menuItem>
-                            <menuItem title="File" state="on" id="dMs-cI-mzQ">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="File" id="bib-Uj-vzu">
-                                    <items>
-                                        <menuItem title="Open…" keyEquivalent="o" id="IAo-SY-fd9">
-                                            <connections>
-                                                <action selector="openDocument:" target="Ady-hI-5gd" id="bVn-NM-KNZ"/>
                                             </connections>
                                         </menuItem>
                                     </items>
@@ -157,7 +142,7 @@
                             </menuItem>
                             <menuItem title="Mixer" id="7Ib-PK-Fgx">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Mixer" userInterfaceLayoutDirection="leftToRight" id="y11-Qd-b9o">
+                                <menu key="submenu" title="Mixer" id="y11-Qd-b9o">
                                     <items>
                                         <menuItem title="Master:" enabled="NO" id="MKE-VX-t0O">
                                             <attributedString key="attributedTitle"/>
@@ -198,7 +183,7 @@
                             </menuItem>
                             <menuItem title="Kraken" id="R4u-9d-YbD">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Kraken" userInterfaceLayoutDirection="leftToRight" id="PeT-ml-yqR">
+                                <menu key="submenu" title="Kraken" id="PeT-ml-yqR">
                                     <items>
                                         <menuItem title="Release it?" id="nCx-0f-Bsk">
                                             <attributedString key="attributedTitle"/>
@@ -212,8 +197,15 @@
                             </menuItem>
                             <menuItem title="Window" id="jZR-qA-vpo">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Window" systemMenu="window" userInterfaceLayoutDirection="leftToRight" id="mTU-Z9-qrz">
+                                <menu key="submenu" title="Window" systemMenu="window" id="mTU-Z9-qrz">
                                     <items>
+                                        <menuItem title="Start In Full Screen" id="2zo-FD-fAg">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="fullscreenoption:" target="Voe-Tx-rLC" id="5Mw-kt-An1"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="JcX-oS-VWc"/>
                                         <menuItem title="Minimize" keyEquivalent="m" id="9gR-Ge-Ldv">
                                             <modifierMask key="keyEquivalentModifierMask" shift="YES" control="YES" option="YES" command="YES"/>
                                             <connections>
@@ -257,19 +249,20 @@
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="noice" customModuleProvider="target">
                     <connections>
                         <outlet property="crowdslider" destination="CLc-qd-ccU" id="5uX-aE-GBM"/>
+                        <outlet property="fullscreen" destination="2zo-FD-fAg" id="jMp-67-iCA"/>
                         <outlet property="kraken" destination="nCx-0f-Bsk" id="aRn-Ge-EVF"/>
                         <outlet property="mastervolume" destination="8aS-dn-y2k" id="VA2-wa-Pj7"/>
                         <outlet property="previewvolume" destination="liJ-ev-un9" id="BF3-aq-9cy"/>
                     </connections>
                 </customObject>
                 <customView id="Lrt-Z8-6iK">
-                    <rect key="frame" x="0.0" y="0.0" width="200" height="20"/>
+                    <rect key="frame" x="0.0" y="0.0" width="210" height="28"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <subviews>
-                        <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8aS-dn-y2k">
-                            <rect key="frame" x="18" y="-2" width="170" height="23"/>
+                        <slider autoresizesSubviews="NO" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8aS-dn-y2k">
+                            <rect key="frame" x="10" y="4" width="184" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <sliderCell key="cell" continuous="YES" refusesFirstResponder="YES" alignment="left" tag="1" maxValue="1" doubleValue="0.86619127516778527" tickMarkPosition="above" sliderType="linear" id="zPV-Z2-EB0"/>
+                            <sliderCell key="cell" controlSize="small" continuous="YES" refusesFirstResponder="YES" alignment="left" tag="1" maxValue="1" doubleValue="0.86619127516778527" tickMarkPosition="above" sliderType="linear" id="zPV-Z2-EB0"/>
                             <connections>
                                 <action selector="mastervolume:" target="Voe-Tx-rLC" id="itf-GR-Ubp"/>
                             </connections>
@@ -277,35 +270,35 @@
                     </subviews>
                 </customView>
                 <customView id="Trg-09-0dO">
-                    <rect key="frame" x="0.0" y="0.0" width="200" height="20"/>
+                    <rect key="frame" x="0.0" y="0.0" width="210" height="28"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <subviews>
-                        <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="liJ-ev-un9">
-                            <rect key="frame" x="18" y="-2" width="170" height="23"/>
+                        <slider autoresizesSubviews="NO" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="liJ-ev-un9">
+                            <rect key="frame" x="10" y="4" width="184" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <sliderCell key="cell" continuous="YES" refusesFirstResponder="YES" state="on" alignment="left" tag="2" maxValue="1" tickMarkPosition="above" sliderType="linear" id="Md4-td-ayu"/>
+                            <sliderCell key="cell" controlSize="small" continuous="YES" refusesFirstResponder="YES" state="on" alignment="left" tag="2" maxValue="1" tickMarkPosition="above" sliderType="linear" id="Md4-td-ayu"/>
                             <connections>
                                 <action selector="previewvolume:" target="Voe-Tx-rLC" id="NKK-bw-Ynu"/>
                             </connections>
                         </slider>
                     </subviews>
                 </customView>
-                <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
-                <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
                 <customView id="o7f-NR-slc">
-                    <rect key="frame" x="0.0" y="0.0" width="200" height="20"/>
+                    <rect key="frame" x="0.0" y="0.0" width="210" height="28"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <subviews>
-                        <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CLc-qd-ccU">
-                            <rect key="frame" x="18" y="-2" width="170" height="23"/>
+                        <slider autoresizesSubviews="NO" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CLc-qd-ccU">
+                            <rect key="frame" x="10" y="4" width="184" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <sliderCell key="cell" continuous="YES" refusesFirstResponder="YES" state="on" alignment="left" tag="2" maxValue="1" doubleValue="0.5" tickMarkPosition="above" sliderType="linear" id="bjR-xq-7wf"/>
+                            <sliderCell key="cell" controlSize="small" continuous="YES" refusesFirstResponder="YES" state="on" alignment="left" tag="2" maxValue="1" doubleValue="0.5" tickMarkPosition="above" sliderType="linear" id="bjR-xq-7wf"/>
                             <connections>
                                 <action selector="crowdnoise:" target="Voe-Tx-rLC" id="Fa5-0i-6A6"/>
                             </connections>
                         </slider>
                     </subviews>
                 </customView>
+                <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
+                <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="33" y="179"/>
         </scene>
@@ -313,8 +306,8 @@
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController storyboardIdentifier="one" showSeguePresentationStyle="single" id="B8D-0N-5wS" sceneMemberID="viewController">
-                    <window key="window" title="noice - alpha" allowsToolTipsWhenApplicationIsInactive="NO" animationBehavior="none" tabbingMode="disallowed" titlebarAppearsTransparent="YES" id="IQv-IB-iLA">
-                        <windowStyleMask key="styleMask" titled="YES" closable="YES" resizable="YES" fullSizeContentView="YES"/>
+                    <window key="window" title="noice" separatorStyle="none" allowsToolTipsWhenApplicationIsInactive="NO" restorable="NO" visibleAtLaunch="NO" animationBehavior="none" appearanceType="darkAqua" tabbingMode="disallowed" titlebarAppearsTransparent="YES" titleVisibility="hidden" id="IQv-IB-iLA">
+                        <windowStyleMask key="styleMask" titled="YES" miniaturizable="YES" resizable="YES" fullSizeContentView="YES"/>
                         <windowCollectionBehavior key="collectionBehavior" fullScreenDisallowsTiling="YES"/>
                         <rect key="contentRect" x="196" y="200" width="768" height="480"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
@@ -330,14 +323,14 @@
                 <customObject id="Oky-zY-oP4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
                 <userDefaultsController representsSharedInstance="YES" id="83F-mX-4cB"/>
             </objects>
-            <point key="canvasLocation" x="60" y="501"/>
+            <point key="canvasLocation" x="93" y="599"/>
         </scene>
-        <!--noice-->
+        <!--Game View Controller-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
-                <viewController title="noice" storyboardIdentifier="two" showSeguePresentationStyle="single" id="XfG-lQ-9wD" customClass="GameViewController" customModule="noice" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="two" showSeguePresentationStyle="single" id="XfG-lQ-9wD" customClass="GameViewController" customModule="noice" customModuleProvider="target" sceneMemberID="viewController">
                     <sceneView key="view" wantsLayer="YES" loops="NO" preferredRenderingAPI="1" translatesAutoresizingMaskIntoConstraints="NO" id="RvT-eo-GD2" customClass="GameView" customModule="noice" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="0.0" width="720" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1152" height="720"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     </sceneView>
                     <connections>

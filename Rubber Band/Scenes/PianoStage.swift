@@ -42,8 +42,8 @@ final class PianoStage: Performing, Track, KeyUp {
 			Button.red: 	StringTrigger(note: .red, 	hwy: self.hwy)	,
 			Button.blue: 	StringTrigger(note: .blue, 	hwy: self.hwy)	,
 			Button.green: 	StringTrigger(note: .green,	hwy: self.hwy)	,
-			Button.orange: StringTrigger(note: .orange, hwy: self.hwy)	,
-			Button.yellow: StringTrigger(note: .yellow, hwy: self.hwy)	,
+			Button.orange: 	StringTrigger(note: .orange, hwy: self.hwy)	,
+			Button.yellow: 	StringTrigger(note: .yellow, hwy: self.hwy)	,
 		]
 		self.sp = StarPower(self.hwy)
 		startparticle()
@@ -62,8 +62,6 @@ final class PianoStage: Performing, Track, KeyUp {
 			default:
 				break
 			}
-		} else {
-			stagemc.loadstage()
 		}
 	}
 	

@@ -11,7 +11,10 @@ import SceneKit
 
 let scoreDisplay = SKScene(fileNamed: "scoredisplay.sks")
 //fileprivate let scoregroup = scoreDisplay?.childNode(withName: "scoregroup")
-/// tallies up the score and updates the score display on screen
+
+/// tallies up the score and updates the score display on screen during gameplay
+///
+/// The final score is display by ScoreBoard
 class ScoreKeeper {
 	/// score value of a successful note PRO drums
 	var pts				= 25
