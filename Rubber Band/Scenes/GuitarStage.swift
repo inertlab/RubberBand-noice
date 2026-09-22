@@ -256,8 +256,6 @@ private extension GuitarStage {
 	
 	/// deprecated - do not use?
 	func tracktails (_ tail: TailComp) {
-//		print("track tails. ")
-		// func = timeremaining / lengh -1 * -1
 		let time = CGFloat(Jukebox.shared.currenttime() ?? 0) * pace.fps + tail.length
 		var lapse:CGFloat = 0
 		tail.node.childNodes[0].geometry?.firstMaterial?.transparent.contentsTransform.m42 = 0.5

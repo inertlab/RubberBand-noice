@@ -8,7 +8,6 @@
 
 
 import Foundation
-//import MIKMIDI
 import SceneKit
 
 typealias TimeBtn = (time:Double, btn:Button)
@@ -16,12 +15,7 @@ typealias BtnList = [TimeBtn]
 /// Sets up gem not locations etc from MIDI events
 class MusicSheet {
 	static let shared = MusicSheet()
-	
-//	var seq = MIKMIDISequence()
-		/// MIDI notes in the chart by difficulty
 	var difficultyConfig = DifficultyConfig()
-		/// convenience reference to timecop
-//	let tc = TimeCode.tc
 	var fzmidi: FZMIDI?
 	private init() {}
 	
@@ -34,7 +28,7 @@ class MusicSheet {
 		if let fzmidi = FZMIDI(url: url) {
 			self.fzmidi = fzmidi
 		}
-//		self.seq = try! MIKMIDISequence(fileAt: url, convertMIDIChannelsToTracks: false)
+
 		self.difficultyConfig = User.current.instrument.config(diff: User.current.diff)
 //		TimeCode.tc.initTimeCode(seq: self.seq)
 		setaveragetempo()
@@ -154,14 +148,10 @@ class MusicSheet {
 		var drumbtnlist = BtnList()
 		guard var drumevents = fzmidi?.notes else {return drumbtnlist}
 		
-
 		
 		drumevents.sort(by: {($0.time, $1.note!) < ($1.time, $0.note!)})
-//		drumevents.sort(by: {$0.time < $1.time && $0.note! > $1.note!})
 		
-		print(drumevents)
-		
-	
+
 		var flip = false // while this is true, we flip red and yellow_c
 		var yellow = 0.0
 		var blue = 0.0

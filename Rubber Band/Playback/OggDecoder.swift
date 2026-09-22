@@ -18,6 +18,7 @@ final class OggDecoder:AudioDecoder {
 	private let channels: AVAudioChannelCount
 	let format: AVAudioFormat
 	var length: Double
+	var cmtime = CMTime(seconds: 0, preferredTimescale: 44100)
 	
 	init?(url: URL) {
 		guard FileManager.default.fileExists(atPath: url.path) else {
@@ -114,7 +115,6 @@ final class OggDecoder:AudioDecoder {
 			}
 			
 			framesRead += framesToCopy
-//			print("framesRead:", framesRead)
 		}
 		
 		guard framesRead > 0 else { return nil }
@@ -122,7 +122,6 @@ final class OggDecoder:AudioDecoder {
 		// Safely clamped: framesRead is guaranteed <= bufferCapacity
 		pcmBuffer.frameLength = AVAudioFrameCount(framesRead)
 		
-//		print("frames read:", framesRead)
 		return pcmBuffer
 	}
 }
@@ -134,6 +133,7 @@ extension OggDecoder {
 		guard isFileOpen else { return false }
 		// ov_time_seek takes time in seconds (Double)
 		let result = ov_time_seek(&vf, seconds)
+		cmtime = CMTime(seconds: seconds, preferredTimescale: CMTimeScale(self.format.sampleRate))
 		if result != 0 {
 			print("ov_time_seek failed with error code: \(result)")
 			return false
@@ -141,7 +141,12 @@ extension OggDecoder {
 		return true
 	}
 	
+<<<<<<< HEAD
 	func readNextSampleBuffer(presentationTime: CMTime) -> CMSampleBuffer? {
+//		print("OGG presentationTime:", presentationTime.seconds)
+=======
+	func readNextSampleBuffer() -> CMSampleBuffer? {
+>>>>>>> vocal_change
 		// 1. Read PCM chunk from libvorbis
 		guard let pcmBuffer = self.readNextChunk(duration: 0.25) else {
 			return nil
@@ -153,13 +158,16 @@ extension OggDecoder {
 		}
 		
 		// 3. Convert to CMSampleBuffer with presentation timestamp
+<<<<<<< HEAD
 		guard let sampleBuffer = pcmBuffer.toCMSampleBuffer(presentationTime: presentationTime) else {
-			print("⚠️ [OggDecoder] Failed to convert AVAudioPCMBuffer to CMSampleBuffer")
+=======
+		guard let sampleBuffer = pcmBuffer.toCMSampleBuffer(presentationTime: cmtime) else {
+>>>>>>> vocal_change
+			print("[OggDecoder] Failed to convert AVAudioPCMBuffer to CMSampleBuffer")
 			return nil
 		}
-//		print(sampleBuffer)
+		cmtime = CMTimeAdd(sampleBuffer.duration, cmtime)
 		return sampleBuffer
 	}
 }
-
 

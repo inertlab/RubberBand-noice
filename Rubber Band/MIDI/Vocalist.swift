@@ -9,9 +9,14 @@
 import Foundation
 import SpriteKit
 
-/// combines midi lyric events into phrases for display in spritekit
+typealias Lyric = (time: Double, text: String)
+
+/// prapares final lyrics from midievents to be used in UI
+///
+/// Does not handle lyric display or tracking -> see VocalCoach for that
+/// Always creates at least 3 lyric events
 class Vocalist {
-	private var lyrics = [(Double, String)]()
+	private var lyrics = [Lyric]()
 	var count = 0
 	
 	init() {
@@ -36,38 +41,49 @@ private extension Vocalist {
 	/// - Parameter tc: timecode instance
 	func lyricist(_ events: NoteEvents){
 
-		var phrase = (0.0, "")
+		var phrase = Lyric(0.0, "")
 		
 		for event in events {
 			switch event{
 			case .lyric(let lyric):
 				if lyric == "+" {break}
-				phrase.1 += "\(lyric) "
+				phrase.text += "\(lyric) "
 				break
 			case .note(let note, let time, _, _):
-				if note != 105 {break} // might need to add 106 too
-				if phrase.1 != "" {
-					phrase.1 = phrase.1.replacingOccurrences(of: "- ", with: "")
-						.replacingOccurrences(of: "= ", with: "-")
-						.replacingOccurrences(of: "-# ", with: "")
-						.replacingOccurrences(of: "#", with: "")
-					lyrics.append(phrase)
-					phrase.1 = ""
+				if ![105, 106].contains(note) {break} // might need to add 106 too
+				if phrase.text != "" {
+					lyrics.append(cleanphrase(phrase))
+					phrase.text = ""
 				}
 				phrase.0 = time
 				break
 			case .meta(let type, time: let time):
 				if type == "[idle]" {
-					lyrics.append(phrase)
+					if phrase.text != "" {
+						lyrics.append(cleanphrase(phrase))
+					}
 					phrase = (time, "* * *")
 				}
 				break
 			}
 		}
 		
-		lyrics.append(phrase)
-		lyrics.append((phrase.0 + 2, ""))
-		lyrics.append((phrase.0 + 1000, ""))
+		lyrics.append(cleanphrase(phrase))
+		lyrics.append((phrase.time + 1, ""))
+		lyrics.append((phrase.time + 2, ""))
+	}
+	
+	func cleanphrase(_ phrase: Lyric) -> Lyric {
+		let newphrase = Lyric(
+			phrase.time,
+			phrase.text.replacingOccurrences(of: "- ", with: "")
+			.replacingOccurrences(of: "-# ", with: "")
+			.replacingOccurrences(of: "#", with: "")
+			.replacingOccurrences(of: "^", with: "")
+			.replacingOccurrences(of: "= ", with: "-")
+			.replacingOccurrences(of: "_", with: " ")
+		)
+		return newphrase
 	}
 	
 }

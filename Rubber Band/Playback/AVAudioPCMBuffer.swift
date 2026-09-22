@@ -79,10 +79,7 @@ extension AVAudioPCMBuffer {
 			return nil
 		}
 
-		let duration = CMTime(
-			value: CMTimeValue(frameCount),
-			timescale: CMTimeScale(sampleRate)
-		)
+		let duration = CMTime(value: 1, timescale: CMTimeScale(sampleRate))
 
 		var timingInfo = CMSampleTimingInfo(
 			duration: duration,
@@ -106,6 +103,8 @@ extension AVAudioPCMBuffer {
 			sampleSizeArray: nil,
 			sampleBufferOut: &sampleBuffer
 		)
+		
+//		print("CREATED:", frameCount, CMSampleBufferGetDuration(sampleBuffer!).seconds)
 
 		guard status == noErr else {
 			return nil

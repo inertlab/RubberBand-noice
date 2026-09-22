@@ -45,7 +45,7 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 	}
 
 	func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-		print("i'm done youall")
+		print("i'm done you'll")
 	}
 	
 	/// creates multiple audio players to play all audio files found by OggNo.aacPaths()
@@ -54,6 +54,7 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 	func play() {
 		trackurls.removeValue(forKey: .preview)
 		noiceplayer.play(trackurls: trackurls)
+		noiceplayer.setvolume(volume)
 	}
 	
 	func previewsong(song: SongComp) {
@@ -80,6 +81,7 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 //		crowd is not needed for previews
 		trackurls.removeValue(forKey: .crowd)
 		noiceplayer.play(trackurls: trackurls, startTime: starttime)
+		noiceplayer.fade(from: 0, to: prevol())
 	}
 	
 	func muteinstrument(track: Track) {
@@ -125,19 +127,9 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 	
 //	only used with slider
 	func setvolume(vol: Float) {
-//		volume = vol
-//		// the oggs
-//		var times:Float = 1.0
-//		
+
 //		if stagemc.machine.currentState is MenuState {
 //			times = vol_prev
-//		}
-		
-//		for fp in fplayers {
-//			if fp.key == .crowd {
-//				continue
-//			}
-//			fp.value.volume = volume * times
 //		}
 		
 //		for p in players {
@@ -160,14 +152,6 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 //				}
 //				p.value.volume = vol_prev * volume
 //			}
-//			
-////			for fp in fplayers {
-////				if fp.key == .crowd {
-////					continue
-////				}
-////				fp.value.volume = vol_prev * volume
-////			}
-//		}
 	}
 	
 	/// used only while setting volume with sliders
