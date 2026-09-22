@@ -100,7 +100,6 @@ extension Track {
 	func starhit(_ star: StarNoteComp) -> Bool {
 		var success = false
 		sp.segment = true
-		print("checking star")
 		if star.meta {
 			sp.starruncompleted()
 			if sp.state == .ready {
@@ -116,7 +115,6 @@ extension Track {
 		var success = false
 		if let starcomp = note.entity?.component(ofType: StarNoteComp.self) {
 			sp.segment = true
-			print("checking star")
 //			this checks if starcomp is the last in the batch but it doesnt always work
 			if starcomp.meta {
 				sp.starruncompleted()
@@ -133,7 +131,6 @@ extension Track {
 	func checkpowerchain2(_ note: NoteComp) -> Bool {
 		if let starcomp = note.entity?.component(ofType: StarNoteComp.self) {
 			sp.segment = true
-			print("checking star")
 			starcomp.node.opacity = 0
 			starcomp.entity?.removeComponent(ofType: StarNoteComp.self)
 //			check to see if this is the last starnote in the set, completes the chain

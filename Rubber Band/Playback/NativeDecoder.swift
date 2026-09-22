@@ -12,7 +12,7 @@ import AVFoundation
 protocol AudioDecoder {
 	var length: Double { get }
 	var format: AVAudioFormat { get }
-	func readNextSampleBuffer(presentationTime: CMTime) -> CMSampleBuffer?
+	func readNextSampleBuffer() -> CMSampleBuffer?
 	func seek(toSeconds seconds: Double) -> Bool
 }
 
@@ -26,18 +26,36 @@ final class NativeDecoder: AudioDecoder {
 	let format: AVAudioFormat
 	
 	init?(url: URL) {
+
 		self.url = url
+
 		let asset = AVURLAsset(url: url)
+
 		self.length = asset.duration.seconds
-		
+
 		guard let track = asset.tracks(withMediaType: .audio).first else { return nil }
-		
-		let sampleRate = track.naturalTimeScale > 0 ? Double(track.naturalTimeScale) : 44100.0
-		guard let fmt = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: sampleRate, channels: 2, interleaved: true) else {
+
+		guard let formatDescription = track.formatDescriptions.first else {
 			return nil
 		}
+
+		let audioFormatDescription = formatDescription as! CMAudioFormatDescription
+
+		guard let asbd = CMAudioFormatDescriptionGetStreamBasicDescription(audioFormatDescription)?.pointee else {
+			return nil
+		}
+
+		let sampleRate = asbd.mSampleRate
+		let channels = AVAudioChannelCount(asbd.mChannelsPerFrame)
+
+		guard let fmt = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: sampleRate, channels: channels, interleaved: true) else {
+			return nil
+		}
+
 		self.format = fmt
+
 		guard self.configureReader(startTime: 0.0) else { return nil }
+
 	}
 	
 	private func configureReader(startTime: Double) -> Bool {
@@ -80,30 +98,17 @@ final class NativeDecoder: AudioDecoder {
 	}
 	
 	/// Returns CMSampleBuffer directly from AVAssetReader hardware pipeline
-	func readNextSampleBuffer(presentationTime: CMTime) -> CMSampleBuffer? {
+	func readNextSampleBuffer() -> CMSampleBuffer? {
+
 		guard let output = trackOutput,
 			  let sampleBuffer = output.copyNextSampleBuffer() else {
 			return nil
 		}
-		
-		// Attach presentation time for AVSampleBufferRenderSynchronizer
-		var timingInfo = CMSampleTimingInfo(
-			duration: CMSampleBufferGetDuration(sampleBuffer),
-			presentationTimeStamp: presentationTime,
-			decodeTimeStamp: .invalid
-		)
-		
-		var timeAdjustedBuffer: CMSampleBuffer?
-		CMSampleBufferCreateCopyWithNewTiming(
-			allocator: kCFAllocatorDefault,
-			sampleBuffer: sampleBuffer,
-			sampleTimingEntryCount: 1,
-			sampleTimingArray: &timingInfo,
-			sampleBufferOut: &timeAdjustedBuffer
-		)
-	
-		return timeAdjustedBuffer ?? sampleBuffer
+
+		return sampleBuffer
 	}
+	
+	
 	
 	func seek(toSeconds seconds: Double) -> Bool {
 		assetReader?.cancelReading()

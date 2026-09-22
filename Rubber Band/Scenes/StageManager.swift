@@ -94,7 +94,7 @@ final class StageManager:NSObject,  SCNSceneRendererDelegate {
 				/// CGFloat representing seconds as distance on HWY
 				let hwytime = cgsongtime * pace.fps
 				
-				vocalcoach.tracklyrics(songtime: songtime)
+//				vocalcoach.tracklyrics(songtime: songtime)
 
 				track.tracker(cgsongtime, hwytime)
 			} else {
@@ -154,6 +154,9 @@ private extension StageManager {
 		vocalcoach = Vocalcoach()
 		let vocalist = Vocalist()
 			vocalist.updatecoach(coach: vocalcoach)
+//		Task {
+//			await vocalcoach.getsyng()
+//		}
 		
 		Anal.shared.songevent(smanager.selected.song)
 
@@ -179,18 +182,23 @@ private extension StageManager {
 				if self.tc.show {
 					self.tc.display(smanager.selected.song)
 				}
-
 				
-				Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
-					if self.track.state != .playing {timer.invalidate()}
-					let timeup = Jukebox.shared.timeremaining()
-					
-					self.track.scorekeeper.time.text = dateformat.string(from: timeup)
-					if timeup < 1 {
-						timer.invalidate()
-						self.machine.enter(ScoreState.self)
-					}
-				}
+				Jukebox.shared.noiceplayer.observe()
+				
+//				let timmy = Jukebox.shared.noiceplayer.trackmanager.synchronizer.addBoundaryTimeObserver(forTimes: [Jukebox.shared.noiceplayer.length + 1] as [NSValue], queue: .main){ [weak self] in
+//					self!.machine.enter(ScoreState.self)
+//				}
+//				
+//				Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+//					if self.track.state != .playing {timer.invalidate()}
+//					let timeup = Jukebox.shared.timeremaining()
+//					
+//					self.track.scorekeeper.time.text = dateformat.string(from: timeup)
+//					if timeup < 1 {
+//						timer.invalidate()
+//						self.machine.enter(ScoreState.self)
+//					}
+//				}
 			}
 		}
 		scoreDisplay?.scaleMode = .aspectFit

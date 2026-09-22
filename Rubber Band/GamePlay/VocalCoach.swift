@@ -7,7 +7,6 @@
 //
 
 import Foundation
-//import MIKMIDI
 import SpriteKit
 
 
@@ -15,7 +14,7 @@ import SpriteKit
 ///
 /// includes animations
 class Vocalcoach {
-	var lyrics = [(0.0, "")]
+	var lyrics = [Lyric]()
 	var abc = [0,1,2]
 	var count = 0
 	var phrases = [SKLabelNode]()
@@ -35,10 +34,15 @@ class Vocalcoach {
 		emptylyrics()
 	}
 	
+	func gettimes() -> [NSValue] {
+		return lyrics.map{$0.time - 0.5} as [NSValue]
+	}
+	
 	/// Keeps track of Song play position and updates lyrics accordingy
 	/// - Parameter songtime: The current time of the song playback in seconds - Unaltered
 	func tracklyrics(songtime: Double)  {
-		if songtime > lyrics[count].0  {
+		
+		while songtime >= lyrics[count].time - 0.6 {
 			switch count % 3 {
 			case 0:
 				abc = [0,1,2]
@@ -49,7 +53,7 @@ class Vocalcoach {
 			}
 			
 			if count + 1 < lyrics.count {
-				phrases[abc[1]].text = lyrics[count + 1].1
+				phrases[abc[1]].text = lyrics[count + 1].text
 				
 				phrases[abc[0]].run(a_enter!, withKey: "entering")
 				phrases[abc[1]].run(a_appear!, withKey: "appearing")
@@ -59,9 +63,9 @@ class Vocalcoach {
 		}
 	}
 	
-	func loadlyrics(lyrics: [(Double, String)]) {
+	func loadlyrics(lyrics: [Lyric]) {
 		self.lyrics = lyrics
-		self.count 	= 0
+		self.count = 0
 		startposition()
 	}
 }
@@ -83,28 +87,28 @@ private extension Vocalcoach {
 //TODO: Lyric positioning
 	func startposition() {
 		abc = [0,1,2]
-		phrases[abc[0]].position.y 	= posy
+		phrases[abc[0]].position.y = posy
 		phrases[abc[0]].alpha = 0.25
-		phrases[abc[1]].position.y 	= posy
-		phrases[abc[1]].alpha 		= 0
-		phrases[abc[2]].position.y 	= posy
-		phrases[abc[2]].alpha 		= 0
+		phrases[abc[1]].position.y = posy
+		phrases[abc[1]].alpha = 0
+		phrases[abc[2]].position.y = posy
+		phrases[abc[2]].alpha = 0
 		resetyrlics()
 	}
 	
 	func resetyrlics() {
-		phrases[abc[0]].text = lyrics[0].1
-		phrases[abc[1]].text = lyrics[1].1
-		phrases[abc[2]].text = lyrics[2].1
+		phrases[abc[0]].text = lyrics[0].text
+		phrases[abc[1]].text = lyrics[1].text
+		phrases[abc[2]].text = lyrics[2].text
 	}
 	
 	func resetloc(){
-		phrases[abc[0]].position.y 	= posy
-		phrases[abc[0]].alpha 		= 0
-		phrases[abc[1]].position.y 	= 0
-		phrases[abc[1]].alpha 		= 1
-		phrases[abc[2]].position.y 	= posy
-		phrases[abc[2]].alpha 		= 0.25
+		phrases[abc[0]].position.y = posy
+		phrases[abc[0]].alpha = 0
+		phrases[abc[1]].position.y = 0
+		phrases[abc[1]].alpha = 1
+		phrases[abc[2]].position.y = posy
+		phrases[abc[2]].alpha = 0.25
 	}
 	
 	func resetanim(){

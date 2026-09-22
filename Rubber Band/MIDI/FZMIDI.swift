@@ -70,6 +70,7 @@ final class FZMIDI {
 		lyrics = gettrackevents(name: .vocals)
 		notes = gettrackevents(name: User.current.instrument.track())
 		beats = gettrackevents(name: .beat)
+//		print(lyrics)
 	}
 	
 	deinit {
@@ -166,8 +167,8 @@ final class FZMIDI {
 			let bytes = Array(UnsafeRawBufferPointer(start: payloadPointer, count: length))
 			
 			let text = String(bytes: bytes, encoding: .ascii)
-	//			?? String(bytes: bytes, encoding: .windowsCP1252)
-				?? String(bytes: bytes, encoding: .utf8)
+				?? String(bytes: bytes, encoding: .utf8) // this does in fact fail with Juanes
+				?? String(bytes: bytes, encoding: .windowsCP1252)
 				?? ""
 						
 			if meta.metaEventType == 5 {

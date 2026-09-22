@@ -17,20 +17,18 @@ actor TrackManager {
 		}
 	}
 	
-	var synchronizer = AVSampleBufferRenderSynchronizer()
+	nonisolated let synchronizer = AVSampleBufferRenderSynchronizer()
 
 	private var decoders: [Jukebox.Track: AudioDecoder] = [:]
-	private var buffers: [Jukebox.Track: CMTime] = [:]
 	private var renderers: [Jukebox.Track: AVSampleBufferAudioRenderer] = [:]
 	private(set) var isplaying = false
-	
-	
+	private var watchers = [Any]()
 	
 	func setup(trackurl: [Jukebox.Track: URL], start: Double = 0) -> Double {
 
 		var maxLength = 0.0
 		let startTime = CMTime(seconds: start, preferredTimescale: 44100)
-		synchronizer.setRate(1.0, time: startTime)
+		
 		
 		for (track, url) in trackurl {
 			// Instantiate OGG or M4A decoder based on extension
@@ -58,13 +56,15 @@ actor TrackManager {
 			renderers[track] = renderer
 			
 			synchronizer.addRenderer(renderer)
-			buffers[track] = startTime
+			synchronizer.setRate(1.0, time: startTime)
 		}
 
 		isplaying = true
 		return maxLength
 	}
 	
+	/// starts streaming loop
+	/// - Parameter start: doesn't do anything
 	func stream(_ start: Double = 0.0) async {
 		guard isplaying else { return }
 
@@ -72,24 +72,16 @@ actor TrackManager {
 			if Task.isCancelled { break }
 			for (key, renderer) in renderers {
 				if Task.isCancelled { break }
-				guard let decoder = decoders[key],
-					  let currentPresentationTime = buffers[key] else { continue }
-				
+				guard let decoder = decoders[key] else { continue }
+
 				while renderer.isReadyForMoreMediaData && isplaying {
-					// Fetch CMSampleBuffer directly from either decoder
-					guard let sampleBuffer = decoder.readNextSampleBuffer(presentationTime: currentPresentationTime) else {
+
+					guard let sampleBuffer = decoder.readNextSampleBuffer() else {
 						break
 					}
 					
 					renderer.enqueue(sampleBuffer)
-					
-					// Advance clock by buffer duration
-					let duration = CMSampleBufferGetDuration(sampleBuffer)
-					let chunkDuration = duration.isValid && duration.seconds > 0
-						? duration
-						: CMTime(value: CMTimeValue(CMSampleBufferGetNumSamples(sampleBuffer)), timescale: CMTimeScale(decoder.format.sampleRate))
-					
-					buffers[key] = CMTimeAdd(currentPresentationTime, chunkDuration)
+//					print("UPDATED BUFFER:", (decoder as! OggDecoder).cmtime.seconds)
 				}
 				
 			}
@@ -99,22 +91,48 @@ actor TrackManager {
 	
 	func clearAll() {
 		isplaying = false
-
+		
+		synchronizer.setRate(0, time: .zero)
+		lookaway()
 		for (_, renderer) in renderers {
 			renderer.stopRequestingMediaData()
 			renderer.flush()
 			synchronizer.removeRenderer(renderer, at: .invalid, completionHandler: nil)
 		}
-		
+		watchers.removeAll()
 		renderers.removeAll()
 		decoders.removeAll()
-		buffers.removeAll()
-		synchronizer = AVSampleBufferRenderSynchronizer()
-		print("cleared all")
+		
+//		synchronizer = AVSampleBufferRenderSynchronizer()
 	}
 	
 	func setvolume(_ vol: Float) {
 		self.volume = vol
+	}
+	
+	func observe(_ length: Double)  {
+
+		let observer = synchronizer.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1, preferredTimescale: 60), queue: .main) { _ in
+			stagemc.track.scorekeeper.time.text = dateformat.string(from: length - self.synchronizer.currentTime().seconds)
+		}
+		
+		let seconds = synchronizer.addBoundaryTimeObserver(forTimes: [length + 1] as [NSValue], queue: .main){
+			stagemc.machine.enter(ScoreState.self)
+		}
+		let times = stagemc.vocalcoach.gettimes() as [NSValue]
+		let lyrics = synchronizer.addBoundaryTimeObserver(forTimes: times, queue: .main) {
+			stagemc.vocalcoach.tracklyrics(songtime: self.synchronizer.currentTime().seconds)
+			}
+
+		watchers = [observer, seconds, lyrics]
+		
+//		print("FIRED FROM:", vocalwatch)
+	}
+	
+	func lookaway(){
+		for watcher in watchers {
+			synchronizer.removeTimeObserver(watcher)
+		}
 	}
 }
 
@@ -124,18 +142,18 @@ final class NoiceAudioPlayer {
 	var trackmanager = TrackManager()
 	private var fadeTask: Task<Void, Never>?
 	var streamTask: Task<Void, Never>?
-
+	var observers = [NSObject]()
 	
 	func play(trackurls: [Jukebox.Track: URL], startTime: Double = 0.0) {
 		self.streamTask = Task(priority: .userInitiated) {
 			self.length = await self.trackmanager.setup(trackurl: trackurls, start: startTime)
-			await self.trackmanager.stream(startTime)
-			await self.trackmanager.setvolume(0.5)
+			await self.trackmanager.stream()
 		}
 	}
 	
 	func stop(){
 		streamTask?.cancel()
+		setvolume(0) // not really necessary?
 		Task(priority: .userInitiated) {
 			await trackmanager.clearAll()
 		}
@@ -147,7 +165,7 @@ final class NoiceAudioPlayer {
 		}
 	}
 	
-	func fade(from: Float = 0, to: Float, duration: TimeInterval = 2.0, completion: (() -> Void)? = nil) {
+	func fade(from: Float = 0, to: Float, duration: TimeInterval = 1.0, completion: (() -> Void)? = nil) {
 			fadeTask?.cancel()
 			
 			fadeTask = Task {
@@ -168,10 +186,17 @@ final class NoiceAudioPlayer {
 				completion?()
 			}
 		}
+	
 	func fadeoutpreview(duration: TimeInterval = 2.0) {
 		let currentPrevol = Jukebox.shared.prevol()
 		fade(from: currentPrevol, to: 0.0, duration: duration) { [weak self] in
 			self?.stop()
+		}
+	}
+	
+	func observe() {
+		Task{
+			await trackmanager.observe(length)
 		}
 	}
 }
