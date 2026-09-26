@@ -29,13 +29,16 @@ class PlayState: GKState {
 			
 			if DiscordRP.rpc != nil {
 				print(rp.timestamps.start!)
-				rp.timestamps.start = Date()
-				rp.timestamps.end = Date() + Jukebox.shared.timeremaining()
+//				rp.timestamps.start = Date()
+//				rp.timestamps.end = Date() + Jukebox.shared.timeremaining()
+				let start = floor(Date().timeIntervalSince1970)
+				let end = start + floor(Jukebox.shared.timeremaining())
+				rp.timestamps.start = Date(timeIntervalSince1970: start)
+				rp.timestamps.end = Date(timeIntervalSince1970: end)
 				DiscordRP.rpc?.setPresence(rp)
 			}
 			return
 		}
-		print("entered")
 		Jukebox.shared.stop()
 		stagemc.loadsong()
 		
@@ -43,8 +46,12 @@ class PlayState: GKState {
 			let song = smanager.selected.song
 			rp.details = song.artist ?? "no artist?"
 			rp.state = song.title ?? "unititled"
-			rp.timestamps.start = Date()
-			rp.timestamps.end = Date() + song.length
+//			rp.timestamps.start = Date()
+//			rp.timestamps.end = Date() + 600
+			let start = floor(Date().timeIntervalSince1970)
+			let end = start + floor(song.length)
+			rp.timestamps.start = Date(timeIntervalSince1970: start)
+			rp.timestamps.end = Date(timeIntervalSince1970: end)
 			rp.assets.largeImage = images.randomElement()
 			rp.assets.largeText = "\(User.current.instrument.name()) on \(User.current.diff.text()) - charted by: \(song.charter ?? "unkown")"
 			DiscordRP.rpc?.setPresence(rp)

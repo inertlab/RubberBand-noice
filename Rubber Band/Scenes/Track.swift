@@ -17,15 +17,15 @@ enum Songstate {
 /// confroms to hwy track animation
 protocol Track: AnyObject {
 //	var particle: SCNNode {get}
-	var backdrop 	:Backdrop {get}
-	var scorekeeper :ScoreKeeper {get}
-	var hwy			:HWY  {get}
-	var sp			:StarPower {get}
-	var state		:Songstate {get set}
-	var starsystem	:GKComponentSystem<StarNoteComp> {get}
-	var notesystem	:GKComponentSystem<NoteComp> {get}
-	var tailsystem	:GKComponentSystemCGF {get}
-	var notes 		:Set<GKEntity> {get set}
+	var backdrop: Backdrop {get}
+	var scorekeeper: ScoreKeeper {get}
+	var hwy: HWY  {get}
+	var sp: StarPower {get}
+	var state: Songstate {get set}
+	var starsystem: GKComponentSystem<StarNoteComp> {get}
+	var notesystem: GKComponentSystem<NoteComp> {get}
+	var tailsystem: GKComponentSystemCGF {get}
+	var notes : Set<GKEntity> {get set}
 
 	func tracker(_ cgsongtime: CGFloat, _ hwytime: CGFloat)
 	func showstats()
@@ -66,10 +66,10 @@ extension Track {
 	}
 	
 	func startparticle() {
-		let box 			= SCNNode()
-		box.name 			= "box"
-		box.position.z 		= -9
-		box.position.y 		= 3
+		let box = SCNNode()
+		box.name = "box"
+		box.position.z = -9
+		box.position.y = 3
 		box.addParticleSystem(spartiscle!)
 		self.hwy.base.parent?.addChildNode(box)
 	}

@@ -12,24 +12,23 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 	
-	@IBOutlet weak var mastervolume	: NSSlider!
+	@IBOutlet weak var mastervolume: NSSlider!
 	@IBOutlet weak var previewvolume: NSSlider!
-	@IBOutlet weak var crowdslider	: NSSlider!
-	@IBOutlet weak var kraken		: NSMenuItem!
-	@IBOutlet weak var fullscreen  	: NSMenuItem!
+	@IBOutlet weak var crowdslider: NSSlider!
+	@IBOutlet weak var kraken: NSMenuItem!
+	@IBOutlet weak var fullscreen: NSMenuItem!
 	
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
-			// Insert code here to initialize your application
-			// set the slider
-		mastervolume.floatValue 	= User.current.player.config?.vol_master ?? 0
-		previewvolume.floatValue 	= User.current.player.config?.vol_preview ?? 0
-		crowdslider.floatValue 		= User.current.player.config?.vol_crowd ?? 0
-		Jukebox.shared.volume 		= mastervolume.floatValue
-		Jukebox.shared.vol_prev 	= previewvolume.floatValue
-		Jukebox.shared.vol_crowd 	= crowdslider.floatValue
+		// set the slider
+		mastervolume.floatValue = User.current.player.config?.vol_master ?? 0
+		previewvolume.floatValue = User.current.player.config?.vol_preview ?? 0
+		crowdslider.floatValue = User.current.player.config?.vol_crowd ?? 0
+		Jukebox.shared.volume = mastervolume.floatValue
+		Jukebox.shared.vol_prev = previewvolume.floatValue
+		Jukebox.shared.vol_crowd = crowdslider.floatValue
 		if User.current.player.config!.kraken {
-			stagemc.bg 		= true
-			kraken.state 	= .on
+			stagemc.bg = true
+			kraken.state = .on
 		}
 		
 		if User.current.player.config!.fullscreen {
@@ -37,10 +36,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		}
 	}
 	
-	
-	
 	func applicationWillTerminate(_ notification: Notification) {
-//		print(notification)
 		Jukebox.shared.stop()
 		User.current.updateUser()
 	}
@@ -69,10 +65,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		}
 		
 		if !songs.isEmpty {
-			let json 				= JSONEncoder()
-			json.outputFormatting 	= .prettyPrinted
+			let json = JSONEncoder()
+			json.outputFormatting = .prettyPrinted
 			if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-				let data 	= try! json.encode(SongList(songs: songs))
+				let data = try! json.encode(SongList(songs: songs))
 				let fileURL = dir.appendingPathComponent("songs.json")
 					//writing
 				do {
@@ -100,8 +96,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		// MARK: - catalog
 		//	catalog
 	@IBAction func recatalog(_ sender: NSMenuItem) {
-			// this crashes because the column letter no longer exists after running this
-			// make a new one that only scans for new songs
+		// this crashes because the column letter no longer exists after running this
+		// make a new one that only scans for new songs
 		smanager.recatalog()
 	}
 	
@@ -111,10 +107,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func printhistory(_ sender: NSMenuItem) {
-			//		for h in User.current.player.history! {
-			//			let his = h as! History
-			//			print(his.song!.title!, his.date!)
-			//		}
+//		for h in User.current.player.history! {
+//			let his = h as! History
+//			print(his.song!.title!, his.date!)
+//		}
 	}
 	
 //MARK: options

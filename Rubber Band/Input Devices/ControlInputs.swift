@@ -122,8 +122,8 @@ let keycodea:KeyCode = [
 	1:		.select, 	// s
 	0: 		.home,		// a
 	123:	.left,	 	// left
-	124: 	.right, 	// right
-	126: 	.up, 		// up
+	124:	.right, 	// right
+	126:	.up, 		// up
 	125:	.down, 		// down
 ]
 

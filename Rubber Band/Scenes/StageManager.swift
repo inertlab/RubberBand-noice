@@ -11,7 +11,7 @@ import SceneKit
 import GameplayKit
 
 
-var dateformat:DateComponentsFormatter{
+var dateformat: DateComponentsFormatter{
 	let form = DateComponentsFormatter()
 	form.allowedUnits = [.minute, .second]
 	return form
@@ -21,13 +21,13 @@ let stagemc = StageManager()
 
 final class StageManager:NSObject,  SCNSceneRendererDelegate {
 	
-	let machine		:GKStateMachine
+	let machine: GKStateMachine
 	
-	var bg 			= true
-	var sub 		: SCNView?
-	let songmenu 	= SongMenu()
-	var vocalcoach 	= Vocalcoach()
-	let tc 			= TitleCredit()
+	var bg = true
+	var sub: SCNView?
+	let songmenu = SongMenu()
+	var vocalcoach = Vocalcoach()
+	let tc = TitleCredit()
 	
 	enum Mode {
 		case choose, random
@@ -37,24 +37,25 @@ final class StageManager:NSObject,  SCNSceneRendererDelegate {
 		case guitar, drums, piano, songmenu, preshow
 	}
 	/// the scene that will be loaded upon exiting current scene
-	var onstage		:Act = .preshow
-	var currentact	:Performing
-	var track		:Track
+	var onstage: Act = .preshow
+	var currentact: Performing
+	var track: Track
 	
 	override init() {
 		self.currentact = songmenu
-		self.track 		= DrumStage()
-		machine		 	= GKStateMachine(states: [MenuState(),
-												  HistoryState(),
-												  RelatedState(),
-												  AddedState(),
-												  HelpState(),
-												  DetailState(octo: songmenu.octopus),
-												  PlayState(),
-												  RewindState(),
-												  ScoreState(),
-												  PausedState(),
-												 ])
+		self.track = DrumStage()
+		machine = GKStateMachine(states: [
+			MenuState(),
+			HistoryState(),
+			RelatedState(),
+			AddedState(),
+			HelpState(),
+			DetailState(octo: songmenu.octopus),
+			PlayState(),
+			RewindState(),
+			ScoreState(),
+			PausedState(),
+		])
 	}
 	
 	required init?(coder: NSCoder) {
@@ -66,18 +67,17 @@ final class StageManager:NSObject,  SCNSceneRendererDelegate {
 		presentmenu()
 	}
 
-	
 	func loadsong()  {
 		switch User.current.instrument {
 		case .guitar, .bass:
-			onstage 	= .guitar
-			currentact 	= GuitarStage()
+			onstage = .guitar
+			currentact = GuitarStage()
 		case .keys:
-			onstage 	= .piano
-			currentact 	= GuitarStage()
+			onstage = .piano
+			currentact = GuitarStage()
 		default:
-			onstage 	= .drums
-			currentact 	= DrumStage()
+			onstage = .drums
+			currentact = DrumStage()
 		}
 		track = currentact as! Track
 		mainView.delegate = self
@@ -108,10 +108,10 @@ private extension StageManager {
 	
 	func presentmenu() {
 		Jukebox.shared.stop()
-		menuOverlay?.isPaused 			= false
+		menuOverlay?.isPaused = false
 		
-		mainView.overlaySKScene		 	= menuOverlay
-		mainView.overlaySKScene?.alpha 	= 0
+		mainView.overlaySKScene = menuOverlay
+		mainView.overlaySKScene?.alpha = 0
 		mainView.overlaySKScene?.run(SKAction.fadeIn(withDuration: 0.5))
 	
 		mainView.present(currentact.scn, with: .crossFade(withDuration: 1), incomingPointOfView: nil)
@@ -154,16 +154,7 @@ private extension StageManager {
 		vocalcoach = Vocalcoach()
 		let vocalist = Vocalist()
 			vocalist.updatecoach(coach: vocalcoach)
-<<<<<<< HEAD
-		Task {
-			await vocalcoach.getsyng()
-		}
-=======
-//		Task {
-//			await vocalcoach.getsyng()
-//		}
->>>>>>> vocal_change
-		
+
 		Anal.shared.songevent(smanager.selected.song)
 
 		if bg {
@@ -190,21 +181,6 @@ private extension StageManager {
 				}
 				
 				Jukebox.shared.noiceplayer.observe()
-				
-//				let timmy = Jukebox.shared.noiceplayer.trackmanager.synchronizer.addBoundaryTimeObserver(forTimes: [Jukebox.shared.noiceplayer.length + 1] as [NSValue], queue: .main){ [weak self] in
-//					self!.machine.enter(ScoreState.self)
-//				}
-//				
-//				Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
-//					if self.track.state != .playing {timer.invalidate()}
-//					let timeup = Jukebox.shared.timeremaining()
-//					
-//					self.track.scorekeeper.time.text = dateformat.string(from: timeup)
-//					if timeup < 1 {
-//						timer.invalidate()
-//						self.machine.enter(ScoreState.self)
-//					}
-//				}
 			}
 		}
 		scoreDisplay?.scaleMode = .aspectFit

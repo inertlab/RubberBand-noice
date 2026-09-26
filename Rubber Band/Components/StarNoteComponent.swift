@@ -12,7 +12,7 @@ import SceneKit
 
 /// duplicates notecomponent nodes, changes them to white and hides the original
 final class StarNoteComp: GKComponent {
-	var set:Int
+	var set: Int
 	var meta = false
 
 	var node = SCNNode()

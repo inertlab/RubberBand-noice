@@ -30,16 +30,16 @@ extension MusicSheet {
 		/// Sorted drum notes from midi sequence
 		let drumNotes = getDrumNotes()
 		
-		var starset		= 0
-		var starnotes 	= stage.sp.starnotes
+		var starset = 0
+		var starnotes = stage.sp.starnotes
 		// if there is no starpower notes, add 1 so it doesn't crash
 		if starnotes.count == 0 {
 			starnotes.append(([.plus], 0, 0, nil))
 		}
-		let setcount	= starnotes.count - 1
+		let setcount = starnotes.count - 1
 
-		var starnote 	= starnotes[starset]
-		var lastStar  	= StarNoteComp(0)
+		var starnote = starnotes[starset]
+		var lastStar = StarNoteComp(0)
 		
 		var basescore = 0
 		var notecount = 0
@@ -52,9 +52,9 @@ extension MusicSheet {
 
 		for note in drumNotes {
 
-			let entity 		= NoteEntity()
-			let start		= CGFloat(note.time * pace.fps_d)
-			let notecomp	= entity.component(ofType: NoteComp.self)!
+			let entity = NoteEntity()
+			let start = CGFloat(note.time * pace.fps_d)
+			let notecomp = entity.component(ofType: NoteComp.self)!
 			
 			notecount += 1
 			
@@ -74,7 +74,7 @@ extension MusicSheet {
 			notecomp.node.position.z = start
 			if note.btn == .plus {
 				// this is an activator button
-				let activator 	= ActivatorComp()
+				let activator = ActivatorComp()
 				notecomp.chord = [.green, .green_c]
 				entity.addComponent(activator)
 				activatortimes.append(notecomp.node.position.z)

@@ -12,10 +12,10 @@ import GameplayKit
 
 /// Column node entity belongs to
 class ColumnComp: GKComponent {
-	let posx	: CGFloat
-	let node	: SCNNode
-	var letter 	= SCNNode()
-	var index 	= 0
+	let posx: CGFloat
+	let node: SCNNode
+	var letter = SCNNode()
+	var index = 0
 	init(column: CGFloat, node: SCNNode){
 		self.posx = column
 		self.node = node

@@ -43,9 +43,9 @@ class GemMaker {
 	/// Shoud the Gems be duplicated inside the scn files are cloned in-code and reassigned materials?
 	var gemSet = [Button: SCNNode]()
 	
-	var drumtail:SCNNode?
-	var stringtail:SCNNode?
-	let beat:(fat: SCNNode, thin: SCNNode)
+	var drumtail: SCNNode?
+	var stringtail: SCNNode?
+	let beat: (fat: SCNNode, thin: SCNNode)
 	let genericglow = SCNMaterial()
 	
 	/// Notes used by drums
@@ -54,8 +54,8 @@ class GemMaker {
 	/// - Required: Red gem for drums, Green for string
 	///
 	/// if second gem is missing from file, the first gem will be reused for all sequential gems
-	let drumSet:[Button] = [.red, .yellow, .blue, .green, .yellow_c, .blue_c, .green_c, .orange]
-	let stringnotes:[Button] = [.green, .red, .yellow, .blue, .orange]
+	let drumSet: [Button] = [.red, .yellow, .blue, .green, .yellow_c, .blue_c, .green_c, .orange]
+	let stringnotes: [Button] = [.green, .red, .yellow, .blue, .orange]
 	
 	
 	/// Initiate instance with a default file for gems
@@ -159,17 +159,12 @@ class GemMaker {
 	}
 	
 	func makegem(button:Button) -> SCNNode {
-//		if let gem = gemSet[button] {
-//			return gem.copy() as! SCNNode
-//		}
 		if button == .plus {
 			return clonegem(instrument: gemSet[.green_c]!)
 		}
 		if let gem = gemSet[button] {
 			return clonegem(instrument: gem)
 		}
-//		return gemSet[button] ?? SCNNode()
-		
 		return SCNNode()
 	}
 

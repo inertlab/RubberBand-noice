@@ -30,7 +30,7 @@ class RowCall {
 		}
 	}
 	
-	let node 	= menuScene.rootNode.childNode(withName: "coverflow", recursively: true)!
+	let node = menuScene.rootNode.childNode(withName: "coverflow", recursively: true)!
 	var state:CFState = .off {
 		didSet {
 			updatezposition()

@@ -23,6 +23,7 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 	var volume: Float = 0.0
 	var vol_prev: Float = 0.0
 	var vol_crowd: Float = 0.0
+	var mutetrack: Track?
 	var trying = false
 	let rewindplayer = try! AVAudioPlayer(
 		contentsOf: URL(
@@ -31,7 +32,7 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 	/// Position driving track animation
 	/// - Returns: time in secods to be converted to cgfloats
 	func currenttime() -> Double? {
-		return noiceplayer.trackmanager.synchronizer.currentTime().seconds
+		return noiceplayer.dj.synchronizer.currentTime().seconds
 	}
 	
 	/// The Volume set for previews
@@ -41,7 +42,7 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 	}
 	
 	func timeremaining() -> Double  {
-		return noiceplayer.length - noiceplayer.trackmanager.synchronizer.currentTime().seconds
+		return noiceplayer.length - noiceplayer.dj.synchronizer.currentTime().seconds
 	}
 
 	func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
@@ -53,6 +54,7 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 	/// - Parameter aacURL: an Array of audio file URLs
 	func play() {
 		trackurls.removeValue(forKey: .preview)
+		setmutetrack()
 		noiceplayer.play(trackurls: trackurls)
 		noiceplayer.setvolume(volume)
 	}
@@ -84,41 +86,26 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 		noiceplayer.fade(from: 0, to: prevol())
 	}
 	
-	func muteinstrument(track: Track) {
-//		if players.count + oggtracks.count == 1 {return}
-//		players[track]?.volume = 0
-	}
-	
-	func unmuteinstrument(track: Track) {
-//		if players.count + oggtracks.count == 1 {return}
-//		players[track]?.volume = volume
+	func instrumentvolume(vol: Float = Jukebox.shared.volume) {
+		if let track = mutetrack {
+			noiceplayer.setvolume(vol, track: track)
+		}
 	}
 	
 	func singalong() {
-//		if let crowd = players[.crowd] {
-//			crowd.setVolume(vol_crowd * volume, fadeDuration: 1)
-//		}
-		
-//		if let crowd = fplayers[.crowd] {
-//			crowd.audioEngine.fade(from: 0, to: vol_crowd * volume, duration: 1)
-//		}
+		if let _ = trackurls[.crowd] {
+			noiceplayer.fadetrack(track: .crowd, to: vol_crowd * volume)
+		}
 	}
 	
 	func stopsinging() {
-//		if let crowd = players[.crowd] {
-//			crowd.setVolume(0, fadeDuration: 1)
-//		}
-//		if let crowd = fplayers[.crowd] {
-//			crowd.audioEngine.fade(from: vol_crowd * volume, to: 0, duration: 1)
-//		}
+		if let _ = trackurls[.crowd] {
+			noiceplayer.fadetrack(track: .crowd, from: vol_crowd * volume, to: 0)
+		}
 	}
 	
 	func stop() {
-//		stop is delayed to allow ffmpeg to finish seeking if seeking is in progress
-//		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-			
-			self.noiceplayer.stop()
-//		}
+		self.noiceplayer.stop()
 	}
 	
 	func fadeout() {
@@ -127,73 +114,44 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 	
 //	only used with slider
 	func setvolume(vol: Float) {
-
-//		if stagemc.machine.currentState is MenuState {
-//			times = vol_prev
-//		}
-		
-//		for p in players {
-//			if p.key == .crowd {
-//				continue
-//			}
-//			p.value.volume = volume * times
-//		}
+		self.volume = vol
+		var times:Float = 1.0
+		if stagemc.machine.currentState is MenuState {
+			times = vol_prev
+		}
+		noiceplayer.setvolume(vol * times)
 	}
 	
 	/// used only while setting volume with menu sliders
 	/// - Parameter vol: volume number from menu slider
 	func setpreviewvol(vol: Float) {
-//		vol_prev = vol
-////		only change the player volume if in preview mode
-//		if stagemc.machine.currentState is MenuState {
-//			for p in players {
-//				if p.key == .crowd {
-//					continue
-//				}
-//				p.value.volume = vol_prev * volume
-//			}
+		vol_prev = vol
+//		only change the player volume if in preview mode
+		if stagemc.machine.currentState is MenuState {
+			noiceplayer.setvolume(vol_prev * volume)
+		}
 	}
 	
 	/// used only while setting volume with sliders
 	/// - Parameter vol: volume number from menu slider
 	func setcrowdnoise(vol: Float) {
-//		vol_crowd = vol
-//		for p in players {
-//			if p.key == .crowd {
-//				p.value.volume = vol_crowd * volume
-//				return
-//			}
-//		}
+		vol_crowd = vol
+		noiceplayer.setvolume(vol * volume, track: .crowd)
 	}
 	
 	func pauseMusic() {
-//		for p in players {
-//			p.value.pause()
-//		}
+		noiceplayer.dj.pause()
 	}
 
 	func resumePlay() {
-//		var time = currenttime()!
-//		
-//		if time > 2 {
-//			time -= 2
-//		} else {
-//			time = 0
-//		}
-//		
-//		let devicetime = players[.guitar]!.deviceCurrentTime
-//		for p in players {
-//			if p.key == .crowd { p.value.volume = 0 }
-//			p.value.volume = 0
-//			p.value.currentTime = time
-//			p.value.play(atTime: devicetime)
-//			p.value.setVolume(volume, fadeDuration: 2)
-//		}
+		Task{
+			await noiceplayer.dj.resume()
+		}
 	}
 	
 	func rewind() {
-//		rewindplayer.volume = volume * 0.25
-//		rewindplayer.play()
+		rewindplayer.volume = volume * 0.25
+		rewindplayer.play()
 	}
 	
 	/// retrieves all the music files from song folder
@@ -201,7 +159,7 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 	/// - Parameter folder: URL to song folder
 	/// - Returns: array of song file paths
 	func getsongfiles (folder: URL) {
-
+		
 		self.folder = folder
 		
 		trackurls.removeAll()
@@ -244,6 +202,34 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 	/// - crowd: sign alongs
 	enum Track: String {
 		case drums, drums_1, drums_2, drums_3, drums_4
-		case guitar, song, vocals, rhythm, keys, preview, crowd
+		case guitar, song, bass, vocals, rhythm, keys, preview, crowd
+	}
+}
+
+private extension Jukebox {
+	func setmutetrack(){
+		mutetrack = nil
+		if trackurls.count > 1 {
+			switch User.current.instrument.track() {
+			case .drums:
+				if let _ = trackurls[.drums]{
+					mutetrack = .drums
+				}
+			case .bass:
+				if let _ = trackurls[.bass]{
+					mutetrack = .bass
+				}
+			case .guitar:
+				if let _ = trackurls[.guitar]{
+					mutetrack = .guitar
+				}
+			case .keys:
+				if let _ = trackurls[.keys]{
+					mutetrack = .keys
+				}
+			default:
+				break
+			}
+		}
 	}
 }

@@ -24,8 +24,7 @@ class Vocalcoach {
 	let a_exit = SKAction(named: "exit")
 	let a_enter = SKAction(named: "enter")
 	let a_appear = SKAction(named: "appear")
-	let posy:CGFloat = -50
-	var observer:Any = NSObject()
+	let posy: CGFloat = -50
 	
 	init() {
 		phrases.append(self.phrase_a)
@@ -35,34 +34,15 @@ class Vocalcoach {
 		emptylyrics()
 	}
 	
-<<<<<<< HEAD
-	deinit {
-//		Jukebox.shared.noiceplayer.trackmanager.synchronizer.removeTimeObserver(observer)
-	}
-	
-	func getsyng() async {
-		let songtimes = lyrics.map{$0.0}
-		observer = try await Jukebox.shared.noiceplayer.trackmanager.synchronizer.addBoundaryTimeObserver(forTimes: songtimes as [NSValue], queue: .main) { [weak self] in
-			if let me = self{
-				me.tracklyrics(songtime: Jukebox.shared.noiceplayer.trackmanager.synchronizer.currentTime().seconds)
-			}
-		}
-		tracklyrics(songtime: 0)
-=======
 	func gettimes() -> [NSValue] {
 		return lyrics.map{$0.time - 0.5} as [NSValue]
->>>>>>> vocal_change
 	}
 	
 	/// Keeps track of Song play position and updates lyrics accordingy
 	/// - Parameter songtime: The current time of the song playback in seconds - Unaltered
 	func tracklyrics(songtime: Double)  {
-<<<<<<< HEAD
-		if songtime > lyrics[count].0 {
-=======
 		
 		while songtime >= lyrics[count].time - 0.6 {
->>>>>>> vocal_change
 			switch count % 3 {
 			case 0:
 				abc = [0,1,2]

@@ -17,7 +17,7 @@ import GameplayKit
 }
 
 /// Custom component system that takes CGFloat instead of TimeInterval
-class GKComponentSystemCGF : GKComponentSystem<GKComponent> {
+class GKComponentSystemCGF: GKComponentSystem<GKComponent> {
 	/// Custom update function
 	/// - Parameter hwytime: Song current playtime converted to HWY track units
 	func update(_ hwytime: CGFloat)  {

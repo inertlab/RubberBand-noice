@@ -15,32 +15,32 @@ protocol TriggerDelegate {
 
 class StringTrigger {
 
-	let note: 	Button
-	let node: 	SCNNode
-	let particle:SCNParticleSystem?
-	let pressed:SCNMaterial?
-	let neutral:SCNMaterial?
-	let missed:SCNMaterial?
-	let hitmat:SCNMaterial?
-	let treck:SCNParticleSystem?
+	let note: Button
+	let node: SCNNode
+	let particle: SCNParticleSystem?
+	let pressed: SCNMaterial?
+	let neutral: SCNMaterial?
+	let missed: SCNMaterial?
+	let hitmat: SCNMaterial?
+	let treck: SCNParticleSystem?
 	/// the ring around the buttons
-	let btnring:SCNNode?
-	let burner:SCNParticleSystem?
+	let btnring: SCNNode?
+	let burner: SCNParticleSystem?
 	
 	init (note: Button, hwy: HWY) {
 		let scn = SCNScene(named: "art.scnassets/particles/particles.scn")
 		
-		treck 		= scn?.rootNode.childNodes.first?.particleSystems?.first
-		particle 	= scn?.rootNode.childNodes[1].particleSystems?.first
-		burner 		= scn?.rootNode.childNodes[2].particleSystems?.first
+		treck = scn?.rootNode.childNodes.first?.particleSystems?.first
+		particle = scn?.rootNode.childNodes[1].particleSystems?.first
+		burner = scn?.rootNode.childNodes[2].particleSystems?.first
 		particle?.particleColor = note.metric.color
-		burner?.particleColor 	= note.metric.color
+		burner?.particleColor = note.metric.color
 		
-		let frets 	= hwy.base.childNode(withName: "frets", recursively: false)
-		let bases 	= frets?.childNode(withName: "base", recursively: false)
+		let frets = hwy.base.childNode(withName: "frets", recursively: false)
+		let bases = frets?.childNode(withName: "base", recursively: false)
 		let buttons = frets?.childNodes.first!
-		let green 	= buttons?.childNode(withName: "green", recursively: false)
-		self.note 	= note
+		let green = buttons?.childNode(withName: "green", recursively: false)
+		self.note = note
 		
 		if note == .green {
 			node = green!
@@ -108,7 +108,5 @@ private extension StringTrigger {
 //			burst.opacity = 0
 		}
 	}
-	
-	
 }
 

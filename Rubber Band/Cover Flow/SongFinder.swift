@@ -101,8 +101,8 @@ class SongFinder {
 	/// does not check if inis have been modified
 	func librarymodified () {
 		do {
-			let modate 	= try fileManager.attributesOfItem(atPath:library)[.modificationDate]
-			let config 	= Defaults.config()
+			let modate = try fileManager.attributesOfItem(atPath:library)[.modificationDate]
+			let config = Defaults.config()
 			
 			if let libdate = config.libupdate {
 				if modate as! Date > libdate {
@@ -174,7 +174,7 @@ class SongFinder {
 	func scanfornewsongs(inis: [String]) {
 		for path in inis {
 			let pathstring 	= path.components(separatedBy: "song.ini")[0]
-			let url	 		= URL(fileURLWithPath: pathstring)
+			let url = URL(fileURLWithPath: pathstring)
 			if let _ = fetchsongbyfolder(folder: url.absoluteString) {
 			} else {
 				print("song not found, add to library")
@@ -202,7 +202,6 @@ class SongFinder {
 				if modate as! Date > date {
 					let pathstring 	= inipath.components(separatedBy: "song.ini")[0]
 					let url = URL(fileURLWithPath: pathstring)
-//					print("url", url)
 					if let song = fetchsongbyfolder(folder: url.absoluteString) {
 						let meta = iniToMeta(iniPath: inipath)
 						mapSongMetatoSong(song: song, meta: meta)
@@ -233,15 +232,15 @@ private extension SongFinder {
 	}
 	
 	func addsongtocatalog(inipath: String) {
-		let songmeta 	= iniToMeta(iniPath: inipath)
-		let song 		= newsongfrominipath(songmeta: songmeta)
+		let songmeta = iniToMeta(iniPath: inipath)
+		let song = newsongfrominipath(songmeta: songmeta)
 		addstattosong(song: song)
 		if let album = getsongalbum(songmeta: songmeta) {
 			song.trackOf = album
 		} else {
-			song.trackOf 			= Album(context: pc.viewContext)
-			song.trackOf?.name 		= songmeta[.album]
-			song.trackOf?.albumArt 	= song.folder?.appendingPathComponent("album.png")
+			song.trackOf = Album(context: pc.viewContext)
+			song.trackOf?.name = songmeta[.album]
+			song.trackOf?.albumArt = song.folder?.appendingPathComponent("album.png")
 		}
 		do{
 			try pc.viewContext.save()
@@ -254,8 +253,8 @@ private extension SongFinder {
 	/// - Parameter songmeta: SongMeta
 	func getsongalbum(songmeta: SongMeta) -> Album? {
 		let fet:NSFetchRequest<Album> = Album.fetchRequest()
-		fet.predicate 	= NSPredicate(format: "name == %@", songmeta[.album]!)
-		let albums 		= try? pc.viewContext.fetch(fet)
+		fet.predicate = NSPredicate(format: "name == %@", songmeta[.album]!)
+		let albums = try? pc.viewContext.fetch(fet)
 		if !albums!.isEmpty {
 			for a in albums! {
 				for song in a.contains as! Set<Song> {
@@ -285,22 +284,22 @@ private extension SongFinder {
 	/// Loots fro a stat matching this song id also set by the current user
 	/// - Parameter song: Song Entity
 	func findstatforsong(song: Song) {
-		let stata 	= fetchstats()
+		let stata = fetchstats()
 		let stat = stata.first(where: {$0.songid == song.uuid})
 		
 		if stat != nil {
-			stat!.song		= song
-			stat!.songid	= song.uuid
-			stat!.pindex	= 0
-			stat!.setby		= User.current.player
+			stat!.song = song
+			stat!.songid = song.uuid
+			stat!.pindex = 0
+			stat!.setby = User.current.player
 		}
 	}
 	
 	/// creates a new song in coredata from midi file path
 	/// - Parameter inipath: the path string to the ini file
 	func newsongfrominipath(songmeta: SongMeta) -> Song {
-		let song 		= Song(context: pc.viewContext)
-			song.tier 	= Tiers(context: pc.viewContext)
+		let song = Song(context: pc.viewContext)
+			song.tier = Tiers(context: pc.viewContext)
 			mapSongMetatoSong(song: song, meta: songmeta)
 		return song
 	}
@@ -315,10 +314,10 @@ private extension SongFinder {
 			case .artist:
 				song.artist = s.value
 			case .name:
-				song.title 	= s.value
+				song.title = s.value
 			case .year:
 				if s.value.count == 4{
-					song.year 	= Int16(s.value)!
+					song.year = Int16(s.value)!
 				} else {
 					let split = s.value.components(separatedBy: " ")
 					
@@ -333,22 +332,22 @@ private extension SongFinder {
 					}
 				}
 			case .genre:
-				song.genre 			= s.value
+				song.genre = s.value
 			case .directory:
-				song.folder 		= URL(fileURLWithPath: s.value)
+				song.folder = URL(fileURLWithPath: s.value)
 			case .diff_drums:
-				song.tier?.drums 	= Int16(s.value) ?? -1
+				song.tier?.drums = Int16(s.value) ?? -1
 			case .diff_guitar:
-				song.tier?.guitar 	= Int16(s.value) ?? -1
+				song.tier?.guitar = Int16(s.value) ?? -1
 			case .diff_bass:
-				song.tier?.bass 	= Int16(s.value) ?? -1
+				song.tier?.bass = Int16(s.value) ?? -1
 			case .diff_keys:
-				song.tier?.keys 	= Int16(s.value) ?? -1
+				song.tier?.keys = Int16(s.value) ?? -1
 			case .delay:
 				if let delay = Double(s.value){
-					song.delay	= delay * 0.001
+					song.delay = delay * 0.001
 				}else{
-					song.delay	= 0
+					song.delay = 0
 				}
 			case .icon:
 				song.icon = s.value.lowercased()
@@ -358,7 +357,7 @@ private extension SongFinder {
 				song.phrase = s.value
 			case .song_length:
 				if let sec = Double(s.value){
-					song.length =  sec / 1000
+					song.length = sec / 1000
 				}
 			case .preview_start_time:
 				if let start = Double(s.value) {
@@ -376,8 +375,8 @@ private extension SongFinder {
 	/// - Parameter folder: folder URL in string format
 	func fetchsongbyfolder(folder: String) -> Song? {
 		let fetch:NSFetchRequest<Song> = Song.fetchRequest()
-		fetch.predicate 	= NSPredicate(format: "folder == %@", folder)
-		fetch.fetchLimit 	= 1
+		fetch.predicate = NSPredicate(format: "folder == %@", folder)
+		fetch.fetchLimit = 1
 		let array = try? pc.viewContext.fetch(fetch)
 		if array!.isEmpty {
 			return nil
@@ -464,12 +463,12 @@ private extension SongFinder {
 	/// - Parameter charter: group that charted the song
 	func uuidfrommeta(song: Song) -> UUID {
 		let charter = song.charter?.lowercased() ?? "null"
-		let thex	= String.init(format: "%0x", song.title!.lowercased().hash).padding(toLength: 8, withPad: "0", startingAt: 0)
-		var ahex	= String.init(format: "%0x", song.artist!.lowercased().hash).padding(toLength: 8, withPad: "0", startingAt: 0)
+		let thex = String.init(format: "%0x", song.title!.lowercased().hash).padding(toLength: 8, withPad: "0", startingAt: 0)
+		var ahex = String.init(format: "%0x", song.artist!.lowercased().hash).padding(toLength: 8, withPad: "0", startingAt: 0)
 			ahex.insert("-", at: ahex.index(ahex.startIndex, offsetBy: 4))
-		let yhex	= String.init(format: "%0x", song.year).padding(toLength: 4, withPad: "0", startingAt: 0)
-		let chex	= String.init(format: "%0x", charter.hash).padding(toLength: 8, withPad: "0", startingAt: 0)
-		let ichex 	= String.init(format: "%0x", song.icon!.hash).padding(toLength: 4, withPad: "0", startingAt: 0)
+		let yhex = String.init(format: "%0x", song.year).padding(toLength: 4, withPad: "0", startingAt: 0)
+		let chex = String.init(format: "%0x", charter.hash).padding(toLength: 8, withPad: "0", startingAt: 0)
+		let ichex = String.init(format: "%0x", song.icon!.hash).padding(toLength: 4, withPad: "0", startingAt: 0)
 		let finalstring = "\(thex)-\(ahex)-\(yhex)-\(chex)\(ichex)"
 		return UUID(uuidString: finalstring)!
 	}

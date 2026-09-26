@@ -16,7 +16,7 @@ class ScoreManager {
 	///
 	/// notice stats cascades and deletes all scores too
 	static func deleteallstats() {
-		let stat:NSFetchRequest<Stats> = Stats.fetchRequest()
+		let stat: NSFetchRequest<Stats> = Stats.fetchRequest()
 		let arr = try? pc.viewContext.fetch(stat)
 		for s in arr! {
 			pc.viewContext.delete(s)
@@ -50,12 +50,12 @@ class ScoreManager {
 	}
 	
 	static func statcount () -> Int {
-		let stat:NSFetchRequest<Stats> = Stats.fetchRequest()
+		let stat: NSFetchRequest<Stats> = Stats.fetchRequest()
 		return try! pc.viewContext.count(for: stat)
 	}
 	
 	static func deletestat () -> Int {
-		let stat:NSFetchRequest<Stats> = Stats.fetchRequest()
+		let stat: NSFetchRequest<Stats> = Stats.fetchRequest()
 		return try! pc.viewContext.count(for: stat)
 	}
 }

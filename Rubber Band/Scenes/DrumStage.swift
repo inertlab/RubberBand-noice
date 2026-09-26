@@ -18,21 +18,21 @@ final class DrumStage: Performing, Track {
 	let scorekeeper = ScoreKeeper()
 
 	// MARK: - ECS
-	var notes   		= Set<GKEntity>()
-	var notesystem		: GKComponentSystem<NoteComp>
-	var tailsystem 		= GKComponentSystemCGF(componentClass: Tailanimate.self)
-	var starsystem		: GKComponentSystem<StarNoteComp> // not used here
-	var activesystem 	= GKComponentSystem<ActivatorComp>(componentClass: ActivatorComp.self)
-	var hidewithsp 		= Set<GKEntity>()
-	var hiddensystem 	= GKComponentSystem<HiddenComp>(componentClass: HiddenComp.self)
+	var notes = Set<GKEntity>()
+	var notesystem: GKComponentSystem<NoteComp>
+	var tailsystem = GKComponentSystemCGF(componentClass: Tailanimate.self)
+	var starsystem: GKComponentSystem<StarNoteComp> // not used here
+	var activesystem = GKComponentSystem<ActivatorComp>(componentClass: ActivatorComp.self)
+	var hidewithsp = Set<GKEntity>()
+	var hiddensystem = GKComponentSystem<HiddenComp>(componentClass: HiddenComp.self)
 	
 	// MARK: - Vars
 	// deprecated - use statemachine instead
 	var state:Songstate = .playing
-	let scn 		= SCNScene(named: "art.scnassets/scns/highway.scn")!
-	let hwy			: HWY
-	let sp			: StarPower
-	var triggers 	: [Button: DrumTrigger]
+	let scn = SCNScene(named: "art.scnassets/scns/highway.scn")!
+	let hwy: HWY
+	let sp: StarPower
+	var triggers: [Button: DrumTrigger]
 	var songtrack: Jukebox.Track = .drums
 
 	init() {
@@ -154,7 +154,6 @@ private extension DrumStage {
 				}
 				starmissed(note)
 				scorekeeper.deadnote()
-				Jukebox.shared.muteinstrument(track: .drums)
 			}
 			// removing entity from one set will not remove the entity completely - DUH!
 			notes.remove(note.entity!)
@@ -212,7 +211,6 @@ private extension DrumStage {
 	func oneup(_ btn: Button) {
 		scorekeeper.comboup()
 		scorekeeper.scoreOneUp()
-		Jukebox.shared.unmuteinstrument(track: .drums)
 		switch btn {
 		case .blue_c:
 			triggers[.blue]?.hit()
@@ -227,7 +225,6 @@ private extension DrumStage {
 	
 	func miss(_ btn: Button) {
 		scorekeeper.scoreMiss()
-		Jukebox.shared.muteinstrument(track: .drums)
 		switch btn {
 		case .blue_c:
 			triggers[.blue]?.miss()

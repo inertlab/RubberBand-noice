@@ -18,7 +18,7 @@ class Defaults {
 	}
 	
 	static func config() -> Config {
-		let fetconfig:NSFetchRequest<Config> = Config.fetchRequest()
+		let fetconfig: NSFetchRequest<Config> = Config.fetchRequest()
 		
 		let configs = try? pc.viewContext.fetch(fetconfig)
 		
@@ -55,9 +55,9 @@ class Defaults {
 		
 		if array!.isEmpty {
 			print("no players in db, making default one")
-			let dplayer 	= Player(context: pc.viewContext)
-			dplayer.name 	= "guest"
-			dplayer.index 	= 0
+			let dplayer = Player(context: pc.viewContext)
+			dplayer.name = "guest"
+			dplayer.index = 0
 			do{
 				try pc.viewContext.save()
 				print("default player saved")

@@ -17,34 +17,34 @@ let burst = SCNParticleSystem(named: "burst.scnp", inDirectory: particleDir)
 
 /// note tracker is attached to triggers on the highway. depending on the trigger, it tracks notes hit
 class DrumTrigger: Burstable {
-	let posy 		= 0.5
-	var nscore 		= 0
-	var kick 		= false
-	let particle 	= SCNParticleSystem(named: "burst.scnp", inDirectory: particleDir)
-	let trigger		: SCNNode
-	let burst		: SCNNode
-	var reactor 	= SCNNode()
+	let posy = 0.5
+	var nscore = 0
+	var kick = false
+	let particle = SCNParticleSystem(named: "burst.scnp", inDirectory: particleDir)
+	let trigger: SCNNode
+	let burst: SCNNode
+	var reactor = SCNNode()
 
 	init(btn: Button, hwy: HWY){
 		self.particle?.particleColor = btn.metric.color
 		switch btn {
 		case .red:
-			self.trigger 	= hwy.base.childNode(withName: "red"		, recursively: false)!
-			self.burst 		= hwy.base.childNode(withName: "rburst"		, recursively: false)!
+			self.trigger = hwy.base.childNode(withName: "red", recursively: false)!
+			self.burst = hwy.base.childNode(withName: "rburst", recursively: false)!
 		case .yellow:
-			self.trigger 	= hwy.base.childNode(withName: "yellow"		, recursively: false)!
-			self.burst 		= hwy.base.childNode(withName: "yburst"		, recursively: false)!
+			self.trigger = hwy.base.childNode(withName: "yellow", recursively: false)!
+			self.burst = hwy.base.childNode(withName: "yburst", recursively: false)!
 		case .blue:
-			self.trigger 	= hwy.base.childNode(withName: "blue"		, recursively: false)!
-			self.burst 		= hwy.base.childNode(withName: "bburst"		, recursively: false)!
+			self.trigger = hwy.base.childNode(withName: "blue", recursively: false)!
+			self.burst = hwy.base.childNode(withName: "bburst", recursively: false)!
 		case .orange:
-			self.kick 		= true
-			self.trigger 	= hwy.base.childNode(withName: "peg"		, recursively: false)!
-			self.burst 		= hwy.base.childNode(withName: "oburst"		, recursively: false)!
-			self.reactor 	= hwy.base.childNode(withName: "reactor"	, recursively: false)!
+			self.kick = true
+			self.trigger = hwy.base.childNode(withName: "peg", recursively: false)!
+			self.burst = hwy.base.childNode(withName: "oburst", recursively: false)!
+			self.reactor = hwy.base.childNode(withName: "reactor", recursively: false)!
 		default:
-			self.trigger 	= hwy.base.childNode(withName: "green"		, recursively: false)!
-			self.burst 		= hwy.base.childNode(withName: "gburst"		, recursively: false)!
+			self.trigger = hwy.base.childNode(withName: "green", recursively: false)!
+			self.burst = hwy.base.childNode(withName: "gburst", recursively: false)!
 		}
 	}
 	
@@ -83,8 +83,8 @@ private extension DrumTrigger {
 		}else{
 			splat(node: trigger)
 			self.trigger.addParticleSystem(self.particle!)
-			self.burst.addAnimation		(animup		, forKey: "emission")
-			self.burst.addAnimation		(animdown	, forKey: "multiply")
+			self.burst.addAnimation(animup, forKey: "emission")
+			self.burst.addAnimation(animdown, forKey: "multiply")
 			self.burst.geometry?.firstMaterial?.multiply.contentsTransform.m41 += 0.1
 		}
 	}
@@ -92,63 +92,63 @@ private extension DrumTrigger {
 	/// transforms the colore gradient upward
 	var animup:CABasicAnimation {
 		let animation = CABasicAnimation(keyPath: "geometry.firstMaterial.emission.contentsTransform.m42")
-			animation.fromValue 		= 0.55
-			animation.toValue 			= 1
-			animation.duration 			= 0.2
-			animation.autoreverses 		= false
-			animation.repeatCount 		= 0
-			animation.timingFunction 	= CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
+			animation.fromValue = 0.55
+			animation.toValue = 1
+			animation.duration = 0.2
+			animation.autoreverses = false
+			animation.repeatCount = 0
+			animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
 		return animation
 	}
 	
 	/// transforms burst pattern upward
 	var animdown:CABasicAnimation {
 		let animation = CABasicAnimation(keyPath: "geometry.firstMaterial.multiply.contentsTransform.m42")
-			animation.byValue 			= -0.32
-			animation.duration 			= 0.2
-			animation.isCumulative 		= true
-			animation.repeatCount 		= 0
-			animation.timingFunction 	= CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
+			animation.byValue = -0.32
+			animation.duration = 0.2
+			animation.isCumulative = true
+			animation.repeatCount = 0
+			animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
 		return animation
 	}
 	
 	func splat(node: SCNNode)  {
 		node.addAnimation(splatx, forKey: "scalex")
 		node.addAnimation(splatz, forKey: "scalez")
-		node.addAnimation(thump,  forKey: "thump")
+		node.addAnimation(thump, forKey: "thump")
 	}
 	
 	var splatx:CABasicAnimation {
 		let animation = CABasicAnimation(keyPath: "transform.scale.x")
-		animation.fromValue 	= 1.25
-		animation.toValue 		= 1
-		animation.duration 		= 0.25
+		animation.fromValue = 1.25
+		animation.toValue = 1
+		animation.duration = 0.25
 		return animation
 	}
 	
 	var kickback:CABasicAnimation {
 		let animation = CABasicAnimation(keyPath: "transform.scale.x")
-		animation.fromValue 	= 1.025
-		animation.toValue 		= 1
-		animation.duration 		= 0.25
+		animation.fromValue = 1.025
+		animation.toValue = 1
+		animation.duration = 0.25
 		return animation
 	}
 	
 	/// animation for drum_peg
 	var shrinkx:CABasicAnimation {
 		let animation = CABasicAnimation(keyPath: "transform.scale.x")
-		animation.fromValue 	= 0.92
-		animation.toValue 		= 1
-		animation.duration 		= 0.4
-		animation.autoreverses 	= false
+		animation.fromValue = 0.92
+		animation.toValue = 1
+		animation.duration = 0.4
+		animation.autoreverses = false
 		return animation
 	}
 	
 	var splatz:CABasicAnimation {
 		let animation = CABasicAnimation(keyPath: "transform.scale.y")
-		animation.fromValue 	= 1.25
-		animation.toValue 		= 1
-		animation.duration 		= 0.25
+		animation.fromValue = 1.25
+		animation.toValue = 1
+		animation.duration = 0.25
 		return animation
 	}
 	

@@ -85,7 +85,6 @@
 		ED8B5151206ED4CB000DB769 /* ScoreKeeper.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8B5150206ED4CB000DB769 /* ScoreKeeper.swift */; };
 		ED8C8A7E22815B5A00A95214 /* LoadingScreen.sks in Resources */ = {isa = PBXBuildFile; fileRef = ED8C8A7D22815B5A00A95214 /* LoadingScreen.sks */; };
 		ED96C8C723DAD3E500D8B488 /* UpNext.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED96C8C623DAD3E500D8B488 /* UpNext.swift */; };
-		ED97F68020F1E373001FAAE0 /* TimeCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED97F67F20F1E373001FAAE0 /* TimeCode.swift */; };
 		ED9A4C25204CDD8E0060DB17 /* titleDisplay.sks in Resources */ = {isa = PBXBuildFile; fileRef = ED9A4C24204CDD8E0060DB17 /* titleDisplay.sks */; };
 		ED9BE2CE22CFCD0F00D7B9BC /* GKComponentSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED9BE2CD22CFCD0F00D7B9BC /* GKComponentSystem.swift */; };
 		ED9DF53D3059F6C100B1F1BC /* Stars.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED025D003057640B003710F4 /* Stars.swift */; };
@@ -100,6 +99,7 @@
 		EDB7D8E03057286D002E8AC4 /* Spherex.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB7D8DF3057286D002E8AC4 /* Spherex.swift */; };
 		EDBD45BB22C9D64F001DB5D4 /* PianoStage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDBD45BA22C9D64F001DB5D4 /* PianoStage.swift */; };
 		EDBD45BD22C9DC14001DB5D4 /* KeyUpDel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDBD45BC22C9DC14001DB5D4 /* KeyUpDel.swift */; };
+		EDC23A5A30675FF8004E1F4B /* TrackJockey.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC23A5930675FF8004E1F4B /* TrackJockey.swift */; };
 		EDC7379B22D6D7F100B227A1 /* ActivatorComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC7379A22D6D7F100B227A1 /* ActivatorComponent.swift */; };
 		EDC7379D22D6D87100B227A1 /* DrumTrigger.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC7379C22D6D87100B227A1 /* DrumTrigger.swift */; };
 		EDC7379F22D6D8EF00B227A1 /* StringTriggers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC7379E22D6D8EF00B227A1 /* StringTriggers.swift */; };
@@ -186,8 +186,6 @@
 		ED51B8302796A4830010950B /* TitleCredit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCredit.swift; sourceTree = "<group>"; };
 		ED59D2A924441D0000CF8617 /* catalog.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = catalog.xcdatamodel; sourceTree = "<group>"; };
 		ED5C68CD266079270081A557 /* Help.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Help.swift; sourceTree = "<group>"; };
-		ED655843245F5A170035EFCB /* noiceDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = noiceDebug.entitlements; sourceTree = "<group>"; };
-		ED678045279CFCF80071CA9D /* SongDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongDetails.swift; sourceTree = SOURCE_ROOT; };
 		ED678047279DE0630071CA9D /* StarsComp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarsComp.swift; sourceTree = "<group>"; };
 		ED678049279DE0E60071CA9D /* ColumnComp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnComp.swift; sourceTree = "<group>"; };
 		ED67804B279DE18A0071CA9D /* RecordComp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordComp.swift; sourceTree = "<group>"; };
@@ -196,7 +194,6 @@
 		ED75815F241588ED00A59BF7 /* ScoreBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreBoard.swift; sourceTree = "<group>"; };
 		ED758161241588FF00A59BF7 /* ScoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreManager.swift; sourceTree = "<group>"; };
 		ED76762A22CE9FE500FA2C82 /* notes.txt */ = {isa = PBXFileReference; explicitFileType = text; path = notes.txt; sourceTree = "<group>"; };
-		ED77F6D22055C86D004CD1E4 /* RubberBand-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RubberBand-Bridging-Header.h"; sourceTree = "<group>"; };
 		ED78D0F2305E36AE00E60E1E /* NativeDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeDecoder.swift; sourceTree = "<group>"; };
 		ED792E722601553B0045EDFE /* Shaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shaders.swift; sourceTree = "<group>"; };
 		ED7EAC6A2050A124003F1A8E /* SongManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongManager.swift; sourceTree = "<group>"; };
@@ -221,6 +218,7 @@
 		EDB7D8DF3057286D002E8AC4 /* Spherex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spherex.swift; sourceTree = "<group>"; };
 		EDBD45BA22C9D64F001DB5D4 /* PianoStage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PianoStage.swift; sourceTree = "<group>"; };
 		EDBD45BC22C9DC14001DB5D4 /* KeyUpDel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyUpDel.swift; sourceTree = "<group>"; };
+		EDC23A5930675FF8004E1F4B /* TrackJockey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackJockey.swift; sourceTree = "<group>"; };
 		EDC7379A22D6D7F100B227A1 /* ActivatorComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivatorComponent.swift; sourceTree = "<group>"; };
 		EDC7379C22D6D87100B227A1 /* DrumTrigger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrumTrigger.swift; sourceTree = "<group>"; };
 		EDC7379E22D6D8EF00B227A1 /* StringTriggers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringTriggers.swift; sourceTree = "<group>"; };
@@ -228,13 +226,10 @@
 		EDCAA7F8224221C200A4856C /* VocalCoach.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocalCoach.swift; sourceTree = "<group>"; };
 		EDCACDD520F59EB4008C6DA4 /* ControlInputs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlInputs.swift; sourceTree = "<group>"; };
 		EDD1295A26008B730036FCA1 /* Backdrop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backdrop.swift; sourceTree = "<group>"; };
-		EDD306DF29E7BF3C0056CAE7 /* Stars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Stars.swift; path = "Rubber Band/Stars.swift"; sourceTree = SOURCE_ROOT; };
 		EDD306E129E7BF770056CAE7 /* TextureMover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureMover.swift; sourceTree = "<group>"; };
 		EDD3F07722C846A800A51672 /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		EDD3F07A22C8747B00A51672 /* Burstable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Burstable.swift; sourceTree = "<group>"; };
 		EDDF1E8A26DB3B6200CAFCE6 /* MusicSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicSheet.swift; sourceTree = "<group>"; };
-		EDE5D21F2442FB20008D0B33 /* noiceRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = noiceRelease.entitlements; sourceTree = "<group>"; };
-		EDE65C0227C44E7F0076279B /* DrumKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrumKit.swift; sourceTree = "<group>"; };
 		EDE65C0427C44EDC0076279B /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		EDE65C0627C4509D0076279B /* GemBit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GemBit.swift; sourceTree = "<group>"; };
 		EDEBC43E22A3187D00655BB9 /* icon.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = icon.atlas; sourceTree = "<group>"; };
@@ -317,11 +312,12 @@
 		ED2FF7E6229A0AD3001B02C5 /* Playback */ = {
 			isa = PBXGroup;
 			children = (
+				ED2FF7E7229A0AF6001B02C5 /* Jukebox.swift */,
 				ED01016630574D4A00C0A1C4 /* NoiceAudioPlayer.swift */,
+				EDC23A5930675FF8004E1F4B /* TrackJockey.swift */,
 				ED78D0F2305E36AE00E60E1E /* NativeDecoder.swift */,
 				ED01016030574C7200C0A1C4 /* OggDecoder.swift */,
 				ED01016230574C9400C0A1C4 /* AVAudioPCMBuffer.swift */,
-				ED2FF7E7229A0AF6001B02C5 /* Jukebox.swift */,
 				ED78D0F6305E3F0D00E60E1E /* deprecated */,
 			);
 			path = Playback;
@@ -338,7 +334,6 @@
 				ED4B11E5267567A700E8D0AD /* PlayState.swift */,
 				ED4179D22676CC9F00C6C297 /* RewindState.swift */,
 				ED4B121726756FA300E8D0AD /* ScoreState.swift */,
-				ED678045279CFCF80071CA9D /* SongDetails.swift */,
 			);
 			path = "state machine";
 			sourceTree = "<group>";
@@ -346,10 +341,7 @@
 		ED45BD0C202CC5FC00E4A9AD = {
 			isa = PBXGroup;
 			children = (
-				ED655843245F5A170035EFCB /* noiceDebug.entitlements */,
-				EDE5D21F2442FB20008D0B33 /* noiceRelease.entitlements */,
 				ED59D2A824441D0000CF8617 /* catalog.xcdatamodeld */,
-				ED77F6D22055C86D004CD1E4 /* RubberBand-Bridging-Header.h */,
 				ED45BD17202CC5FC00E4A9AD /* Rubber Band */,
 				ED45BD16202CC5FC00E4A9AD /* Products */,
 			);
@@ -475,7 +467,6 @@
 			children = (
 				EDD306E129E7BF770056CAE7 /* TextureMover.swift */,
 				ED025D3B3059C616003710F4 /* iniCleanser.swift */,
-				EDD306DF29E7BF3C0056CAE7 /* Stars.swift */,
 				EDA3A5A229EF873D001B96AB /* LoadingScreen.swift */,
 				ED0318FA2A11F4A60091177B /* Experimental.swift */,
 			);
@@ -496,7 +487,6 @@
 		EDE65C0127C44DB50076279B /* Constants */ = {
 			isa = PBXGroup;
 			children = (
-				EDE65C0227C44E7F0076279B /* DrumKit.swift */,
 				EDE65C0427C44EDC0076279B /* Color.swift */,
 				EDE65C0627C4509D0076279B /* GemBit.swift */,
 			);
@@ -691,7 +681,6 @@
 				ED2FE4A522D5833600F18789 /* Drums.swift in Sources */,
 				ED2AA00D22B4B53200E61D89 /* DrumStage.swift in Sources */,
 				ED7EAC6B2050A124003F1A8E /* SongManager.swift in Sources */,
-				ED97F68020F1E373001FAAE0 /* TimeCode.swift in Sources */,
 				EDF83AC82285095800D07E7A /* KeyPaths.swift in Sources */,
 				ED1665362033E3FC0099DE12 /* FZMIDI.swift in Sources */,
 				EDC7379B22D6D7F100B227A1 /* ActivatorComponent.swift in Sources */,
@@ -701,6 +690,7 @@
 				ED274DA321141BA000CC788C /* ChartIcons.swift in Sources */,
 				ED025D0730576486003710F4 /* SongDetails.swift in Sources */,
 				ED025D3C3059C616003710F4 /* iniCleanser.swift in Sources */,
+				EDC23A5A30675FF8004E1F4B /* TrackJockey.swift in Sources */,
 				ED758162241588FF00A59BF7 /* ScoreManager.swift in Sources */,
 				ED01016330574C9400C0A1C4 /* AVAudioPCMBuffer.swift in Sources */,
 				EDCAA7F9224221C200A4856C /* VocalCoach.swift in Sources */,
@@ -900,17 +890,19 @@
 		ED45BD33202CC5FC00E4A9AD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APP_SHORTCUTS_ENABLE_FLEXIBLE_MATCHING = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES_ERROR;
-				CODE_SIGN_ENTITLEMENTS = noiceDebug.entitlements;
 				CODE_SIGN_IDENTITY = "-";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 28;
+				CURRENT_PROJECT_VERSION = 30;
 				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)\"/**",
@@ -936,15 +928,15 @@
 					"$(PROJECT_DIR)/Frameworks/MIKMIDI.framework/Versions/A",
 				);
 				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.inertlab.noice;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "RubberBand-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -952,18 +944,28 @@
 		ED45BD34202CC5FC00E4A9AD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APP_SHORTCUTS_ENABLE_FLEXIBLE_MATCHING = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				AUTOMATION_APPLE_EVENTS = NO;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES_ERROR;
-				CODE_SIGN_ENTITLEMENTS = noiceRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 28;
+				CURRENT_PROJECT_VERSION = 30;
 				DEAD_CODE_STRIPPING = YES;
-				ENABLE_HARDENED_RUNTIME = YES;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = NO;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)\"/**",
 					"$(PROJECT_DIR)/Frameworks",
@@ -988,14 +990,20 @@
 					"$(PROJECT_DIR)/Frameworks/MIKMIDI.framework/Versions/A",
 				);
 				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.inertlab.noice;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
+				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
+				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
+				RUNTIME_EXCEPTION_DEBUGGING_TOOL = NO;
+				RUNTIME_EXCEPTION_DISABLE_EXECUTABLE_PAGE_PROTECTION = NO;
+				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "RubberBand-Bridging-Header.h";
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

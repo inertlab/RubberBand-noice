@@ -15,19 +15,19 @@ final class UpNext {
 	static let shared = UpNext()
 	
 	private init() {
-		self.moreup 	= upnextgroup?.childNode(withName: "moreup") 	as! SKLabelNode
-		self.moredown 	= upnextgroup?.childNode(withName: "moredown") 	as! SKLabelNode
-		let list 		= upnextgroup?.childNode(withName: "nextlist")
+		self.moreup = upnextgroup?.childNode(withName: "moreup") 	as! SKLabelNode
+		self.moredown = upnextgroup?.childNode(withName: "moredown") 	as! SKLabelNode
+		let list = upnextgroup?.childNode(withName: "nextlist")
 		for node in list!.children as! [SKLabelNode] {
 			listnodes.append(node)
 		}
 	}
-	let moreup		:SKLabelNode
-	let moredown	:SKLabelNode
+	let moreup: SKLabelNode
+	let moredown: SKLabelNode
 	let upnextgroup = menuOverlay?.childNode(withName: "upnext")
-	var listnodes 	= [SKLabelNode]()
+	var listnodes = [SKLabelNode]()
 	
-	var list 		= ["","","","","","","","",""]
+	var list = ["","","","","","","","",""]
 	
 	func scrollup (title: String) {
 		list.removeLast()
@@ -43,7 +43,6 @@ final class UpNext {
 	
 	func refreshlist (nexttitles: [String]) {
 		list = nexttitles
-//		print(nexttitles)
 		updatenodes()
 	}
 	

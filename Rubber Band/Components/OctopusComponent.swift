@@ -82,7 +82,7 @@ final class OctoInstrumentComp: GKComponent {
 	}
 	
 	private func getinstrument() -> SCNNode? {
-		let name:String
+		let name: String
 		switch User.current.instrument {
 		case .prodrums:
 			name = "prostick"

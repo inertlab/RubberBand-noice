@@ -15,13 +15,13 @@ import SceneKit
 /// User preference needs to be implemented in the future
 class PaceMaker {
 	/// controls the speed and distance between notes
-	var fps:CGFloat
+	var fps: CGFloat
 	/// double version of fps to avoid casting in computations
-	var fps_d:Double = 8
+	var fps_d: Double = 8
 	/// speed of the highway texture
-	var asphalt:CGFloat
-	var hitwindow:CGFloat = 2
-	var tempo:Double = 120
+	var asphalt: CGFloat
+	var hitwindow: CGFloat = 2
+	var tempo: Double = 120
 	init() {
 		self.fps = CGFloat(fps_d)
 		self.asphalt = fps / 8 		// 8 is derived from the size of the texture

@@ -10,9 +10,9 @@ import Foundation
 import GameKit
 
 class Octopus {
-	var arms 	= Set<GKEntity>()
-	var joints 	= Set<GKEntity>()
-	let node	: SCNNode
+	var arms = Set<GKEntity>()
+	var joints = Set<GKEntity>()
+	let node: SCNNode
 	
 	init(arm: SCNNode) {
 		self.node = menuScene.rootNode.childNode(withName: "octopus", recursively: false)!

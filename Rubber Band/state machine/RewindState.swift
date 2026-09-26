@@ -10,10 +10,9 @@ import Foundation
 import GameplayKit
 
 class RewindState: GKState {
-	let node 	= SCNNode()
-	let sound 	= SCNAudioSource(named: "sounds/rewind_01.m4a")!
+	let node = SCNNode()
+	let sound = SCNAudioSource(named: "sounds/rewind_01.m4a")!
 
-	
 	override init() {
 		sound.isPositional = false
 		sound.volume = 1
@@ -22,7 +21,7 @@ class RewindState: GKState {
 	
 	override func didEnter(from previousState: GKState?) {
 		Jukebox.shared.rewind()
-		stagemc.track.hwy.pista.runAction(SCNAction.move(to: SCNVector3(0, 0, CGFloat( Jukebox.shared.currenttime()! - 2) * pace.fps), duration: 1)) {
+		stagemc.track.hwy.pista.runAction(SCNAction.move(to: SCNVector3(0, 0, CGFloat( Jukebox.shared.currenttime()!) * pace.fps), duration: 1)) {
 			stagemc.machine.enter(PlayState.self)
 		}
 	}

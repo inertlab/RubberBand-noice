@@ -70,7 +70,7 @@ private extension Vocalist {
 		
 		lyrics.append(cleanphrase(phrase))
 		lyrics.append((phrase.time + 1, ""))
-		lyrics.append((phrase.time + 2, ""))
+		lyrics.append((phrase.time + 60, ""))
 	}
 	
 	func cleanphrase(_ phrase: Lyric) -> Lyric {

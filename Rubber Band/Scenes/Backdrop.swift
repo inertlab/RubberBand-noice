@@ -16,17 +16,17 @@ enum BGState {
 
 /// Protocol for backgrounds
 protocol Backdrop {
-	var active	:Bool {get set}
-	var node	:SCNNode {get set}
-	var state	:BGState {get set}
+	var active: Bool {get set}
+	var node: SCNNode {get set}
+	var state: BGState {get set}
 	func state(_ state: BGState)
 	func setnode(node: SCNNode)
 }
 
 class Pentapuss: Backdrop {
-	var node 	= SCNNode()
-	var active 	= false
-	var color 	= NSColor.black
+	var node = SCNNode()
+	var active = false
+	var color = NSColor.black
 	private var material = SCNMaterial()
 	private var animation = SCNAnimationPlayer()
 
@@ -52,7 +52,7 @@ class Pentapuss: Backdrop {
 				animation.speed = 0.75
 				spartiscle?.speedFactor = 1
 				material.removeAllAnimations()
-				material.diffuse.intensity 	= 1
+				material.diffuse.intensity = 1
 				material.multiply.intensity = 0
 				material.selfIllumination.intensity = 0
 				material.addAnimation(NCAnimation.flash(color: NSColor.red), forKey: nil)
@@ -64,7 +64,7 @@ class Pentapuss: Backdrop {
 	
 	func setnode(node: SCNNode) {
 		self.active = true
-		self.node 	= node
+		self.node = node
 		node.position.z = -10
 		
 		self.animation = (node.childNode(withName: "joint0", recursively: true)?.animationPlayer(forKey: "animation1"))!
@@ -121,78 +121,78 @@ enum NCAnimation {
 	
 	static func intensify(property: String, _ time: Double = 3 ) -> CABasicAnimation {
 		let animation = CABasicAnimation(keyPath: "\(property).intensity")
-			animation.fromValue 	= 0
-			animation.toValue 		= 1
-			animation.duration 		= time
-			animation.autoreverses 	= false
-			animation.fillMode 		= CAMediaTimingFillMode.forwards
+			animation.fromValue = 0
+			animation.toValue = 1
+			animation.duration = time
+			animation.autoreverses = false
+			animation.fillMode = CAMediaTimingFillMode.forwards
 			animation.isRemovedOnCompletion = false
 		return animation
 	}
 	
 	static func fadeintensity(property: String ) -> CABasicAnimation {
 		let animation = CABasicAnimation(keyPath: "\(property).intensity")
-			animation.fromValue 	= 1
-			animation.toValue 		= 0
-			animation.duration 		= 3
-			animation.autoreverses 	= false
-			animation.fillMode 		= CAMediaTimingFillMode.forwards
+			animation.fromValue = 1
+			animation.toValue = 0
+			animation.duration = 3
+			animation.autoreverses = false
+			animation.fillMode = CAMediaTimingFillMode.forwards
 			animation.isRemovedOnCompletion = false
 		return animation
 	}
 
 	static func grow(property: String ) -> CABasicAnimation {
 		let animation = CABasicAnimation(keyPath: property)
-			animation.fromValue 	= 1
-			animation.toValue 		= 0.5
-			animation.duration 		= 600
-			animation.autoreverses 	= false
+			animation.fromValue = 1
+			animation.toValue = 0.5
+			animation.duration = 600
+			animation.autoreverses = false
 			animation.isRemovedOnCompletion = false
 		return animation
 	}
 	
 	static func flash()  -> CABasicAnimation {
 		let animation = CABasicAnimation(keyPath: "diffuse.intensity")
-			animation.fromValue 	= 2
-			animation.duration 		= 1
-			animation.autoreverses 	= false
+			animation.fromValue = 2
+			animation.duration = 1
+			animation.autoreverses = false
 		return animation
 	}
 	
 	static func glow()  -> CABasicAnimation {
 		let ani = CABasicAnimation(keyPath: "emission.intensity")
-			ani.fromValue 		= 0
+			ani.fromValue = 0
 			ani.toValue			= 1
-			ani.duration 		= 2
-			ani.autoreverses 	= true
-			ani.timingFunction  = CAMediaTimingFunction(name: .easeIn)
+			ani.duration = 2
+			ani.autoreverses = true
+			ani.timingFunction = CAMediaTimingFunction(name: .easeIn)
 			ani.repeatCount = .infinity
 		return ani
 	}
 	
 	static func flow()  -> CABasicAnimation {
 		let ani = CABasicAnimation(keyPath: "emission.contentsTransform.m41")
-			ani.byValue 		= -1
-			ani.duration 		= 30
-			ani.timingFunction  = CAMediaTimingFunction(name: .linear)
+			ani.byValue = -1
+			ani.duration = 30
+			ani.timingFunction = CAMediaTimingFunction(name: .linear)
 			ani.repeatCount = .infinity
 		return ani
 	}
 	
 	static func flash(color: NSColor)  -> CABasicAnimation {
 		let animation = CABasicAnimation(keyPath: "diffuse.contents")
-			animation.fromValue 	= color
-			animation.duration 		= 1
-			animation.autoreverses 	= false
+			animation.fromValue = color
+			animation.duration = 1
+			animation.autoreverses = false
 		return animation
 	}
 }
 
 enum NCColor {
-	static var happy 	= NSColor(srgbRed: 1, green: 1, blue: 0, alpha: 1)
-	static var sad 		= NSColor(srgbRed: 0, green: 0, blue: 1, alpha: 1)
-	static var combo2 	= NSColor(srgbRed: 0, green: 1, blue: 1, alpha: 1)
-	static var combo3 	= NSColor(srgbRed: 1, green: 0.85, blue: 0, alpha: 1)
+	static var happy = NSColor(srgbRed: 1, green: 1, blue: 0, alpha: 1)
+	static var sad = NSColor(srgbRed: 0, green: 0, blue: 1, alpha: 1)
+	static var combo2 = NSColor(srgbRed: 0, green: 1, blue: 1, alpha: 1)
+	static var combo3 = NSColor(srgbRed: 1, green: 0.85, blue: 0, alpha: 1)
 }
 
 extension NSImage {

@@ -150,14 +150,14 @@ private extension ScoreBoard {
 	/// Makes a new record and saves it if no previous record was found
 	/// - Parameter stat: the current song stat
 	func newScore(_ stat: Stats) {
-		let newscore 		= Score(context: pc.viewContext)
+		let newscore = Score(context: pc.viewContext)
 		newscore.instrument	= User.current.instrument.rawValue
-		newscore.stat 		= stat
+		newscore.stat = stat
 		savenewrecord(newscore)
-		streaklabel.text 	= NSLocalizedString("This is your first streak", comment: "")
+		streaklabel.text = NSLocalizedString("This is your first streak", comment: "")
 
-		congratslabel.text 	= NSLocalizedString("New Score!", comment: "")
-		messagelabel.text 	= NSLocalizedString("This is the first High Score", comment: "")
+		congratslabel.text = NSLocalizedString("New Score!", comment: "")
+		messagelabel.text = NSLocalizedString("This is the first High Score", comment: "")
 	}
 	
 	/// if there is a New Record score set, saves and updates graphics

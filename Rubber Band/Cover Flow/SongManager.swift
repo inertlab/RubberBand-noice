@@ -103,17 +103,17 @@ class SongManager {
 	///
 	/// Called at loading time once and only once
 	private func createcovers (songs: [Song]) {
-		covers 		= []
-		var count 	= songs.count
+		covers = []
+		var count = songs.count
 
 		var countup = 1
 		for song in songs {
 			count -= 1
 			countup += 1
 
-			loadingscreen.loadcount.text 	= String(format: "%04d", countup)
-			let entity 		= GKEntity()
-			let songcomp 	= SongComp(song: song)
+			loadingscreen.loadcount.text = String(format: "%04d", countup)
+			let entity = GKEntity()
+			let songcomp = SongComp(song: song)
 			// assign entity to the covernode so it can be reference by the frusturm
 			songcomp.cover.entity = entity
 			entity.addComponent(songcomp)
@@ -121,7 +121,7 @@ class SongManager {
 			songenties.insert(entity)
 		}
 
-		loadingscreen.loadcount.text =  "-\(loadingscreen.loadcount.text!)-"
+		loadingscreen.loadcount.text = "-\(loadingscreen.loadcount.text!)-"
 		shuffled = songsystem.components.shuffled()
 	}
 	
@@ -166,7 +166,7 @@ class SongManager {
 		
 		if songsystem.components.isEmpty { return }
 		
-		if sortkeypath ==  keypath { return }
+		if sortkeypath == keypath { return }
 		if keypath == .artist { sorting = .artist} else {sorting = .song}
 		sortkeypath = keypath
 //		let tempcontainer 	= movecoverstotempcol()
@@ -277,8 +277,8 @@ class SongManager {
 	/// - Returns: First song in the array of Songs found
 	func fetchSongById (id: String) -> Song {
 		let fetch:NSFetchRequest<Song> = Song.fetchRequest()
-			fetch.predicate 	= NSPredicate(format: "uuid == %@", id)
-			fetch.fetchLimit 	= 1
+			fetch.predicate = NSPredicate(format: "uuid == %@", id)
+			fetch.fetchLimit = 1
 		let array = try? pc.viewContext.fetch(fetch)
 
 		return array![0]
@@ -286,8 +286,8 @@ class SongManager {
 	
 	func fetchStatByID (id: String) -> Stats {
 		let fetch:NSFetchRequest<Stats> = Stats.fetchRequest()
-			fetch.predicate 	= NSPredicate(format: "songid == %@", id)
-			fetch.fetchLimit 	= 1
+			fetch.predicate = NSPredicate(format: "songid == %@", id)
+			fetch.fetchLimit = 1
 		let array = try? pc.viewContext.fetch(fetch)
 		if array!.isEmpty {
 			return createstats(uuid: id)!
@@ -348,13 +348,13 @@ class SongManager {
 	
 	func allsongsfromartist(song: Song) -> [Song] {
 		let fetch:NSFetchRequest<Song> = Song.fetchRequest()
-		fetch.predicate 	= NSPredicate(format: "artist == %@", song.artist!)
-		let sorter 			= NSSortDescriptor(
+		fetch.predicate = NSPredicate(format: "artist == %@", song.artist!)
+		let sorter = NSSortDescriptor(
 			key: "title",
 			ascending: true,
 			selector: #selector(NSString.localizedCaseInsensitiveCompare)
 		)
-			fetch.sortDescriptors = [sorter]
+		fetch.sortDescriptors = [sorter]
 		let array = try? pc.viewContext.fetch(fetch)
 
 		return array!
@@ -366,15 +366,15 @@ class SongManager {
 	///
 	/// a different selection function needs to be made without the animating
 	func updatesongselection(newsong: SongComp, state: SelState) {
-		let oldcolumn 	= selected.entity?.component(ofType: ColumnComp.self)
-		selected.state 	= .notselected
-		selected 		= newsong
-		newsong.state 	= state
+		let oldcolumn = selected.entity?.component(ofType: ColumnComp.self)
+		selected.state = .notselected
+		selected = newsong
+		newsong.state = state
 		
 		delegate?.newsongselected(song: selected.song)
 		
-		let column 		= selected.entity?.component(ofType: ColumnComp.self)
-		rowcall.posx 	= -column!.posx + 1
+		let column = selected.entity?.component(ofType: ColumnComp.self)
+		rowcall.posx = -column!.posx + 1
 		
 		if column != oldcolumn {
 			loc.col = Int(column!.posx - 1)
@@ -463,7 +463,6 @@ class SongManager {
 	}
 	
 	func moveselector(direction: Direction)  {
-//		if Jukebox.shared.trying{return}
 		
 		var i = selected.index
 		
@@ -509,16 +508,14 @@ class SongManager {
 	}
 	
 	func selectfirstsong() -> Bool {
-		if songsystem.components.isEmpty {
-			return false
-		}
-		selected 		= songsystem[0]
-		selected.state 	= .selected
+		if songsystem.components.isEmpty { return false }
+		selected = songsystem[0]
+		selected.state = .selected
 		
 		// texturemover needs to be called so it instantiates or else delegate doesn't work
 		TextureMover.shared.updatechartericon(icon: selected.song.icon ?? "blank")
 		updatesongselection(newsong: selected, state: .selected)
-		let column 	= selected.entity?.component(ofType: ColumnComp.self)
+		let column = selected.entity?.component(ofType: ColumnComp.self)
 		column!.highlight()
 		return true
 	}
@@ -562,15 +559,15 @@ private extension SongManager {
 	/// lays out cover art into a grid of columns
 	func flowcoverart () {
 		
-		var index 		= 0
-		var char		= ""
-		var row 		= CGFloat(1)
-		var column 		= CGFloat(1)
+		var index = 0
+		var char = ""
+		var row = CGFloat(1)
+		var column = CGFloat(1)
 		/// this is the first column used always
-		var colnode 	= makeColumn(name: "col-" + column.description)
+		var colnode = makeColumn(name: "col-" + column.description)
 		var columncomp = ColumnComp(column: column, node: colnode)
 		colsystem.addComponent(columncomp)
-		colnode.position.x 	= column
+		colnode.position.x = column
 		
 //		print(sorted.count)
 //		print(colsystem.components.count)
@@ -578,7 +575,7 @@ private extension SongManager {
 		for comp in songsystem.components {
 //			print(comp)
 			/// first character of the song Title, Artist et depending of the "sorting value"
-			var tchar 	= (comp.song.value(forKeyPath: sorting.value()) as! String).first!.uppercased().folding(options: .diacriticInsensitive, locale: .current)
+			var tchar = (comp.song.value(forKeyPath: sorting.value()) as! String).first!.uppercased().folding(options: .diacriticInsensitive, locale: .current)
 			// remap the first characters
 			switch tchar {
 			case "0"..."9":
@@ -599,21 +596,21 @@ private extension SongManager {
 				row -= 1
 			// else we make a new comlum + new component
 			}else{
-				char 	= tchar
-				row 	= 0
-				column 	+= 1
+				char = tchar
+				row = 0
+				column += 1
 				// creat a new column and comp
-				colnode 			= makeColumn(name: "col-" + column.description)
-				columncomp 			= ColumnComp(column: column, node: colnode)
-				columncomp.index 	= index
+				colnode = makeColumn(name: "col-" + column.description)
+				columncomp = ColumnComp(column: column, node: colnode)
+				columncomp.index = index
 				colsystem.addComponent(columncomp)
 				colnode.position.x = column
 				columncomp.addletter(char: char)
 			}
-			comp.index 				= index
-			index 					+= 1
-			comp.cover.position.y 	= row
-			comp.row 				= row
+			comp.index = index
+			index += 1
+			comp.cover.position.y = row
+			comp.row = row
 			colnode.addChildNode(comp.cover)
 			comp.entity?.addComponent(columncomp)
 			// check to see if cover is on screen at start
@@ -629,8 +626,8 @@ private extension SongManager {
 		let song = fetchSongById(id: uuid)
 		song.addToStats(stat)
 		User.current.player.addToStats(stat)
-		stat.songid 	= song.uuid
-		stat.pindex		= User.current.player.index
+		stat.songid = song.uuid
+		stat.pindex = User.current.player.index
 		try? pc.viewContext.save()
 		return stat
 	}
@@ -640,14 +637,14 @@ private extension SongManager {
 	/// - Parameter name: this is set in reflow() or coverflow()
 	/// - Returns: 3D column of album covers
 	func makeColumn (name: String) -> SCNNode {
-		let column 		= SCNNode()
+		let column = SCNNode()
 			column.name = name
 		covernode.addChildNode(column)
 		return column
 	}
 	
 	func makeColumn () -> SCNNode {
-		let column 		= SCNNode()
+		let column = SCNNode()
 		
 		covernode.addChildNode(column)
 		return column

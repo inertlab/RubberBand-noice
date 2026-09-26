@@ -37,19 +37,20 @@ fileprivate enum LightColor: String {
 	/// Selects 1 color suitable to be light colors
 	/// - Returns: LightColor
 	static func light() -> LightColor {
-		return [.crimson_lit,
-				.cyan,
-				.dust,
-				.jade,
-				.mint,
-				.navy_lit,
-				.orange,
-				.sienna,
-				.sorbet,
-				.white,
-				.yellow,
-				.pink,
-				.pink_deep
+		return [
+			.crimson_lit,
+			.cyan,
+			.dust,
+			.jade,
+			.mint,
+			.navy_lit,
+			.orange,
+			.sienna,
+			.sorbet,
+			.white,
+			.yellow,
+			.pink,
+			.pink_deep
 		].randomElement()!
 	}
 	
@@ -123,40 +124,35 @@ fileprivate enum LightColor: String {
 //}
 
 class LoadingScreen {
-	let scene 		= SKScene(fileNamed: "LoadingScreen.sks")
-	let loadcount	:SKLabelNode
-	let logo		:SKSpriteNode //i might not need to reference this?
-	let splash		:SKSpriteNode
-	let version 	:SKLabelNode
-	let light 		:SKLightNode
-	let loading		:SKLabelNode
+	let scene = SKScene(fileNamed: "LoadingScreen.sks")
+	let loadcount: SKLabelNode
+	let logo: SKSpriteNode //i might not need to reference this?
+	let splash: SKSpriteNode
+	let version: SKLabelNode
+	let light : SKLightNode
+	let loading: SKLabelNode
 	/// temp label for color values. delete in future
-	let col  		:SKLabelNode
+	let col: SKLabelNode
 	private let randomx = GKRandomDistribution(lowestValue: -720, highestValue: 720)
 	private let randomy = GKRandomDistribution(lowestValue: -450, highestValue: 450)
 
 	private let scaleindex = GKRandomDistribution(lowestValue: 0, highestValue: 4)
 	
-	private let scales:[CGFloat] = [0.5, 0.625, 0.75, 0.875, 1]
+	private let scales: [CGFloat] = [0.5, 0.625, 0.75, 0.875, 1]
 	
 	private let logoatlas = SKTextureAtlas(named: "logo")
-	private let mono:SKSpriteNode
-
-//	private
-	/// dictionary of color combinations
-//	private let lit:[NSColor:[NSColor]] = [.n_sepia: [LightColors.Color.ambient()]]
-	
+	private let mono: SKSpriteNode
 
 	init() {
-		self.loadcount 		= scene?.childNode(withName: "loadcount") as! SKLabelNode
-		self.logo 			= scene?.childNode(withName: "logo") as! SKSpriteNode
-		self.splash 		= scene?.childNode(withName: "splash") as! SKSpriteNode
-		self.version 		= scene?.childNode(withName: "version") as! SKLabelNode
-		self.light 			= scene?.childNode(withName: "light") as! SKLightNode
-		self.col 			= scene?.childNode(withName: "color") as! SKLabelNode
-		self.loading		= scene?.childNode(withName: "loading") as! SKLabelNode
-		self.mono 			= scene?.childNode(withName: "logo2") as! SKSpriteNode
-		scene?.scaleMode 	= .aspectFit
+		self.loadcount = scene?.childNode(withName: "loadcount") as! SKLabelNode
+		self.logo = scene?.childNode(withName: "logo") as! SKSpriteNode
+		self.splash = scene?.childNode(withName: "splash") as! SKSpriteNode
+		self.version = scene?.childNode(withName: "version") as! SKLabelNode
+		self.light = scene?.childNode(withName: "light") as! SKLightNode
+		self.col = scene?.childNode(withName: "color") as! SKLabelNode
+		self.loading = scene?.childNode(withName: "loading") as! SKLabelNode
+		self.mono = scene?.childNode(withName: "logo2") as! SKSpriteNode
+		scene?.scaleMode = .aspectFit
 		scene?.isPaused = false
 		mono.texture = logoatlas.textureNamed("1")
 		loading.text = NSLocalizedString("Loaded Songs…", comment: "loading message")
@@ -222,12 +218,12 @@ class LoadingScreen {
 		roll.duration = 1.75
 		mono.run(roll)
 
-		loading.text =  NSLocalizedString("Rock On!", comment: "encouragment")
+		loading.text = NSLocalizedString("Rock On!", comment: "encouragment")
 		loadcount.run(SKAction.fadeOut(withDuration: 0.5))
 		version.run(SKAction.fadeOut(withDuration: 0.25)){
 			updatekeycode(User.current.instrument)
 			mainView.overlaySKScene?.run(SKAction.fadeOut(withDuration: 1.5)) {
-				menuOverlay!.alpha 	= 0
+				menuOverlay!.alpha = 0
 				mainView.overlaySKScene?.removeAllActions()
 				mainView.overlaySKScene	= menuOverlay
 				mainView.overlaySKScene?.isPaused = false
@@ -267,7 +263,7 @@ private extension LoadingScreen {
 	func randomsplashposition(){
 //		at scale 1 max and min = screen bounds, 720, 450
 //		at scale 0.5 minmx = 0
-		let scale =  scales[scaleindex.nextInt()]
+		let scale = scales[scaleindex.nextInt()]
 
 		splash.setScale(scale)
 		

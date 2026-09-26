@@ -32,7 +32,7 @@ class DetailState: GKState {
 			details.update(smanager.selected)
 			stagemc.loadmenu()
 		case is ListState:
-				TextureMover.shared.updatechartericon(icon: smanager.selected.song.icon ?? "")
+			TextureMover.shared.updatechartericon(icon: smanager.selected.song.icon ?? "")
 			fallthrough
 		default:
 			if DiscordRP.rpc != nil {

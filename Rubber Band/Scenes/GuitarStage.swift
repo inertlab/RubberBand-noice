@@ -12,22 +12,22 @@ import GameplayKit
 
 
 final class GuitarStage: Performing, Track, KeyUp {
-	let backdrop:Backdrop = Pentapuss()
+	let backdrop: Backdrop = Pentapuss()
 	let scorekeeper = ScoreKeeper()
 	
-	var tailsystem 	= GKComponentSystemCGF(componentClass: Tailanimate.self)
-	var starsystem	: GKComponentSystem<StarNoteComp>
-	var notesystem	: GKComponentSystem<NoteComp>
-	var notes 		= Set<GKEntity>()
+	var tailsystem = GKComponentSystemCGF(componentClass: Tailanimate.self)
+	var starsystem: GKComponentSystem<StarNoteComp>
+	var notesystem: GKComponentSystem<NoteComp>
+	var notes = Set<GKEntity>()
 
-	var sp			: StarPower
+	var sp: StarPower
 	
-	let scn			: SCNScene
-	let hwy			: HWY
-	let triggers	:[Button: StringTrigger]
-	var hand:Chord 	= []
+	let scn: SCNScene
+	let hwy: HWY
+	let triggers:[Button: StringTrigger]
+	var hand: Chord = []
 	
-	var state:Songstate = .playing
+	var state: Songstate = .playing
 	var power = 2
 
 	var songtrack: Jukebox.Track = .guitar
@@ -35,9 +35,9 @@ final class GuitarStage: Performing, Track, KeyUp {
 	init() {
 		self.notesystem = GKComponentSystem(componentClass: NoteComp.self)
 		self.starsystem	= GKComponentSystem(componentClass: StarNoteComp.self)
-		self.scn 		= SCNScene(named: "art.scnassets/scns/strings.scn")!
-		self.hwy 		= HWY(self.scn)
-		self.triggers 	= [
+		self.scn = SCNScene(named: "art.scnassets/scns/strings.scn")!
+		self.hwy = HWY(self.scn)
+		self.triggers = [
 			Button.red		: StringTrigger(note: .red, 	hwy: self.hwy),
 			Button.blue		: StringTrigger(note: .blue, 	hwy: self.hwy),
 			Button.green	: StringTrigger(note: .green,	hwy: self.hwy),
@@ -50,7 +50,6 @@ final class GuitarStage: Performing, Track, KeyUp {
 			self.power = 4
 			self.songtrack = .rhythm
 		}
-//		tailanimate?.delegate = self
 		startparticle()
 	}
 	
@@ -213,8 +212,6 @@ private extension GuitarStage {
 				starmissed(note)
 				miss(chord: note.chord)
 				scorekeeper.scoreMiss()
-				
-				Jukebox.shared.muteinstrument(track: songtrack)
 			}
 		}
 	}
@@ -273,7 +270,6 @@ private extension GuitarStage {
 			triggers[c]?.hit()
 			scorekeeper.scoreOneUp()
 		}
-		Jukebox.shared.unmuteinstrument(track: songtrack)
 	}
 	
 	func miss(chord: Chord = []) {
@@ -287,7 +283,6 @@ private extension GuitarStage {
 		for t in triggers {
 			t.value.miss()
 		}
-		Jukebox.shared.muteinstrument(track: songtrack)
 	}
 }
 

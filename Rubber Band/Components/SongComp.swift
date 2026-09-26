@@ -79,7 +79,7 @@ class SongComp: GKComponent {
 	
 	let song: Song
 	var index = 0
-	var row:CGFloat	= 0
+	var row: CGFloat	= 0
 	let cover = makecoverart()
 	
 	init(song:Song) {
@@ -103,7 +103,7 @@ private extension SongComp {
 	
 	func time() {
 		if song.length > 0 {
-			var secs 	= DateComponents()
+			var secs = DateComponents()
 			secs.second = Int(song.length)
 			labelt.text = dateformat.string(for: secs)
 		}else{
@@ -149,7 +149,7 @@ fileprivate func makecoverart() -> SCNNode {
 
 
 let albumscn = SCNScene(named: "art.scnassets/scns/album.scn")!
-fileprivate let cover 	= albumscn.rootNode.childNode(withName: "cover", recursively: false)!
+fileprivate let cover = albumscn.rootNode.childNode(withName: "cover", recursively: false)!
 
 //MARK: - Waddle Animations
 

@@ -39,7 +39,6 @@ extension MusicSheet {
 		var chordcount 	= 1
 
 		for chord in guitarnotes {
-//			print(chord)
 			chordcount += 1
 			
 			switch chordcount {

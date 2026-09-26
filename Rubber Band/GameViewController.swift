@@ -24,7 +24,6 @@ class GameViewController: NSViewController, WKUIDelegate {
     @IBOutlet var boxview: SCNView!
     override func viewDidLoad() {
 		
-		
         mainView = self.view as! SCNView
 		mainView.scene = stagemc.currentact.scn
 		
@@ -38,7 +37,7 @@ class GameViewController: NSViewController, WKUIDelegate {
 		mainView.autoresizesSubviews = true
 //		mainView.showsStatistics = true
 		
-//		Anal.shared.track = true
+		Anal.shared.track = true
 		Anal.shared.addsubview(mainView)
 		
 		

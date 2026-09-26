@@ -30,7 +30,6 @@ class MusicSheet {
 		}
 
 		self.difficultyConfig = User.current.instrument.config(diff: User.current.diff)
-//		TimeCode.tc.initTimeCode(seq: self.seq)
 		setaveragetempo()
 	}
 	
@@ -78,7 +77,6 @@ class MusicSheet {
 		}
 		
 		chordlist.append(chord)
-//		print(chordlist)
 //		not sure if sorting is needed
 		return chordlist.sorted { $0.start < $1.start }
 	}
@@ -136,7 +134,6 @@ class MusicSheet {
 			
 		}
 		
-//		print(btnlist)
 		return btnlist.sorted {$0.0 < $1.0 }
 	}
 	

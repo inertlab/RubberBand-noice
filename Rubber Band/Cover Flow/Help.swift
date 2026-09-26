@@ -11,16 +11,16 @@ import SpriteKit
 
 
 class Help {
-	var state	:SongMenu.State = .help
-	let helpm 	= menuOverlay!.childNode(withName: "help")!
-	let detail	:SKNode
-	let select	:SKNode
-	let list	:SKNode
+	var state: SongMenu.State = .help
+	let helpm = menuOverlay!.childNode(withName: "help")!
+	let detail: SKNode
+	let select: SKNode
+	let list: SKNode
 	
 	init() {
 		self.detail = helpm.childNode(withName: "detail")!
 		self.select = helpm.childNode(withName: "select")!
-		self.list 	= helpm.childNode(withName: "list")!
+		self.list = helpm.childNode(withName: "list")!
 	}
 	
 	func showhelp(state: SongMenu.State) {
@@ -57,9 +57,9 @@ class Help {
 private extension Help {
 	func hideall() {
 		helpm.removeAllActions()
-		detail.alpha 	= 0
-		select.alpha 	= 0
-		list.alpha 		= 0
-		helpm.alpha 	= 0
+		detail.alpha = 0
+		select.alpha = 0
+		list.alpha = 0
+		helpm.alpha = 0
 	}
 }

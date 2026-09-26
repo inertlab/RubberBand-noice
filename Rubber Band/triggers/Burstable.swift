@@ -16,18 +16,18 @@ protocol Burstable {
 extension Burstable {
 	var thump:CABasicAnimation {
 		let animation = CABasicAnimation(keyPath: "geometry.firstMaterial.emission.intensity")
-		animation.fromValue 	= 1
-		animation.toValue 		= 0
-		animation.duration 		= 0.4
+		animation.fromValue = 1
+		animation.toValue = 0
+		animation.duration = 0.4
 		animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeIn)
 		return animation
 	}
 	
 	var thumpmiss:CABasicAnimation {
 		let animation = CABasicAnimation(keyPath: "geometry.firstMaterial.diffuse.intensity")
-		animation.fromValue 	= 0
-		animation.toValue 		= 1
-		animation.duration 		= 0.4
+		animation.fromValue = 0
+		animation.toValue = 1
+		animation.duration = 0.4
 		animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeIn)
 		return animation
 	}

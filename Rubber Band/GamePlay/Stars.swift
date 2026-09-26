@@ -12,9 +12,9 @@ import SpriteKit
 /// displaces the Star coin in the scoreboard display
 class Stars {
 	/// the sprite representing the star
-	private let node 	= ScoreBoard.scene?.childNode(withName: "stars") as! SKSpriteNode
-	private let light 	= ScoreBoard.scene?.childNode(withName: "light")
-	private	let images 	= SKTextureAtlas(named: "stars")
+	private let node = ScoreBoard.scene?.childNode(withName: "stars") as! SKSpriteNode
+	private let light = ScoreBoard.scene?.childNode(withName: "light")
+	private	let images = SKTextureAtlas(named: "stars")
 	private let normals = SKTextureAtlas(named: "starnormals")
 
 	

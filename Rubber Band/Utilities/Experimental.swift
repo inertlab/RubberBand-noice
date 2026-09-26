@@ -33,11 +33,11 @@ enum NCStyle {
 /// NOT USED - Delete?
 class Scorelabel {
 
-	let scene 		= SKScene(size: NCStyle.frame)
-	let score 		= SKLabelNode()
-	let congrats 	= SKLabelNode()
-	let message  	= SKLabelNode()
-	let streak 	 	= SKLabelNode()
+	let scene = SKScene(size: NCStyle.frame)
+	let score = SKLabelNode()
+	let congrats = SKLabelNode()
+	let message = SKLabelNode()
+	let streak = SKLabelNode()
 	
 	init() {
 		self.scene.addChild(score)

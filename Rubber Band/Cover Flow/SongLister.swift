@@ -40,16 +40,16 @@ final class SongLister {
 	let description = menuOverlay?.childNode(withName: "relatedsongs/description") 	as! SKLabelNode
 	let countlabel  = menuOverlay?.childNode(withName: "details/morelabel") 		as! SKLabelNode
 	
-	private var stats 	= [Stats]()
-	private var nodes 	= [SKLabelNode]()
-	var songs  = [Song]()
+	private var stats = [Stats]()
+	private var nodes = [SKLabelNode]()
+	var songs = [Song]()
 	
 	/// currently selected song
 	var song:Song? = nil
 	
-	private var index 	= 0
+	private var index = 0
 	private var indexes = [Mode: Int]()
-	private var limit 	= 0
+	private var limit = 0
 	
 	//MARK: Styles
 //	controls the size of the song list
@@ -86,8 +86,8 @@ final class SongLister {
 			let label = makelabel()
 			nodes.append(label)
 			listnode?.addChild(label)
-			label.position 	= CGPoint(x: 0, y: y)
-			label.text 		= song.title!
+			label.position = CGPoint(x: 0, y: y)
+			label.text = song.title!
 			y -= leading
 		}
 		movelist()
@@ -189,13 +189,13 @@ private extension SongLister {
 	}
 	
 	func deselectlabel() {
-		nodes[index].fontColor 	= NSColor.white
-		nodes[index].fontSize 	= ptSmall
+		nodes[index].fontColor = NSColor.white
+		nodes[index].fontSize = ptSmall
 	}
 	
 	func labelselected() {
-		nodes[index].fontColor 	= NSColor.black
-		nodes[index].fontSize 	= ptLarge
+		nodes[index].fontColor = NSColor.black
+		nodes[index].fontSize = ptLarge
 	}
 	
 	func selectlabel() {
@@ -277,8 +277,8 @@ private extension SongLister {
 				let label = makelabel()
 				nodes.append(label)
 				listnode?.addChild(label)
-				label.position 	= CGPoint(x: 0, y: y)
-				label.text 		= song.title!
+				label.position = CGPoint(x: 0, y: y)
+				label.text = song.title!
 				y -= leading
 				if limit == 0 { break }
 			}
@@ -294,8 +294,8 @@ private extension SongLister {
 			let label = makelabel()
 			nodes.append(label)
 			listnode?.addChild(label)
-			label.position 	= CGPoint(x: 0, y: y)
-			label.text 		= song.title
+			label.position = CGPoint(x: 0, y: y)
+			label.text = song.title
 			y -= leading
 		}
 	}

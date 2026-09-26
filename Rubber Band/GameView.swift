@@ -19,7 +19,7 @@ class GameView: SCNView {
 		if trackingarea != nil {
 			self.removeTrackingArea(trackingarea!)
 		}
-		let options : NSTrackingArea.Options = [
+		let options: NSTrackingArea.Options = [
 			.mouseEnteredAndExited,
 			.mouseMoved,
 			.activeInKeyWindow
@@ -37,23 +37,23 @@ class GameView: SCNView {
 	
 	override func mouseMoved(with event: NSEvent) {
 		mainView.window?.titleVisibility = .visible
-		mainView.window?.titlebarAppearsTransparent =  false
+		mainView.window?.titlebarAppearsTransparent = false
 		mouseTimer.invalidate()
 		mouseTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { _ in
 		   NSCursor.setHiddenUntilMouseMoves(true)
 			mainView.window?.titleVisibility = .hidden
-		   mainView.window?.titlebarAppearsTransparent =  true
+		   mainView.window?.titlebarAppearsTransparent = true
 	   }
 	}
 	
 	override func mouseEntered(with event: NSEvent) {
 		mainView.window?.titleVisibility = .visible
-		mainView.window?.titlebarAppearsTransparent =  false
+		mainView.window?.titlebarAppearsTransparent = false
 	}
 	
 	override func mouseExited(with event: NSEvent) {
 		mainView.window?.titleVisibility = .hidden
-		mainView.window?.titlebarAppearsTransparent =  true
+		mainView.window?.titlebarAppearsTransparent = true
 	}
 	
 	// MARK: - Key Handles
@@ -83,6 +83,5 @@ class GameView: SCNView {
 			}
 		}
 	}
-	
 }
 

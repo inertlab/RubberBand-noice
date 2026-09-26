@@ -33,7 +33,7 @@ class NoteEntity: GKEntity {
 }
 
 class NoteComp: GKComponent {
-	var status  = Status.live
-	var chord 	= Chord()
-	var node  	= SCNNode()
+	var status = Status.live
+	var chord = Chord()
+	var node = SCNNode()
 }

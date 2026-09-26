@@ -15,7 +15,7 @@ protocol UserDelegate {
 }
 
 class User {
-	static let current 	= User()
+	static let current = User()
 	var delegate: UserDelegate?
 	let player:	Player
 	
@@ -38,11 +38,11 @@ class User {
 	}
 	
 	private init() {
-		self.player 	= Defaults.config().currentplayer!
-		self.diff 		= Difficulty(rawValue: self.player.difficulty)!
+		self.player = Defaults.config().currentplayer!
+		self.diff = Difficulty(rawValue: self.player.difficulty)!
 		self.instrument = Instrument(rawValue: self.player.instrument)!
-		difficultylabel.text 	= self.diff.text()
-		instrumentlabel.text 	= self.instrument.name()
+		difficultylabel.text = self.diff.text()
+		instrumentlabel.text = self.instrument.name()
 	}
 	
 	/// Saves config options to user database
@@ -54,12 +54,12 @@ class User {
 	///	- kraken
 	///
 	func updateUser() {
-		player.difficulty 			= diff.rawValue
-		player.instrument 			= instrument.rawValue
-		player.config?.vol_master 	= Jukebox.shared.volume
-		player.config?.vol_preview 	= Jukebox.shared.vol_prev
-		player.config?.vol_crowd 	= Jukebox.shared.vol_crowd
-		player.config?.kraken 		= stagemc.bg
+		player.difficulty = diff.rawValue
+		player.instrument = instrument.rawValue
+		player.config?.vol_master = Jukebox.shared.volume
+		player.config?.vol_preview = Jukebox.shared.vol_prev
+		player.config?.vol_crowd = Jukebox.shared.vol_crowd
+		player.config?.kraken = stagemc.bg
 		do {
 			try pc.viewContext.save()
 		} catch  {
@@ -72,8 +72,8 @@ class User {
 	}
 	
 	func newPlayer (name: String)  {
-		let users 	= findUsers()
-		let user 	= users.contains {$0.name == name }
+		let users = findUsers()
+		let user = users.contains {$0.name == name }
 		
 		if user {
 			print("name has been taken")
@@ -81,9 +81,9 @@ class User {
 			
 		}
 		
-		let player 		= Player(context: pc.viewContext)
-		player.name 	= name
-		player.index 	= Int16(users.count)
+		let player = Player(context: pc.viewContext)
+		player.name = name
+		player.index = Int16(users.count)
 		
 		do {
 			try pc.viewContext.save()
@@ -93,7 +93,7 @@ class User {
 	}
 	
 	func deleteplayers() {
-		let delete:NSFetchRequest<NSFetchRequestResult> = Player.fetchRequest()
+		let delete: NSFetchRequest<NSFetchRequestResult> = Player.fetchRequest()
 		let del = NSBatchDeleteRequest(fetchRequest: delete)
 		do {
 			try pc.viewContext.execute(del)

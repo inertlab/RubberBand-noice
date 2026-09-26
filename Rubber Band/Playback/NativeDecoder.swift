@@ -98,11 +98,7 @@ final class NativeDecoder: AudioDecoder {
 	}
 	
 	/// Returns CMSampleBuffer directly from AVAssetReader hardware pipeline
-<<<<<<< HEAD
-	func readNextSampleBuffer(presentationTime: CMTime) -> CMSampleBuffer? {
-=======
 	func readNextSampleBuffer() -> CMSampleBuffer? {
->>>>>>> vocal_change
 
 		guard let output = trackOutput,
 			  let sampleBuffer = output.copyNextSampleBuffer() else {

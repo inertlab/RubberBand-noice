@@ -18,7 +18,7 @@ final class Tailanimate: GKComponent {
 	var delegate: TriggerDelegate?
 	var scoredel: ScoreDelegate?
 	var pts: CGFloat = 12
-	var tail:TailComp {
+	var tail: TailComp {
 		return (entity?.component(ofType: TailComp.self))!
 	}
 	
@@ -85,9 +85,9 @@ class TailComp: GKComponent {
 	/// Length of tail in CGfloats already calculated with pace.fps
 	///
 	/// change this to end of note as duration is not acurate when translated to beats
-	var length	: CGFloat
-	let node 	= SCNNode()
-	let beats	: CGFloat
+	var length: CGFloat
+	let node = SCNNode()
+	let beats: CGFloat
 	
 	init(_ length: CGFloat, beats: CGFloat) {
 		self.length = length

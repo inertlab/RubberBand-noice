@@ -11,13 +11,13 @@ import SceneKit
 import SpriteKit
 
 class TextureMover {
-	static let shared 	= TextureMover()
+	static let shared = TextureMover()
 	
-	let difInitial 	= menutext.detailnode?.childNode(withName: "easy", recursively: false)
-	let disklabel 	= smanager.record.node.childNode(withName: "label", recursively: false)
-	let labelicon 	= menuOverlay?.childNode(withName: "icon") as! SKSpriteNode
+	let difInitial = menutext.detailnode?.childNode(withName: "easy", recursively: false)
+	let disklabel = smanager.record.node.childNode(withName: "label", recursively: false)
+	let labelicon = menuOverlay?.childNode(withName: "icon") as! SKSpriteNode
 
-	let starmat 	= menutext.detailnode?.geometry?.firstMaterial
+	let starmat = menutext.detailnode?.geometry?.firstMaterial
 	
 	private init(){
 		smanager.delegate = self

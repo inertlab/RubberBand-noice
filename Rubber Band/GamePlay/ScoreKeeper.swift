@@ -17,15 +17,15 @@ let scoreDisplay = SKScene(fileNamed: "scoredisplay.sks")
 /// The final score is display by ScoreBoard
 class ScoreKeeper {
 	/// score value of a successful note PRO drums
-	var pts				= 25
-	var streak:Int16 	= 0
-	var combobreaks  	= 0
-	var deadnotes 		= 0
-	var highscore:Int32 = 0
-	var oldscore:Int32 	= 0
-	var oldstreak:Int16	= 0
+	var pts = 25
+	var streak: Int16 = 0
+	var combobreaks = 0
+	var deadnotes = 0
+	var highscore: Int32 = 0
+	var oldscore: Int32 = 0
+	var oldstreak: Int16 = 0
 	/// keeps score of tail sustains
-	var tickcount:Int32 = 100 {
+	var tickcount: Int32 = 100 {
 		willSet {
 //			if new value is negative, it might show in the counter
 			if newValue < 0 {return}
@@ -81,7 +81,7 @@ class ScoreKeeper {
 			switch self.comborun {
 			case 0:
 				// combo broken
-				if multiplier == 4 || multiplier == 6{
+				if multiplier == 4 || multiplier == 6 {
 					stagemc.track.hwy.flow = false
 					Jukebox.shared.stopsinging()
 				}
@@ -90,6 +90,8 @@ class ScoreKeeper {
 				}
 				stagemc.track.backdrop.state(.idle)
 				multiplier = 1
+			case 1:
+				Jukebox.shared.instrumentvolume()
 			case 10:
 				multiplier = 2
 				stagemc.track.backdrop.state(.combo2)
@@ -122,21 +124,22 @@ class ScoreKeeper {
 	}
 	
 	/// Score display on screen
-	var label 	= scoreDisplay?.childNode(withName: "scoregroup/score") as! SKLabelNode
-	var labelx 	= scoreDisplay?.childNode(withName: "scoregroup/multiplier") as! SKLabelNode
-	var labelh 	= scoreDisplay?.childNode(withName: "scoregroup/highscore") as! SKLabelNode
-	var time 	= scoreDisplay?.childNode(withName: "time") as! SKLabelNode
+	var label = scoreDisplay?.childNode(withName: "scoregroup/score") as! SKLabelNode
+	var labelx = scoreDisplay?.childNode(withName: "scoregroup/multiplier") as! SKLabelNode
+	var labelh = scoreDisplay?.childNode(withName: "scoregroup/highscore") as! SKLabelNode
+	var time = scoreDisplay?.childNode(withName: "time") as! SKLabelNode
 	
 	init() {
 		if User.current.instrument == .prodrums {self.pts = 30}
-		labelx.text 	= ""
-		label.text  	= "0"
+		labelx.text = ""
+		label.text = "0"
 		labelh.isHidden = true
 		labelh.fontColor = .rbOrange
 	}
 	/// resets all the multipliers to 1 when player breaks streak
 	func scoreMiss() {
 		if comborun != 0 {
+			Jukebox.shared.instrumentvolume(vol: 0)
 			combobreaks += 1
 			comborun = 0
 		}
@@ -166,9 +169,9 @@ class ScoreKeeper {
 	func loadoldscore(_ song: Song) {
 		if let score = ScoreManager.getscore(song) {
 			labelh.isHidden = false
-			highscore 	= score.score * -1
-			oldscore 	= score.score
-			oldstreak 	= score.streak
+			highscore = score.score * -1
+			oldscore = score.score
+			oldstreak = score.streak
 			labelh.text = highscore.description
 		}
 	}

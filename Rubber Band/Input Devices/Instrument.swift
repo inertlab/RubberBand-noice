@@ -13,16 +13,16 @@ import Foundation
 /// extend to different handle different diffs later
 enum DrumEvent: String {
 	typealias RawValue = String
-	case 	mix3d0	= "[mix 3 drums0]" ,
-			mix3d1 	= "[mix 3 drums1]" ,
-			mix3d2 	= "[mix 3 drums2]" ,
-			mix3d3 	= "[mix 3 drums3]" ,
-			mix3d4 	= "[mix 3 drums4]" ,
-			mix3d0d = "[mix 3 drums0d]",
-			mix3d1d	= "[mix 3 drums1d]",
-			mix3d2d = "[mix 3 drums2d]",
-			mix3d3d = "[mix 3 drums3d]",
-			mix3d4d = "[mix 3 drums4d]"
+	case mix3d0	= "[mix 3 drums0]" ,
+		mix3d1 	= "[mix 3 drums1]" ,
+		mix3d2 	= "[mix 3 drums2]" ,
+		mix3d3 	= "[mix 3 drums3]" ,
+		mix3d4 	= "[mix 3 drums4]" ,
+		mix3d0d = "[mix 3 drums0d]",
+		mix3d1d	= "[mix 3 drums1d]",
+		mix3d2d = "[mix 3 drums2d]",
+		mix3d3d = "[mix 3 drums3d]",
+		mix3d4d = "[mix 3 drums4d]"
 	
 	func flip() -> Bool {
 		switch self {

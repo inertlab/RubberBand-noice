@@ -141,12 +141,7 @@ extension OggDecoder {
 		return true
 	}
 	
-<<<<<<< HEAD
-	func readNextSampleBuffer(presentationTime: CMTime) -> CMSampleBuffer? {
-//		print("OGG presentationTime:", presentationTime.seconds)
-=======
 	func readNextSampleBuffer() -> CMSampleBuffer? {
->>>>>>> vocal_change
 		// 1. Read PCM chunk from libvorbis
 		guard let pcmBuffer = self.readNextChunk(duration: 0.25) else {
 			return nil
@@ -158,11 +153,7 @@ extension OggDecoder {
 		}
 		
 		// 3. Convert to CMSampleBuffer with presentation timestamp
-<<<<<<< HEAD
-		guard let sampleBuffer = pcmBuffer.toCMSampleBuffer(presentationTime: presentationTime) else {
-=======
 		guard let sampleBuffer = pcmBuffer.toCMSampleBuffer(presentationTime: cmtime) else {
->>>>>>> vocal_change
 			print("[OggDecoder] Failed to convert AVAudioPCMBuffer to CMSampleBuffer")
 			return nil
 		}

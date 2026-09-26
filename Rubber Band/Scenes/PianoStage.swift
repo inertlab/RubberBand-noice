@@ -17,23 +17,22 @@ final class PianoStage: Performing, Track, KeyUp {
 	let backdrop:Backdrop = Pentapuss()
 	let scorekeeper = ScoreKeeper()
 
-	var tailsystem 	= GKComponentSystemCGF(componentClass: Tailanimate.self)
-	var starsystem	: GKComponentSystem<StarNoteComp>
-	var notesystem	: GKComponentSystem<NoteComp>
-	var notes 		= Set<GKEntity>()
+	var tailsystem = GKComponentSystemCGF(componentClass: Tailanimate.self)
+	var starsystem: GKComponentSystem<StarNoteComp>
+	var notesystem: GKComponentSystem<NoteComp>
+	var notes = Set<GKEntity>()
 	
 	var sp: StarPower
 	
 	let scn: SCNScene
 	let hwy: HWY
-	let triggers:[Button: StringTrigger]
-	var chords 		= [GKEntity]()
-	var hand:Chord 	= []
+	let triggers: [Button: StringTrigger]
+	var chords = [GKEntity]()
+	var hand: Chord = []
 
-	var state:Songstate = .playing
+	var state: Songstate = .playing
 	
 	init() {
-		print("piano and shit")
 		self.notesystem = GKComponentSystem(componentClass: NoteComp.self)
 		self.starsystem	= GKComponentSystem(componentClass: StarNoteComp.self)
 		self.scn = SCNScene(named: "art.scnassets/scns/strings.scn")!
@@ -126,11 +125,9 @@ private extension PianoStage {
 			triggers[c]?.hit()
 			scorekeeper.scoreOneUp()
 		}
-		Jukebox.shared.unmuteinstrument(track: .keys)
 	}
 	
 	func miss(_ set: Chord) {
-		Jukebox.shared.muteinstrument(track: .keys)
 		print("silencing keys")
 		print("nothing pressed", set)
 	}
