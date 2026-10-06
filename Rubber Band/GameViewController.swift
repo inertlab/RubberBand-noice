@@ -37,7 +37,7 @@ class GameViewController: NSViewController, WKUIDelegate {
 		mainView.autoresizesSubviews = true
 //		mainView.showsStatistics = true
 		
-		Anal.shared.track = true
+//		Anal.shared.track = true
 		Anal.shared.addsubview(mainView)
 		
 		
@@ -55,7 +55,6 @@ class GameViewController: NSViewController, WKUIDelegate {
 		rpc.initRPC()
     }
 	
-
 	override func viewWillAppear() {
 		if	User.current.player.config?.fullscreen == true {
 			mainView.window!.toggleFullScreen(.none)

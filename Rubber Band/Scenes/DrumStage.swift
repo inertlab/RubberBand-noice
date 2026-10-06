@@ -28,12 +28,13 @@ final class DrumStage: Performing, Track {
 	
 	// MARK: - Vars
 	// deprecated - use statemachine instead
-	var state:Songstate = .playing
+	var state: Songstate = .playing
 	let scn = SCNScene(named: "art.scnassets/scns/highway.scn")!
 	let hwy: HWY
 	let sp: StarPower
 	var triggers: [Button: DrumTrigger]
 	var songtrack: Jukebox.Track = .drums
+	var deadindex = 0
 
 	init() {
 		self.notesystem = GKComponentSystem(componentClass: NoteComp.self)
@@ -93,14 +94,6 @@ final class DrumStage: Performing, Track {
 		}
 	}
 	
-	func tracker(_ cgsongtime: CGFloat, _ hwytime: CGFloat) {
-		hwy.asphalt.geometry?.firstMaterial?.diffuse.contentsTransform.m42 = cgsongtime * pace.asphalt
-		
-		hwy.pista.position.z = hwytime
-		
-		sp.trackpower(time: hwytime)
-		trackdeadnotes(hwytime: hwytime)
-	}
 	
 	//MARK: - Functions, public
 	func laytrack() {
@@ -109,7 +102,7 @@ final class DrumStage: Performing, Track {
 	}
 	
 	/// hides notes that overlap activator notes and shows activators
-	func showsp () {
+	func showsp() {
 		let limit = hwy.pista.position.z + pace.fps
 		for activator in activesystem.components {
 			activator.show(limit)
@@ -120,7 +113,7 @@ final class DrumStage: Performing, Track {
 	}
 	
 	/// shows notes that overlap activator notes and shows activators
-	func hidesp () {
+	func hidesp() {
 		let limit = hwy.pista.position.z + pace.fps
 		for activator in activesystem.components {
 			activator.hide(limit)
@@ -128,52 +121,68 @@ final class DrumStage: Performing, Track {
 		for hide in self.hiddensystem.components {
 			hide.show(limit)
 		}
-	}	
+	}
+	
+	/// Checks and removes the first note in notesystem per frame
+	/// - Parameter hwytime: The song time in HWY units
+	/// - Note: Nothing gets removed, only note.status gets updated
+	/// - checknote() hides Hit notes
+	func trackdeadnotes(hwytime: CGFloat) {
+		
+		for i in deadindex..<notesystem.components.count {
+			let note = notesystem.components[i]
+
+			if note.node.position.z < hwytime - pace.hitwindow {
+				deadindex += 1
+				if note.status == .live {
+					note.status = .remove
+					if sp.state == .ready {
+						if note.chord == [.green_c, .green] {
+							continue
+						}
+					}
+					starmissed(note)
+					scorekeeper.deadnote()
+				}
+			} else {
+				return
+			}
+		}
+	}
+	
+	func robot(hwytime: CGFloat) {
+		if notesystem.components.isEmpty { return }
+		
+		if deadindex == notesystem.components.count - 1 {return}
+		
+		for i in deadindex..<notesystem.components.count {
+			let note = notesystem.components[i]
+			if note.node.position.z <= hwytime {
+			if note.status != .live {continue}
+			notecheck(note.chord.first!)
+			} else {
+				return
+			}
+		}
+	}
 }
 
 //MARK: - Private
 private extension DrumStage {
-
-	/// Checks and removes the first note in notesystem per frame
-	/// - Parameter hwytime: The song time in HWY units
-	///
-	/// This only removes one note per frame which might affect accuracy, might need to change it to 3 notes per frame
-	///
-	/// Also, when an entity is removed, the scnnode is not removed. cycle though scnnodes to remove dead notes
-	func trackdeadnotes(hwytime: CGFloat) {
-		if notesystem.components.isEmpty { return }
-		let note = notesystem.components[0]
-		
-		if note.node.position.z < hwytime - pace.hitwindow {
-			if note.status == .live {
-				if sp.state == .ready {
-					if note.chord == [.green_c, .green] {
-						notes.remove(note.entity!)
-						return
-					}
-				}
-				starmissed(note)
-				scorekeeper.deadnote()
-			}
-			// removing entity from one set will not remove the entity completely - DUH!
-			notes.remove(note.entity!)
-		}
-	}
-
+	
 	/// Checks to see if triggered note matches the entities
 	/// - Parameter btn: button press on keyboard or game controller or instrument
 	///
 	/// This is different from Strings in that we have to check the first four NoteEntities not just the first
 	func notecheck(_ btn : Button) {
 		
-		let max = hwy.pista.position.z + pace.hitwindow
-		var checkcount = 0
-		
-		for note in notesystem.components {
+		for i in deadindex..<notesystem.components.count{
+			let note = notesystem.components[i]
+
 			if note.status == .live {
-				checkcount += 1
-				if note.node.position.z < max {
+				if note.node.position.z < hwy.pista.position.z + pace.hitwindow {
 					if note.chord.contains(btn) {
+						note.status = .remove
 //						[.green, .green_c] is the starpower trigger
 						if note.chord == [.green, .green_c] {
 							sp.activateSP(note.node.position.z)
@@ -189,13 +198,9 @@ private extension DrumStage {
 								showsp()
 							}
 						}
-
-						note.node.removeFromParentNode()
-						note.status = .remove
+						note.node.isHidden = true
 						break
 					}
-					if checkcount > 5 { break }
-					continue
 				} else {
 					if sp.segment {
 						sp.segment = false

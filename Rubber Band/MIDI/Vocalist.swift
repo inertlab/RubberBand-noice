@@ -20,7 +20,8 @@ class Vocalist {
 	var count = 0
 	
 	init() {
-		if let events = MusicSheet.shared.fzmidi?.lyrics {
+		if var events = MusicSheet.shared.fzmidi?.lyrics {
+			events.sort(by: {($0.time, $1.note!) < ($1.time, $0.note!)})
 			lyricist(events)
 		} else {
 			lyrics = [(0, ""), (0, ""), (0, "")]
@@ -44,8 +45,9 @@ private extension Vocalist {
 		var phrase = Lyric(0.0, "")
 		
 		for event in events {
+			
 			switch event{
-			case .lyric(let lyric):
+			case .lyric(let lyric, _):
 				if lyric == "+" {break}
 				phrase.text += "\(lyric) "
 				break
@@ -69,8 +71,8 @@ private extension Vocalist {
 		}
 		
 		lyrics.append(cleanphrase(phrase))
-		lyrics.append((phrase.time + 1, ""))
-		lyrics.append((phrase.time + 60, ""))
+		lyrics.append((phrase.time + 3, ""))
+		lyrics.append((phrase.time + 5, ""))
 	}
 	
 	func cleanphrase(_ phrase: Lyric) -> Lyric {

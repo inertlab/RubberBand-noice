@@ -24,7 +24,10 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 	var vol_prev: Float = 0.0
 	var vol_crowd: Float = 0.0
 	var mutetrack: Track?
-	var trying = false
+	var previewing = DispatchWorkItem {
+		print("dsipatch here")
+	}
+//	var previewtimer = DispatchWorkItem
 	let rewindplayer = try! AVAudioPlayer(
 		contentsOf: URL(
 			string: Bundle.main.path(forResource: "sounds/rewind_01", ofType: "m4a")!)!)
@@ -41,9 +44,6 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 		return vol_prev * volume
 	}
 	
-	func timeremaining() -> Double  {
-		return noiceplayer.length - noiceplayer.dj.synchronizer.currentTime().seconds
-	}
 
 	func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
 		print("i'm done you'll")
@@ -68,22 +68,25 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 			return
 		}
 	
-		var starttime = song.song.preview
-		
-		if starttime == 0 { starttime = 20}
-//		 if song duration is not marked get the song duration
-		if song.song.length < 1 {
-			song.song.length = noiceplayer.length
-			try? pc.viewContext.save()
-		}
-	
+//		if preview track is found no timer necessary
 		if let previewtrack = trackurls[.preview] {
-			noiceplayer.play(trackurls: [.preview: previewtrack], startTime: starttime)
+			
+			noiceplayer.play(trackurls: [.preview: previewtrack])
+			setvolume(vol: prevol())
+			return
 		}
+		
+		
+		var starttime = song.song.preview
+		if starttime == 0 { starttime = 20}
+		
 //		crowd is not needed for previews
 		trackurls.removeValue(forKey: .crowd)
 		noiceplayer.play(trackurls: trackurls, startTime: starttime)
 		noiceplayer.fade(from: 0, to: prevol())
+		
+		previewing = DispatchWorkItem{ self.fadeout()}
+		DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(20), execute: previewing )
 	}
 	
 	func instrumentvolume(vol: Float = Jukebox.shared.volume) {
@@ -105,6 +108,7 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 	}
 	
 	func stop() {
+		previewing.cancel()
 		self.noiceplayer.stop()
 	}
 	
@@ -140,7 +144,9 @@ class Jukebox: NSObject, AVAudioPlayerDelegate {
 	}
 	
 	func pauseMusic() {
-		noiceplayer.dj.pause()
+		Task{
+			await noiceplayer.dj.pause()
+		}
 	}
 
 	func resumePlay() {

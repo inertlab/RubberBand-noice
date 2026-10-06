@@ -9,11 +9,6 @@
 import Foundation
 import SceneKit
 
-//enum Flow {
-//	case empty, flow, starpower, starflow
-//}
-
-
 
 /// reference to highway 3D model and model parts
 class HWY {

@@ -10,14 +10,13 @@ import Foundation
 
 /// High level player for TrackJockey
 final class NoiceAudioPlayer {
-	var length = 0.0
 	var dj = TrackJockey()
 	private var fadeTask: Task<Void, Never>?
 	var streamTask: Task<Void, Never>?
 	
 	func play(trackurls: [Jukebox.Track: URL], startTime: Double = 0.0) {
 		self.streamTask = Task(priority: .userInitiated) {
-			self.length = await self.dj.setup(trackurl: trackurls, start: startTime)
+			await self.dj.setup(trackurl: trackurls, start: startTime)
 			await self.dj.stream()
 		}
 	}
@@ -95,7 +94,7 @@ final class NoiceAudioPlayer {
 	
 	func observe() {
 		Task{
-			await dj.observe(length)
+			await dj.observe()
 		}
 	}
 }

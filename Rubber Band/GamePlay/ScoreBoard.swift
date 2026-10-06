@@ -17,27 +17,25 @@ class ScoreBoard {
 	//skscn is dupicate of gamestats and it is not used.
 	static let scene = SKScene.init(fileNamed: "gameStats")
 	
-	var scorelabel:SKLabelNode {
+	var scorelabel: SKLabelNode {
 		return ScoreBoard.scene?.childNode(withName: "score/score") as! SKLabelNode
 	}
-	var congratslabel:SKLabelNode {
+	var congratslabel: SKLabelNode {
 		return ScoreBoard.scene?.childNode(withName: "score/congrats") as! SKLabelNode
 	}
-	var messagelabel:SKLabelNode {
+	var messagelabel: SKLabelNode {
 		return ScoreBoard.scene?.childNode(withName: "score/message") as! SKLabelNode
 	}
-	var streaklabel:SKLabelNode {
+	var streaklabel: SKLabelNode {
 		return ScoreBoard.scene?.childNode(withName: "score/streak") as! SKLabelNode
 	}
-	var streaknum:SKLabelNode {
+	var streaknum: SKLabelNode {
 		return ScoreBoard.scene?.childNode(withName: "score/streaknumber") as! SKLabelNode
 	}
 	var screener: SKNode
-	
-	let sk:ScoreKeeper
+	let sk: ScoreKeeper
 	let stars = Stars()
-
-	var fc:Int16 = -1
+	var fc: Int16 = -1
 
 	init (scorekeeper: ScoreKeeper) {
 		print("new scoreboard created")
@@ -174,6 +172,10 @@ private extension ScoreBoard {
 	}
 	
 	func saveplaycount(_ score: Score) {
+		#if DEBUG
+		pc.viewContext.rollback()
+		return
+		#endif
 		score.playcount += 1
 		score.stat?.playcount += 1
 		score.stat?.date = Date()

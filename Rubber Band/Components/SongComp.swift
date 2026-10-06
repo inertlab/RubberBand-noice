@@ -96,11 +96,6 @@ class SongComp: GKComponent {
 		return column!
 	}
 	
-	
-}
-
-private extension SongComp {
-	
 	func time() {
 		if song.length > 0 {
 			var secs = DateComponents()
@@ -110,6 +105,11 @@ private extension SongComp {
 			labelt.text = ""
 		}
 	}
+	
+}
+
+private extension SongComp {
+	
 	
 	func initiateselected() {
 		UpNext.shared.listnodes[4].text = "# \(index + 1)"

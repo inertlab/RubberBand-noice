@@ -103,7 +103,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	@IBAction func scanfornewsongs(_ sender: NSMenuItem){
 		let finder = SongFinder()
-		finder.updatemetadata()
+		finder.updatemetadata(songcomp: smanager.selected)
 	}
 	
 	@IBAction func printhistory(_ sender: NSMenuItem) {

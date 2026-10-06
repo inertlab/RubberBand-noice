@@ -28,24 +28,24 @@ final class SongLister {
 	
 	static let shared = SongLister()
 	
-	var ready 		= false
-	let node		= menuOverlay?.childNode(withName: "relatedsongs")
-	let listnode 	= menuOverlay?.childNode(withName: "relatedsongs/list")!
-	let artist 		= menuOverlay?.childNode(withName: "relatedsongs/artist") 		as! SKLabelNode
-	let moreup 		= menuOverlay?.childNode(withName: "relatedsongs/moreup") 		as! SKLabelNode
-	let moredown 	= menuOverlay?.childNode(withName: "relatedsongs/moredown") 	as! SKLabelNode
-	let timemore 	= menuOverlay?.childNode(withName: "relatedsongs/time_other") 	as! SKLabelNode
-	let stars 		= menuOverlay?.childNode(withName: "relatedsongs/stars") 		as! SKLabelNode
-	let diff 		= menuOverlay?.childNode(withName: "relatedsongs/difficulty")	as! SKLabelNode
-	let description = menuOverlay?.childNode(withName: "relatedsongs/description") 	as! SKLabelNode
-	let countlabel  = menuOverlay?.childNode(withName: "details/morelabel") 		as! SKLabelNode
+	var ready = false
+	let node = menuOverlay?.childNode(withName: "relatedsongs")
+	let listnode = menuOverlay?.childNode(withName: "relatedsongs/list")!
+	let artist = menuOverlay?.childNode(withName: "relatedsongs/artist") as! SKLabelNode
+	let moreup = menuOverlay?.childNode(withName: "relatedsongs/moreup") as! SKLabelNode
+	let moredown = menuOverlay?.childNode(withName: "relatedsongs/moredown") as! SKLabelNode
+	let timemore = menuOverlay?.childNode(withName: "relatedsongs/time_other") as! SKLabelNode
+	let stars = menuOverlay?.childNode(withName: "relatedsongs/stars") as! SKLabelNode
+	let diff = menuOverlay?.childNode(withName: "relatedsongs/difficulty") as! SKLabelNode
+	let description = menuOverlay?.childNode(withName: "relatedsongs/description") as! SKLabelNode
+	let countlabel = menuOverlay?.childNode(withName: "details/morelabel") as! SKLabelNode
 	
 	private var stats = [Stats]()
 	private var nodes = [SKLabelNode]()
 	var songs = [Song]()
 	
 	/// currently selected song
-	var song:Song? = nil
+	var song: Song? = nil
 	
 	private var index = 0
 	private var indexes = [Mode: Int]()
@@ -53,9 +53,9 @@ final class SongLister {
 	
 	//MARK: Styles
 //	controls the size of the song list
-	private let leading:CGFloat = 65 //todo: make relative to screen height
-	private let ptSmall:CGFloat = 22
-	private let ptLarge:CGFloat = 26
+	private let leading: CGFloat = 65 //todo: make relative to screen height
+	private let ptSmall: CGFloat = 22
+	private let ptLarge: CGFloat = 26
 	private var mode = Mode.relatedsongs
 	
 
@@ -103,10 +103,10 @@ final class SongLister {
 			self.artist.text = artist
 			listrelatedsongs()
 		}
-			movelist()
-			moreorless()
-			updatetime()
-			selectlabel()
+		movelist()
+		moreorless()
+		updatetime()
+		selectlabel()
 	}
 	
 	/// Clears the previous list and listnode and loads a new list
@@ -164,11 +164,11 @@ private extension SongLister {
 	func wraparoundup() {
 		index = 0
 		if nodes.count < 4 {
-			listnode?.position.y = 0
+			listnode?.position.y = -10
 		} else {
 			listnode?.run(SKAction.moveBy(x: 0, y: 120, duration: 0.10)) {
 				self.listnode?.position.y = -180
-				self.listnode?.run(SKAction.moveTo(y: 0, duration: 0.10))
+				self.listnode?.run(SKAction.moveTo(y: -10, duration: 0.10))
 				self.selectlabel()
 			}
 		}
@@ -176,7 +176,7 @@ private extension SongLister {
 	
 	func wraparounddown() {
 		index = nodes.count - 1
-		let posy = leading * CGFloat(index)
+		let posy = leading * CGFloat(index) - 10
 		if nodes.count < 4 {
 			listnode?.position.y = posy
 		} else {
@@ -202,9 +202,11 @@ private extension SongLister {
 		indexes[mode] = index
 		switch mode {
 		case .history:
-			song = stats[index].song!
-			artist.text = stats[index].song!.artist
-			updatestars(stat: stats[index])
+			if let s = stats[index].song {
+				song = s
+				artist.text = stats[index].song!.artist
+				updatestars(stat: stats[index])
+			}
 		case .recentlyadded:
 			song = songs[index]
 			artist.text = song!.artist
@@ -267,12 +269,14 @@ private extension SongLister {
 	
 	/// creates sklabel list in menu from an array of stats
 	func listhistory() {
-		stats = User.current.player.stats?.sortedArray(using: [NSSortDescriptor(key: "date", ascending: false)]) as! [Stats]
+		let userstats = User.current.player.stats?.sortedArray(using: [NSSortDescriptor(key: "date", ascending: false)]) as! [Stats]
 		var y:CGFloat = 0
-		if stats.count == 0 {return}
+		if userstats.count == 0 {return}
 		var limit = 100
-		for stat in stats {
+		stats.removeAll()
+		for stat in userstats {
 			if let song = stat.song {
+				stats.append(stat)
 				limit -= 1
 				let label = makelabel()
 				nodes.append(label)

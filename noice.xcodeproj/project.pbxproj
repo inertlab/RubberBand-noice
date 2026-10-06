@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -120,6 +120,7 @@
 		EDF83AC82285095800D07E7A /* KeyPaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF83AC72285095800D07E7A /* KeyPaths.swift */; };
 		EDF8DE0621103D5E00F0BAE8 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF8DE0521103D5E00F0BAE8 /* User.swift */; };
 		EDFB2D2325A9650000564689 /* OctopusComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDFB2D2225A9650000564689 /* OctopusComponent.swift */; };
+		EDFD2227306EC5E700EE389D /* MIDIEncodingDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDFD2226306EC5E700EE389D /* MIDIEncodingDetector.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -204,7 +205,6 @@
 		ED8B5150206ED4CB000DB769 /* ScoreKeeper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreKeeper.swift; sourceTree = "<group>"; };
 		ED8C8A7D22815B5A00A95214 /* LoadingScreen.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = LoadingScreen.sks; sourceTree = "<group>"; };
 		ED96C8C623DAD3E500D8B488 /* UpNext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpNext.swift; sourceTree = "<group>"; };
-		ED97F67F20F1E373001FAAE0 /* TimeCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeCode.swift; sourceTree = "<group>"; };
 		ED9A4C24204CDD8E0060DB17 /* titleDisplay.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = titleDisplay.sks; sourceTree = "<group>"; };
 		ED9BE2CD22CFCD0F00D7B9BC /* GKComponentSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GKComponentSystem.swift; sourceTree = "<group>"; };
 		EDA0FC6522AC2406005D5DFA /* Instrument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Instrument.swift; sourceTree = "<group>"; };
@@ -239,11 +239,8 @@
 		EDF83AC72285095800D07E7A /* KeyPaths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPaths.swift; sourceTree = "<group>"; };
 		EDF8DE0521103D5E00F0BAE8 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		EDFB2D2225A9650000564689 /* OctopusComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OctopusComponent.swift; sourceTree = "<group>"; };
+		EDFD2226306EC5E700EE389D /* MIDIEncodingDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIEncodingDetector.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		ED78D0F6305E3F0D00E60E1E /* deprecated */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = deprecated; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		ED45BD12202CC5FC00E4A9AD /* Frameworks */ = {
@@ -318,7 +315,6 @@
 				ED78D0F2305E36AE00E60E1E /* NativeDecoder.swift */,
 				ED01016030574C7200C0A1C4 /* OggDecoder.swift */,
 				ED01016230574C9400C0A1C4 /* AVAudioPCMBuffer.swift */,
-				ED78D0F6305E3F0D00E60E1E /* deprecated */,
 			);
 			path = Playback;
 			sourceTree = "<group>";
@@ -515,7 +511,7 @@
 				ED1F1E7B22B1CDC000B21883 /* Strings.swift */,
 				ED2FE4A422D5833600F18789 /* Drums.swift */,
 				EDB79420224203D10036AB69 /* Vocalist.swift */,
-				ED97F67F20F1E373001FAAE0 /* TimeCode.swift */,
+				EDFD2226306EC5E700EE389D /* MIDIEncodingDetector.swift */,
 				ED3EFCD120EF3AA10015701A /* PaceMaker.swift */,
 				ED1665352033E3FC0099DE12 /* FZMIDI.swift */,
 				ED153705204297A300ADBA12 /* MIDIDevices.swift */,
@@ -555,9 +551,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				ED78D0F6305E3F0D00E60E1E /* deprecated */,
 			);
 			name = noice;
 			packageProductDependencies = (
@@ -709,6 +702,7 @@
 				EDA0FC6622AC2406005D5DFA /* Instrument.swift in Sources */,
 				ED4718B5266DB68F00B15DD8 /* MenuState.swift in Sources */,
 				ED2AA00922B4838B00E61D89 /* SongMenu.swift in Sources */,
+				EDFD2227306EC5E700EE389D /* MIDIEncodingDetector.swift in Sources */,
 				ED51B8312796A4830010950B /* TitleCredit.swift in Sources */,
 				ED0B5FBC204A847D00524979 /* SongFinder.swift in Sources */,
 				ED9BE2CE22CFCD0F00D7B9BC /* GKComponentSystem.swift in Sources */,
@@ -900,14 +894,10 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 33;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SRCROOT)\"/**",
-					"$(PROJECT_DIR)/Frameworks",
-				);
 				HEADER_SEARCH_PATHS = (
 					"${SOURCE_ROOT}/ffmpeg/**",
 					"${SOURCE_ROOT}/**",
@@ -916,19 +906,8 @@
 				INFOPLIST_KEY_CFBundleDisplayName = noice;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music-games";
 				LD_QUOTE_LINKER_ARGUMENTS_FOR_COMPILER_DRIVER = YES;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Frameworks",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/Frameworks/MIKMIDI.framework/Versions/A",
-				);
 				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.inertlab.noice;
@@ -956,7 +935,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 33;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = NO;
@@ -966,10 +945,6 @@
 				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
 				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
 				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SRCROOT)\"/**",
-					"$(PROJECT_DIR)/Frameworks",
-				);
 				HEADER_SEARCH_PATHS = (
 					"${SOURCE_ROOT}/ffmpeg/**",
 					"${SOURCE_ROOT}/**",
@@ -978,19 +953,8 @@
 				INFOPLIST_KEY_CFBundleDisplayName = noice;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music-games";
 				LD_QUOTE_LINKER_ARGUMENTS_FOR_COMPILER_DRIVER = YES;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Frameworks",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/Frameworks/MIKMIDI.framework/Versions/A",
-				);
 				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.inertlab.noice;

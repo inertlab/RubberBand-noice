@@ -22,13 +22,12 @@ class MusicSheet {
 	/// Updates timesheet with the current song music sequence
 	/// - Parameter url: File location of notes.mid file
 	///
-	/// When a new sequence is set, TimeCode gets updated here
 	/// this will have to change when multiplayer is added as we don't want to conflict 2 TimeCodes
-	func setSeq (url: URL) {
-		if let fzmidi = FZMIDI(url: url) {
+	func setSeqConfig() {
+		if let fzmidi = FZMIDI() {
 			self.fzmidi = fzmidi
+			self.fzmidi?.config()
 		}
-
 		self.difficultyConfig = User.current.instrument.config(diff: User.current.diff)
 		setaveragetempo()
 	}
@@ -214,7 +213,10 @@ class MusicSheet {
 	private func setaveragetempo() {
 		var bpm = 120.0
 		if let tempos = fzmidi?.tempos {
-			bpm = tempos.reduce(0.0, +) / Double(tempos.count)
+			let bpmtotals = tempos.reduce(into: 0) {sum, item in
+				sum += item.tempo
+			}
+			bpm = bpmtotals / Double(tempos.count)
 		}
 		pace.setFPS(miditempo: round(Double(bpm)))
 	}
@@ -222,7 +224,7 @@ class MusicSheet {
 	/// makes and layers beat marks on the track
 	///
 	/// - Note: at the end of the track beats tend to dip
-	func layBeat () -> Int {
+	func layBeat() -> Int {
 		if let beats = fzmidi?.beats {
 			laybeattrack(beats)
 			return (beats.count)
@@ -236,7 +238,7 @@ private extension MusicSheet {
 	
 	/// Checks if note is Star Power, If it is then it appends it to SP list and returns True
 	/// - Parameter n: midi note event
-	func appendSP (_ event: NoteEvent) -> Bool {
+	func appendSP(_ event: NoteEvent) -> Bool {
 		if event.note == 116 {
 			stagemc.track.sp.starnotes.append(([.plus], event.time, event.end!, nil))
 			return true
@@ -244,6 +246,8 @@ private extension MusicSheet {
 		return false
 	}
 	
+	/// Lays beat scenenodes on Track
+	/// - Parameter beats: Array of NoteEvent - (note: note, time: seconds)
 	func laybeattrack(_ beats: NoteEvents) {
 		for beat in beats {
 			if let note = beat.note {
@@ -255,26 +259,33 @@ private extension MusicSheet {
 				}
 				line.position.z = CGFloat(beat.time) * pace.fps
 				stagemc.track.hwy.beatlines.addChildNode(line)
+				stagemc.track.sp.beats.append(beat.time)
 			}
 		}
 	}
 	
+	/// Creates beats when there is no Beat track and lays scenenodes on Track
+	/// - Returns: the beat count, used for calculating scores
 	func laybeattrack() -> Int {
-		let length = fzmidi!.getmusiclength()
-		let beats = Int(length.beats)
-		let bps = length.beats / length.seconds
-		for beat in 0...beats {
+		guard let fzmidi = fzmidi else {return 0}
+		let beats = fzmidi.getbeats()
+		let sig = fzmidi.signature
+		var num = 1
+		
+		for beat in beats {
 			var line: SCNNode
-			let z = Double(beat) * bps * pace.fps
-			if beat % 4 != 3 {
+			if num == sig.num {
+				num = 1
 				line = gemmaker.beat.fat.clone()
 			} else {
+				num += 1
 				line = gemmaker.beat.thin.clone()
 			}
-			line.position.z = z
+			line.position.z = beat * pace.fps
 			stagemc.track.hwy.beatlines.addChildNode(line)
 		}
-		return beats
+		stagemc.track.sp.beats = beats
+		return beats.count
 	}
 }
 

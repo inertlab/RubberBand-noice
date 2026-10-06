@@ -7,13 +7,20 @@
 //
 
 
-// this is not used yet?
+// this is not used yet
 
 import Foundation
 import GameplayKit
 
 
 final class PianoStage: Performing, Track, KeyUp {
+	func trackdeadnotes(hwytime: CGFloat) {
+		return
+	}
+	func robot(hwytime: CGFloat) {
+		return
+	}
+	
 	let backdrop:Backdrop = Pentapuss()
 	let scorekeeper = ScoreKeeper()
 
@@ -87,7 +94,6 @@ private extension PianoStage {
 		
 		for entity in self.chords {
 			if let comp = entity.component(ofType: NoteComp.self) {
-				
 				// node is dead and of no use
 				if comp.node.categoryBitMask == GemBit.dead {
 					continue

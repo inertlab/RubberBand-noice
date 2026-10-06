@@ -50,6 +50,9 @@ func setupMidiDevice () {
 	
 	drumCenter.addObserver(forName: drumgothit, object: nil, queue: OperationQueue.main){
 		(note) in
-		stagemc.currentact.handleevent(note.object as! Button)
+		if let not = note.object as? Button {
+			
+			stagemc.currentact.handleevent(not)
+		}
 	}
 }

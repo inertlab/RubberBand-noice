@@ -140,10 +140,8 @@ private extension StageManager {
 		track.scorekeeper.loadoldscore(smanager.selected.song)
 		
 		mainView.prepare(currentact.scn, shouldAbortBlock: {return true})
-	
-		let midiUrl = smanager.selected.song.folder!.appendingPathComponent("notes.mid")
 		
-		MusicSheet.shared.setSeq(url: midiUrl)
+		MusicSheet.shared.setSeqConfig()
 	
 //		dispatchques causes all kinds of problems with race conditions. this needs to be delayed or else the first few notes are missing from notecomponentsystem. sigh
 		DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {

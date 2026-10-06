@@ -24,13 +24,17 @@ final class GuitarStage: Performing, Track, KeyUp {
 	
 	let scn: SCNScene
 	let hwy: HWY
-	let triggers:[Button: StringTrigger]
+	let triggers: [Button: StringTrigger]
 	var hand: Chord = []
 	
 	var state: Songstate = .playing
 	var power = 2
+	var deadindex = 0
 
 	var songtrack: Jukebox.Track = .guitar
+	func robot(hwytime: CGFloat) {
+		return
+	}
 
 	init() {
 		self.notesystem = GKComponentSystem(componentClass: NoteComp.self)
@@ -38,11 +42,11 @@ final class GuitarStage: Performing, Track, KeyUp {
 		self.scn = SCNScene(named: "art.scnassets/scns/strings.scn")!
 		self.hwy = HWY(self.scn)
 		self.triggers = [
-			Button.red		: StringTrigger(note: .red, 	hwy: self.hwy),
-			Button.blue		: StringTrigger(note: .blue, 	hwy: self.hwy),
-			Button.green	: StringTrigger(note: .green,	hwy: self.hwy),
-			Button.orange	: StringTrigger(note: .orange, 	hwy: self.hwy),
-			Button.yellow	: StringTrigger(note: .yellow, 	hwy: self.hwy),
+			Button.red: StringTrigger(note: .red, hwy: self.hwy),
+			Button.blue: StringTrigger(note: .blue, hwy: self.hwy),
+			Button.green: StringTrigger(note: .green, hwy: self.hwy),
+			Button.orange: StringTrigger(note: .orange, hwy: self.hwy),
+			Button.yellow: StringTrigger(note: .yellow, hwy: self.hwy),
 		]
 		self.sp = StarPower(self.hwy)
 
@@ -61,7 +65,7 @@ final class GuitarStage: Performing, Track, KeyUp {
 				if hand.isEmpty {
 					allmissed()
 				} else {
-//					inhere write logic for when hand is empty
+				// inhere write logic for when hand is empty
 					notecheck()
 				}
 			case .left, .right:
@@ -83,15 +87,14 @@ final class GuitarStage: Performing, Track, KeyUp {
 		case is PausedState:
 			stagemc.machine.enter(RewindState.self)
 		case is ScoreState:
-//			this events don't use the strum bar - maybe change it?
-//			??? why is this orange?
+			// this events don't use the strum bar - maybe change it?
 			switch event {
 			case .left, .right:
 				smanager.makerandomnextselected()
 			case .down, .up:
 				smanager.refreshnext()
 			case .orange:
-//				play random song by previously played artist
+			// play random song by previously played artist
 				smanager.selectrandom(true)
 				stagemc.machine.enter(PlayState.self)
 			case .blue:
@@ -99,7 +102,7 @@ final class GuitarStage: Performing, Track, KeyUp {
 				smanager.selectrandom()
 				fallthrough
 			case .yellow:
-//				replay current song
+			// replay current song
 				stagemc.machine.enter(PlayState.self)
 			default:
 				stagemc.machine.enter(DetailState.self)
@@ -127,11 +130,35 @@ final class GuitarStage: Performing, Track, KeyUp {
 		
 		hwy.pista.position.z = hwytime
 		
-		sp.trackpower(time: hwytime)
-		
 		trackdeadnotes(hwytime: hwytime)
 		
-		tailsystem.update(hwytime)
+		tailsystem.update(hwytime) // move this to a Task? 
+	}
+	
+	//	MARK: Note Checking/Tracking
+	func trackdeadnotes(hwytime: CGFloat) {
+		if notesystem.components.isEmpty { return }
+		
+		for i in deadindex..<notesystem.components.count {
+			let note = notesystem.components[i]
+
+			if note.node.position.z < hwytime - pace.hitwindow {
+				deadindex += 1
+				if note.status == .live {
+					note.status = .remove
+					starmissed(note)
+					miss()
+					// make tail gray after starmissed or starmissed will turn tail back to color
+					if let tail = note.entity?.component(ofType: TailComp.self){
+						tail.maketailgray()
+					}
+					scorekeeper.deadnote()
+				}
+			} else {
+				// if note is within hit window, exit loop
+				return
+			}
+		}
 	}
 }
 
@@ -139,45 +166,20 @@ final class GuitarStage: Performing, Track, KeyUp {
 
 private extension GuitarStage {
 	
-//	MARK: Note Checking/Tracking
-	func trackdeadnotes(hwytime: CGFloat) {
-		if notesystem.components.isEmpty { return }
-		
-		if let note = notesystem.components.first {
-			
-			if note.node.position.z < hwytime - pace.hitwindow {
-				
-				if note.status == .live {
-					if let tail = note.entity?.component(ofType: TailComp.self){
-						tail.maketailgray()
-					}
-					
-					starmissed(note)
-					miss()
-					
-					scorekeeper.deadnote()
-					notes.remove(note.entity!)
-				} else {
-					// if entity contains a tailcomp, it will not removeit from the notesystem, if not it will remove it from notes.
-					if let _ = note.entity?.component(ofType: TailComp.self) {
-						notesystem.removeComponent(note)
-					} else {
-//						if note.entity is removed, all components get removed including tails and they won't animate
-						notes.remove(note.entity!)
-					}
-				}
-			}
+	func removeentity(in note: NoteComp) {
+		if let entity = note.entity {
+			notes.remove(entity)
 		}
 	}
 	
 	func notecheck() {
 		
-		let max = hwy.pista.position.z + pace.hitwindow
-		
-		for note in notesystem.components {
+		for i in deadindex..<notesystem.components.count{
+			let note = notesystem.components[i]
+			
 			if note.status == .live {
 				// this note is inside the hitbox. if it's not hit then it's a miss
-				if note.node.position.z < max {
+				if note.node.position.z < hwy.pista.position.z + pace.hitwindow {
 					// mark for removall - this gets changed to skip if there is a tail component
 					note.status = .remove
 					// if there is only one note, more than one fret can be pressed
@@ -192,9 +194,7 @@ private extension GuitarStage {
 						// this is if there are multiple notes or chord
 					} else {
 						if hand == note.chord {
-							
 							notecheck(note: note)
-							
 							break
 						}
 					}
@@ -211,6 +211,9 @@ private extension GuitarStage {
 				// this is the only time a miss is registered
 				starmissed(note)
 				miss(chord: note.chord)
+				if let tail = note.entity?.component(ofType: TailComp.self){
+					tail.maketailgray()
+				}
 				scorekeeper.scoreMiss()
 			}
 		}
@@ -226,15 +229,14 @@ private extension GuitarStage {
 		if checkpowerchain2(note) {
 			sp.starruncompleted()
 		}
-		
-		note.node.removeFromParentNode()
+		note.node.isHidden = true
 	}
 	
 	/// Checks to see if component has a tail, if it does, Tailanimate component
 	/// - Parameter entity: NoteEntity
 	///
 	/// See Tailanimate.update() for further instructions
-	func checktail (_ note: NoteComp) {
+	func checktail(_ note: NoteComp) {
 		if let entidy = note.entity {
 			if let _ = entidy.component(ofType: TailComp.self) {
 				let tail = Tailanimate()
@@ -252,9 +254,9 @@ private extension GuitarStage {
 	}
 	
 	/// deprecated - do not use?
-	func tracktails (_ tail: TailComp) {
+	func tracktails(_ tail: TailComp) {
 		let time = CGFloat(Jukebox.shared.currenttime() ?? 0) * pace.fps + tail.length
-		var lapse:CGFloat = 0
+		var lapse: CGFloat = 0
 		tail.node.childNodes[0].geometry?.firstMaterial?.transparent.contentsTransform.m42 = 0.5
 		while lapse < 1 {
 			let remain = time - (CGFloat(Jukebox.shared.currenttime() ?? 0) * pace.fps)

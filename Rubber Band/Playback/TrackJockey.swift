@@ -27,11 +27,12 @@ actor TrackJockey {
 	private(set) var isplaying = false
 	private var watchers = [Any]()
 	private var pausedtime = 0.0
+	private(set) var length = 0.0
 
 //	MARK: Setup
-	func setup(trackurl: [Jukebox.Track: URL], start: Double = 0) -> Double {
+	func setup(trackurl: [Jukebox.Track: URL], start: Double = 0) {
 
-		var maxLength = 0.0
+		length = 0.0
 		let startTime = CMTime(seconds: start, preferredTimescale: 44100)
 		
 		for (track, url) in trackurl {
@@ -51,8 +52,8 @@ actor TrackJockey {
 			}
 			
 			decoders[track] = validDecoder
-			if validDecoder.length > maxLength {
-				maxLength = validDecoder.length
+			if validDecoder.length > length {
+				length = validDecoder.length
 			}
 			
 			let renderer = AVSampleBufferAudioRenderer()
@@ -61,11 +62,21 @@ actor TrackJockey {
 			renderers[track] = renderer
 			
 			synchronizer.addRenderer(renderer)
-			synchronizer.setRate(1.0, time: startTime)
 		}
-
+		#if DEBUG
+		synchronizer.setRate(4.0, time: startTime)
+		#else
+		synchronizer.setRate(1.0, time: startTime)
+		#endif
+		
+		
+		if smanager.selected.song.length < 1 && trackurl.first?.key != .preview {
+			smanager.selected.song.length = length
+			try? pc.viewContext.save()
+			smanager.selected.self.time()
+		}
+		
 		isplaying = true
-		return maxLength
 	}
 	
 	/// starts streaming loop
@@ -96,7 +107,7 @@ actor TrackJockey {
 //MARK: Cleanup
 	func clearAll() {
 		isplaying = false
-		
+		length = 0.0
 		synchronizer.setRate(0, time: .zero)
 		lookaway()
 		for (_, renderer) in renderers {
@@ -107,8 +118,6 @@ actor TrackJockey {
 		watchers.removeAll()
 		renderers.removeAll()
 		decoders.removeAll()
-		
-//		synchronizer = AVSampleBufferRenderSynchronizer()
 	}
 	
 //MARK: Fucntions
@@ -118,7 +127,7 @@ actor TrackJockey {
 			ren.value.flush()
 		}
 		for decoder in decoders {
-			decoder.value.seek(toSeconds: pausedtime - 2)
+			let _ = decoder.value.seek(toSeconds: pausedtime - 2)
 		}
 		synchronizer.rate = 1
 		await stream()
@@ -140,15 +149,22 @@ actor TrackJockey {
 		}
 	}
 	
-	func observe(_ length: Double)  {
-
-		let observer = synchronizer.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1, preferredTimescale: 60), queue: .main) { _ in
-			stagemc.track.scorekeeper.time.text = dateformat.string(from: length - self.synchronizer.currentTime().seconds)
+	func observe() {
+		
+		if let events = MusicSheet.shared.fzmidi?.events(){
+			if let end = events.first(where: {$0.meta ==  "[end]"}) {
+				length = end.time
+			}
 		}
 		
-		let seconds = synchronizer.addBoundaryTimeObserver(forTimes: [length + 0.5] as [NSValue], queue: .main){
+		let observer = synchronizer.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1, preferredTimescale: 60), queue: .main) { _ in
+			stagemc.track.scorekeeper.time.text = dateformat.string(from: self.length - self.synchronizer.currentTime().seconds)
+		}
+		
+		let seconds = synchronizer.addBoundaryTimeObserver(forTimes: [self.length] as [NSValue], queue: .main){
 			stagemc.machine.enter(ScoreState.self)
 		}
+		
 		let times = stagemc.vocalcoach.gettimes() as [NSValue]
 		let lyrics = synchronizer.addBoundaryTimeObserver(forTimes: times, queue: .main) {
 			stagemc.vocalcoach.tracklyrics(songtime: self.synchronizer.currentTime().seconds)
@@ -161,5 +177,9 @@ actor TrackJockey {
 		for watcher in watchers {
 			synchronizer.removeTimeObserver(watcher)
 		}
+	}
+	
+	func timeremaining() -> Double {
+		return length - synchronizer.currentTime().seconds
 	}
 }

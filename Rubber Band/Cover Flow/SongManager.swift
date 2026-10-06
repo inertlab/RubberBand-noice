@@ -28,23 +28,21 @@ enum Direction {
 	case left, right, up, down
 }
 
+let menuOverlay = SKScene(fileNamed: "titleDisplay.sks")
 
-
-let menuOverlay 	= SKScene(fileNamed: "titleDisplay.sks")
-
-let menuScene 		= SCNScene(named: "art.scnassets/scns/menu_song.scn")!
-var covernode 		= menuScene.rootNode.childNode(withName: "coverflow", recursively: true)!
+let menuScene = SCNScene(named: "art.scnassets/scns/menu_song.scn")!
+var covernode = menuScene.rootNode.childNode(withName: "coverflow", recursively: true)!
 
 struct MenuText {
-	let detailnode 	= menuScene.rootNode.childNode(withName: "details", recursively: true)
+	let detailnode = menuScene.rootNode.childNode(withName: "details", recursively: true)
 	init(){
 	}
 }
 
 class ColCol {
-	var index 	= 0
-	var row 	= 0
-	var col 	= 0
+	var index = 0
+	var row = 0
+	var col = 0
 }
 
 let menutext = MenuText()
@@ -57,26 +55,26 @@ class SongManager {
 	
 	//MARK: - Vars
 	/// selected album always has the record component
-	var delegate	: SongManagerDelegate?
-	var songcount 	= 0
-	var loc 		= ColCol()
-	let noart		= NSImage(named: "noart")
+	var delegate: SongManagerDelegate?
+	var songcount = 0
+	var loc = ColCol()
+	let noart = NSImage(named: "noart")
 	
 	//MARK: ECS
-	let record 		= RecordComp()
-	let stars 		= StarsComp()
-	var selected 	= SongComp(song: Song())
-	var songenties 	= Set<GKEntity>()
+	let record = RecordComp()
+	let stars = StarsComp()
+	var selected = SongComp(song: Song())
+	var songenties = Set<GKEntity>()
 	
 	/// collection of song components
 	///
 	/// should not be sorted because it is access by Index
-	var songsystem 	= GKComponentSystem<SongComp>	(componentClass: SongComp.self)
-	var colsystem 	= GKComponentSystem<ColumnComp>	(componentClass: ColumnComp.self)
+	var songsystem = GKComponentSystem<SongComp>(componentClass: SongComp.self)
+	var colsystem = GKComponentSystem<ColumnComp>(componentClass: ColumnComp.self)
 	
 	/// the scnnodes containing a row of covers
-	var sortkeypath:SortKeypath = .song
-	var sorting:SortKeypath 	= .song
+	var sortkeypath: SortKeypath = .song
+	var sorting: SortKeypath = .song
 	
 	//MARK: Lists
 	/// array of ordered Stats used to arrange covers
@@ -85,7 +83,7 @@ class SongManager {
 	var sorted = [Song]()
 	var shuffled = [SongComp]()
 	
-	/// array of the CoverArt (scnnodes with UUID)
+	/// array of the CoverArt(scnnodes with UUID)
 	/// - Loaded once at start, can take a while to build
 	/// - Needs to be rebuilt if cataloging songs again
 	var covers = [CoverArt]()
@@ -102,7 +100,7 @@ class SongManager {
 	/// Creates cover art and displays progress for songs in the core library arranged by Artist
 	///
 	/// Called at loading time once and only once
-	private func createcovers (songs: [Song]) {
+	private func createcovers(songs: [Song]) {
 		covers = []
 		var count = songs.count
 
@@ -125,12 +123,15 @@ class SongManager {
 		shuffled = songsystem.components.shuffled()
 	}
 	
+//	MARK: Fix Later
+//	has a redundancy of looking up entity when we already know the songcomp from the caller
+//	also has some unnecesary type casting
 	func addcoverarttonode(cover:SCNNode) {
 		if let entity = cover.entity {
 			if cover.geometry?.firstMaterial?.diffuse.contents != nil {return}
 			if let song = entity.component(ofType: SongComp.self)?.song {
 				let arturl = song.trackOf?.value(forKey: "albumArt") as! URL
-				let art:NSImage = NSImage (byReferencing: arturl)
+				let art = NSImage(byReferencing: arturl)
 				if art.isValid {
 					cover.geometry?.firstMaterial?.diffuse.contents = art
 				}else{
@@ -140,8 +141,9 @@ class SongManager {
 		}
 	}
 	
+	
 	/// Initializes Coverflow, run only once at beginning of game
-	func coverflow () {
+	func coverflow() {
 		let sfinder = SongFinder()
 		
 		sfinder.librarymodified()
@@ -162,7 +164,7 @@ class SongManager {
 	/// Sorts Album Art by given KeyPath
 	///
 	/// - Parameter keypath: path to sorting value for Stat
-	func reflow (sortedBy keypath: SortKeypath) {
+	func reflow(sortedBy keypath: SortKeypath) {
 		
 		if songsystem.components.isEmpty { return }
 		
@@ -204,7 +206,7 @@ class SongManager {
 	/// DEPRICATED - Retrieves list of Stats ordered by Artist or Album
 	/// - parameter sortBy: sorting key: Artist or Album
 	/// - Returns: An array of Stats sorted by Artist or Album
-	func fetchStats (sortBy: String) -> [Stats] {
+	func fetchStats(sortBy: String) -> [Stats] {
 		let fet:NSFetchRequest<Stats> = Stats.fetchRequest()
 		let sorter = NSSortDescriptor(
 			key: sortBy,
@@ -225,7 +227,7 @@ class SongManager {
 	/// Retrieves list of Songs ordered by Artist or Album
 	/// - parameter sortBy: sorting key: Artist or Album
 	/// - Returns: An array of Songs sorted by Artist or Album
-	func fetchSongs (sortBy: String, _ limit: Int?, _ ascending: Bool?) -> [Song] {
+	func fetchSongs(sortBy: String, _ limit: Int?, _ ascending: Bool?) -> [Song] {
 		let fet:NSFetchRequest<Song> = Song.fetchRequest()
 		let sorter = NSSortDescriptor(
 			key: sortBy,
@@ -247,7 +249,7 @@ class SongManager {
 	/// Retrieves list of Songs ordered by Artist or Album
 	/// - parameter sortBy: sorting key: Artist or Album
 	/// - Returns: An array of Songs sorted by Artist or Album
-	func fetchSongs (sortByStat: String) -> [Song] {
+	func fetchSongs(sortByStat: String) -> [Song] {
 		
 		let fet:NSFetchRequest<Stats> = Stats.fetchRequest()
 		let sorter = NSSortDescriptor(
@@ -275,7 +277,7 @@ class SongManager {
 	///
 	/// - Parameter id: unique Int id for song - also used as name for cover (cover.name)
 	/// - Returns: First song in the array of Songs found
-	func fetchSongById (id: String) -> Song {
+	func fetchSongById(id: String) -> Song {
 		let fetch:NSFetchRequest<Song> = Song.fetchRequest()
 			fetch.predicate = NSPredicate(format: "uuid == %@", id)
 			fetch.fetchLimit = 1
@@ -284,7 +286,7 @@ class SongManager {
 		return array![0]
 	}
 	
-	func fetchStatByID (id: String) -> Stats {
+	func fetchStatByID(id: String) -> Stats {
 		let fetch:NSFetchRequest<Stats> = Stats.fetchRequest()
 			fetch.predicate = NSPredicate(format: "songid == %@", id)
 			fetch.fetchLimit = 1
@@ -557,7 +559,7 @@ class SongManager {
 //MARK: - Private Funcs
 private extension SongManager {	
 	/// lays out cover art into a grid of columns
-	func flowcoverart () {
+	func flowcoverart() {
 		
 		var index = 0
 		var char = ""
@@ -636,14 +638,14 @@ private extension SongManager {
 	///
 	/// - Parameter name: this is set in reflow() or coverflow()
 	/// - Returns: 3D column of album covers
-	func makeColumn (name: String) -> SCNNode {
+	func makeColumn(name: String) -> SCNNode {
 		let column = SCNNode()
 			column.name = name
 		covernode.addChildNode(column)
 		return column
 	}
 	
-	func makeColumn () -> SCNNode {
+	func makeColumn() -> SCNNode {
 		let column = SCNNode()
 		
 		covernode.addChildNode(column)
@@ -653,7 +655,7 @@ private extension SongManager {
 	/// creates a temporary node to hold existing album covers for resorting into new columns. this node gets discarded after used
 	///
 	/// - Returns: temporary albums holder
-	func movecoverstotempcol () -> SCNNode {
+	func movecoverstotempcol() -> SCNNode {
 		let tempcol = SCNNode()
 		menuScene.rootNode.addChildNode(tempcol)
 		

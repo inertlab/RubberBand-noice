@@ -28,14 +28,13 @@ class PlayState: GKState {
 			Jukebox.shared.resumePlay()
 			
 			if DiscordRP.rpc != nil {
-				print(rp.timestamps.start!)
-//				rp.timestamps.start = Date()
-//				rp.timestamps.end = Date() + Jukebox.shared.timeremaining()
-				let start = floor(Date().timeIntervalSince1970)
-				let end = start + floor(Jukebox.shared.timeremaining())
-				rp.timestamps.start = Date(timeIntervalSince1970: start)
-				rp.timestamps.end = Date(timeIntervalSince1970: end)
-				DiscordRP.rpc?.setPresence(rp)
+				Task {
+					let start = floor(Date().timeIntervalSince1970)
+					let end = await start + floor(Jukebox.shared.noiceplayer.dj.timeremaining())
+					rp.timestamps.start = Date(timeIntervalSince1970: start)
+					rp.timestamps.end = Date(timeIntervalSince1970: end)
+					DiscordRP.rpc?.setPresence(rp)
+				}
 			}
 			return
 		}

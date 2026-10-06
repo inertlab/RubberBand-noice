@@ -26,27 +26,31 @@ protocol Track: AnyObject {
 	var notesystem: GKComponentSystem<NoteComp> {get}
 	var tailsystem: GKComponentSystemCGF {get}
 	var notes : Set<GKEntity> {get set}
-
+	
+	/// moves highway and feeds Time information to gameloop functions
+	/// - Parameter cgsongtime: Song current play time cast as CGFloat
+	/// - Parameter beatframe: Song current play time converted to HWY units
 	func tracker(_ cgsongtime: CGFloat, _ hwytime: CGFloat)
 	func showstats()
 	/// convenience method for laying track
 	func laytrack()
+	func trackdeadnotes(hwytime: CGFloat)
+	func robot(hwytime: CGFloat)
 }
 
 extension Track {
 	
 	func handleBasicEvents(_ btn: Button) { }
 
-	/// moves the hwy track animation
-	/// - Parameter cgsongtime: Song current play time cast as CGFloat
-	/// - Parameter beatframe: Song current play time converted to HWY units
+	
 	func tracker(_ cgsongtime: CGFloat, _ hwytime: CGFloat) {
-		
+		#if DEBUG
+			robot(hwytime: hwytime)
+		#endif
 		self.hwy.asphalt.geometry?.firstMaterial?.diffuse.contentsTransform.m42 = cgsongtime * pace.asphalt
-		
 		self.hwy.pista.position.z = hwytime
-		
-		self.sp.trackpower(time: hwytime)
+		trackdeadnotes(hwytime: hwytime)
+		sp.trackpower(time: cgsongtime)
 	}
 	
 	/// Displays the score of the current song before going back to main menu

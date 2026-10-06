@@ -68,7 +68,7 @@ class SongFinder {
 			
 			addstattosong(song: song)
 
-			// this combines artis + album to indentify unique albulms
+			// combine artis + album to indentify unique albums
 			let albumID = songmeta[SongData.artist]!.lowercased() + songmeta[SongData.album]!.lowercased()
 			
 			// look for album in current album dictionary else make a new album
@@ -77,7 +77,7 @@ class SongFinder {
 			}else{
 				album = Album(context: pc.viewContext)
 				album.name = songmeta[SongData.album]
-				album.albumArt 	= song.folder?.appendingPathComponent("album.png")
+				album.albumArt = getalbumURL(song: song)
 			}
 			
 			song.trackOf = album
@@ -191,6 +191,44 @@ class SongFinder {
 		}
 	}
 	
+	func updatemetadata(songcomp: SongComp) {
+		updatealbumart(song: songcomp.song)
+		guard let album = songcomp.song.trackOf else {return}
+		if let arturl = album.albumArt {
+			let art = NSImage(byReferencing: arturl)
+			if art.isValid {
+				songcomp.cover.geometry?.firstMaterial?.diffuse.contents = art
+			} else {
+				songcomp.cover.geometry?.firstMaterial?.diffuse.contents = smanager.noart
+			}
+		}
+	}
+	
+	func updatealbumart(song: Song) {
+		if let album = smanager.selected.song.trackOf {
+			do {
+				album.albumArt = getalbumURL(song: song)
+				try pc.viewContext.save()
+			} catch {
+				print(error)
+			}
+		}
+	}
+	
+	/// Returns album url for any image type - jpeg or png
+	/// - Parameter song: Song entity
+	func getalbumURL(song: Song) -> URL? {
+		do {
+			let files = try fileManager.contentsOfDirectory(atPath: song.folder!.path)
+			if let art = files.first(where: {$0.contains("album")}) {
+				return song.folder?.appendingPathComponent(art)
+			}
+		} catch {
+			print(error)
+		}
+		return nil
+	}
+	
 	/// compares Song.modified to ini file modification date to check for changes
 	/// - Parameters:
 	///   - songs: list of Song
@@ -240,7 +278,15 @@ private extension SongFinder {
 		} else {
 			song.trackOf = Album(context: pc.viewContext)
 			song.trackOf?.name = songmeta[.album]
-			song.trackOf?.albumArt = song.folder?.appendingPathComponent("album.png")
+			
+			do {
+				let files = try fileManager.contentsOfDirectory(atPath: song.folder!.path)
+				if let art = files.first(where: {$0.contains("album")}) {
+					song.trackOf?.albumArt = song.folder?.appendingPathComponent(art)
+				}
+			}catch{
+				
+			}
 		}
 		do{
 			try pc.viewContext.save()
@@ -249,17 +295,48 @@ private extension SongFinder {
 		}
 	}
 	
+	
+	
 	/// Returns existing album, or makes a new one
 	/// - Parameter songmeta: SongMeta
+//	func getsongalbum(songmeta: SongMeta) -> Album? {
+//		let fet:NSFetchRequest<Album> = Album.fetchRequest()
+//		fet.predicate = NSPredicate(format: "name == %@", songmeta[.album]!)
+//		if let albums = try? pc.viewContext.fetch(fet) {
+//			if !albums.isEmpty {
+//				for a in albums {
+//					for song in a.contains as! Set<Song> {
+//						if song.artist == songmeta[.artist] {
+//							return a
+//						}
+//					}
+//				}
+//			}
+//		}
+//		return nil
+//	}
+	
+	/// Returns existing album
+	/// - Parameter songmeta: SongMeta
 	func getsongalbum(songmeta: SongMeta) -> Album? {
+		guard let album = songmeta[.album] else {return nil}
+		guard let artist = songmeta[.artist] else {return nil}
+		return getsongalbum(album: album, artist: artist)
+	}
+	
+	/// Returns existing album
+	/// - Parameter album: album title
+	/// - Parameter artist: artist name
+	func getsongalbum(album: String, artist: String) -> Album? {
 		let fet:NSFetchRequest<Album> = Album.fetchRequest()
-		fet.predicate = NSPredicate(format: "name == %@", songmeta[.album]!)
-		let albums = try? pc.viewContext.fetch(fet)
-		if !albums!.isEmpty {
-			for a in albums! {
-				for song in a.contains as! Set<Song> {
-					if song.artist == songmeta[.artist] {
-						return a
+		fet.predicate = NSPredicate(format: "name == %@", album)
+		if let albums = try? pc.viewContext.fetch(fet) {
+			if !albums.isEmpty {
+				for a in albums {
+					for song in a.contains as! Set<Song> {
+						if song.artist == artist {
+							return a
+						}
 					}
 				}
 			}

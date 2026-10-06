@@ -41,7 +41,7 @@ class Vocalcoach {
 	/// Keeps track of Song play position and updates lyrics accordingy
 	/// - Parameter songtime: The current time of the song playback in seconds - Unaltered
 	func tracklyrics(songtime: Double)  {
-		
+		if count == lyrics.count - 1 {return}
 		while songtime >= lyrics[count].time - 0.6 {
 			switch count % 3 {
 			case 0:
